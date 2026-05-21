@@ -1,0 +1,47 @@
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+*~
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.venv/
+venv/
+env/
+
+# Node
+node_modules/
+
+# Output dirs
+dist/
+build/
+*.egg-info/
+
+# Logs
+*.log
+
+# Environment
+.env
+.env.local
+
+# 本仓库特有
+# 用户 fork 之后可能本地填的真实信息——不要 commit
+01-quickstart/memory/*.md
+!01-quickstart/memory/*.md.template
+
+# slides 演讲者私人备注（可选——如果存在）
+06-slides/outline.md
+06-slides/reference/
+
+# Mac 文件
+.DS_Store

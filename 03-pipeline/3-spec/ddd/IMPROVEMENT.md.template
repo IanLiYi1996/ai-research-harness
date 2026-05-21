@@ -1,0 +1,47 @@
+# IMPROVEMENT.md · "Have we tried this?"
+
+> 这份文档是**项目的集体记忆**。每次实验后写。下次相关实验前 Agent 自动读。
+
+## 怎么写
+
+每条记录格式：
+
+```
+### <YYYY-MM-DD> · <slug>
+
+**Hypothesis**: <你试图验证什么>
+**Outcome**: <work / partial / fail>
+**Lesson**: <一句话教训——下次相关实验时要避免 / 重复什么>
+**Spec link**: experiments/<slug>/spec.yaml
+```
+
+## 已记录的教训
+
+<!-- 例子：
+
+### 2026-04-12 · rope-baseline
+
+**Hypothesis**: 用默认 RoPE 训练 Llama-3-8B 在 GSM8K 上比 absolute PE 好
+**Outcome**: partial — 短上下文 (2k) 持平，长上下文 (32k) 显著提升
+**Lesson**: RoPE 的优势在 2k 以下显示不出来，做相关实验必须保证 ≥ 4k 上下文
+**Spec link**: experiments/rope-baseline/spec.yaml
+
+-->
+
+## 反向避坑列表
+
+经过多次实验沉淀出的 **"不要再这么做"**：
+
+- ❌ <pitfall>: <how to avoid>
+- ❌ <pitfall>: <how to avoid>
+
+## 验证过的最佳实践
+
+- ✅ <best practice>: <why it works>
+- ✅ <best practice>: <why it works>
+
+## 关于本文档
+
+- 每次实验完成后**强制更新**——这是 spec.yaml 的 reflect 字段最终归宿
+- 写得越具体越有价值（"调小 lr" 不算教训；"在 N=8B 模型上 lr=2e-4 才稳定" 是教训）
+- 失败比成功更值得写

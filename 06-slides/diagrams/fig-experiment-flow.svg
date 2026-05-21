@@ -1,0 +1,108 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 480" font-family="Georgia, 'Latin Modern Roman', serif">
+  <defs>
+    <marker id="arr-bad" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#8a1a1a"/>
+    </marker>
+    <marker id="arr-good" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1a3a7a"/>
+    </marker>
+  </defs>
+
+  <!-- LEFT: Before -->
+  <g>
+    <text x="240" y="32" text-anchor="middle" fill="#8a1a1a" font-size="12" letter-spacing="3" font-weight="700">BEFORE · 散点式实验</text>
+    <line x1="40" y1="42" x2="440" y2="42" stroke="#8a1a1a" stroke-width="0.8"/>
+
+    <!-- 5 vertical steps -->
+    <g>
+      <rect x="120" y="60" width="240" height="50" fill="#fdfcf8" stroke="#8a1a1a" stroke-width="1"/>
+      <text x="135" y="82" fill="#8a1a1a" font-weight="700" font-size="11">IDEA</text>
+      <text x="240" y="84" text-anchor="middle" fill="#0a0a0a" font-size="12">"我觉得 X 可能 work"</text>
+      <text x="240" y="100" text-anchor="middle" fill="#707070" font-size="10" font-style="italic">脑子里 / 微信收藏</text>
+
+      <line x1="240" y1="110" x2="240" y2="130" stroke="#8a1a1a" stroke-width="1.5" marker-end="url(#arr-bad)"/>
+
+      <rect x="120" y="135" width="240" height="50" fill="#fdfcf8" stroke="#8a1a1a" stroke-width="1"/>
+      <text x="135" y="157" fill="#8a1a1a" font-weight="700" font-size="11">CODE</text>
+      <text x="240" y="159" text-anchor="middle" fill="#0a0a0a" font-size="12">立刻动手写代码</text>
+      <text x="240" y="175" text-anchor="middle" fill="#707070" font-size="10" font-style="italic">colab.ipynb · 超参藏在 cell</text>
+
+      <line x1="240" y1="185" x2="240" y2="205" stroke="#8a1a1a" stroke-width="1.5" marker-end="url(#arr-bad)"/>
+
+      <rect x="120" y="210" width="240" height="50" fill="#fdfcf8" stroke="#8a1a1a" stroke-width="1"/>
+      <text x="135" y="232" fill="#8a1a1a" font-weight="700" font-size="11">RUN</text>
+      <text x="240" y="234" text-anchor="middle" fill="#0a0a0a" font-size="12">跑通就行</text>
+      <text x="240" y="250" text-anchor="middle" fill="#707070" font-size="10" font-style="italic">截屏 + 微信发导师</text>
+
+      <line x1="240" y1="260" x2="240" y2="280" stroke="#8a1a1a" stroke-width="1.5" marker-end="url(#arr-bad)"/>
+
+      <rect x="120" y="285" width="240" height="50" fill="#fdfcf8" stroke="#8a1a1a" stroke-width="1"/>
+      <text x="135" y="307" fill="#8a1a1a" font-weight="700" font-size="11">EVAL</text>
+      <text x="240" y="309" text-anchor="middle" fill="#0a0a0a" font-size="12">跑 1 个 benchmark 自慰</text>
+      <text x="240" y="325" text-anchor="middle" fill="#707070" font-size="10" font-style="italic">"看起来比 baseline 高了"</text>
+
+      <line x1="240" y1="335" x2="240" y2="355" stroke="#8a1a1a" stroke-width="1.5" marker-end="url(#arr-bad)"/>
+
+      <rect x="120" y="360" width="240" height="50" fill="#fdfcf8" stroke="#8a1a1a" stroke-width="1"/>
+      <text x="135" y="382" fill="#8a1a1a" font-weight="700" font-size="11">DONE?</text>
+      <text x="240" y="384" text-anchor="middle" fill="#0a0a0a" font-size="12">写进周报，没了</text>
+      <text x="240" y="400" text-anchor="middle" fill="#707070" font-size="10" font-style="italic">无 audit trail · 无法复现</text>
+    </g>
+
+    <!-- outcome -->
+    <text x="240" y="438" text-anchor="middle" fill="#8a1a1a" font-size="11" font-style="italic">上下文藏在脑子里</text>
+    <text x="240" y="455" text-anchor="middle" fill="#8a1a1a" font-size="11" font-style="italic">判据靠"我觉得对" · 失败无法回溯</text>
+  </g>
+
+  <!-- DIVIDER -->
+  <line x1="500" y1="60" x2="500" y2="430" stroke="#1a3a7a" stroke-width="1" stroke-dasharray="6,4"/>
+
+  <!-- RIGHT: After -->
+  <g>
+    <text x="760" y="32" text-anchor="middle" fill="#1a3a7a" font-size="12" letter-spacing="3" font-weight="700">AFTER · Spec-driven 管线</text>
+    <line x1="560" y1="42" x2="960" y2="42" stroke="#1a3a7a" stroke-width="0.8"/>
+
+    <g>
+      <rect x="640" y="60" width="240" height="50" fill="#f5f3ea" stroke="#1a3a7a" stroke-width="1.2"/>
+      <text x="655" y="82" fill="#1a3a7a" font-weight="700" font-size="11">DDD</text>
+      <text x="760" y="82" text-anchor="middle" fill="#0a0a0a" font-size="12">"为什么做 X"</text>
+      <text x="760" y="100" text-anchor="middle" fill="#707070" font-size="10" font-style="italic">domain 文档 · 假设 + 前序工作</text>
+
+      <line x1="760" y1="110" x2="760" y2="130" stroke="#1a3a7a" stroke-width="1.5" marker-end="url(#arr-good)"/>
+
+      <rect x="640" y="135" width="240" height="50" fill="#f5f3ea" stroke="#1a3a7a" stroke-width="1.2"/>
+      <text x="655" y="157" fill="#1a3a7a" font-weight="700" font-size="11">SDD</text>
+      <text x="760" y="157" text-anchor="middle" fill="#0a0a0a" font-size="12">spec.yaml = single truth</text>
+      <text x="760" y="175" text-anchor="middle" fill="#707070" font-size="10" font-style="italic">hypothesis · metric · invariant · IDs</text>
+
+      <line x1="760" y1="185" x2="760" y2="205" stroke="#1a3a7a" stroke-width="1.5" marker-end="url(#arr-good)"/>
+
+      <rect x="640" y="210" width="240" height="50" fill="#f5f3ea" stroke="#1a3a7a" stroke-width="1.2"/>
+      <text x="655" y="232" fill="#1a3a7a" font-weight="700" font-size="11">TDD</text>
+      <text x="760" y="232" text-anchor="middle" fill="#0a0a0a" font-size="12">先写 invariant 测试</text>
+      <text x="760" y="250" text-anchor="middle" fill="#707070" font-size="10" font-style="italic">RED → 实现 → GREEN</text>
+
+      <line x1="760" y1="260" x2="760" y2="280" stroke="#1a3a7a" stroke-width="1.5" marker-end="url(#arr-good)"/>
+
+      <rect x="640" y="285" width="240" height="50" fill="#f5f3ea" stroke="#1a3a7a" stroke-width="1.2"/>
+      <text x="655" y="307" fill="#1a3a7a" font-weight="700" font-size="11">EVAL</text>
+      <text x="760" y="307" text-anchor="middle" fill="#0a0a0a" font-size="12">三层评测</text>
+      <text x="760" y="325" text-anchor="middle" fill="#707070" font-size="10" font-style="italic">benchmark + invariant + reviewer</text>
+
+      <line x1="760" y1="335" x2="760" y2="355" stroke="#1a3a7a" stroke-width="1.5" marker-end="url(#arr-good)"/>
+
+      <rect x="640" y="360" width="240" height="50" fill="#1a3a7a" stroke="#0a0a0a" stroke-width="1.2"/>
+      <text x="655" y="382" fill="#fdfcf8" font-weight="700" font-size="11">PUBLISH</text>
+      <text x="760" y="382" text-anchor="middle" fill="#fdfcf8" font-size="12" font-weight="700">四件套自动落 Registry</text>
+      <text x="760" y="400" text-anchor="middle" fill="#f5f3ea" font-size="10" font-style="italic">paper · model · dataset · demo</text>
+    </g>
+
+    <!-- REFLECT loop arrow -->
+    <path d="M 880 385 L 920 385 L 920 85 L 880 85" stroke="#1a3a7a" stroke-width="1.2" fill="none" stroke-dasharray="5,3" marker-end="url(#arr-good)"/>
+    <text x="930" y="240" fill="#1a3a7a" font-size="10" font-style="italic" transform="rotate(-90 930 240)">REFLECT · 失败也是产物</text>
+
+    <!-- outcome -->
+    <text x="760" y="438" text-anchor="middle" fill="#1a3a7a" font-size="11" font-style="italic" font-weight="700">spec 是契约 · 测试是证据</text>
+    <text x="760" y="455" text-anchor="middle" fill="#1a3a7a" font-size="11" font-style="italic" font-weight="700">DDD 是知识 · 反思可累积</text>
+  </g>
+</svg>

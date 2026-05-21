@@ -1,0 +1,63 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 420" font-family="Georgia, 'Latin Modern Roman', serif">
+  <!-- Y axis: capability ceiling -->
+  <line x1="80" y1="380" x2="80" y2="40" stroke="#0a0a0a" stroke-width="1"/>
+  <text x="50" y="210" text-anchor="middle" fill="#707070" font-size="11" letter-spacing="2" transform="rotate(-90 50 210)">CAPABILITY CEILING ↑</text>
+  <polygon points="80,32 76,42 84,42" fill="#0a0a0a"/>
+
+  <!-- X axis: effort/maturity -->
+  <line x1="80" y1="380" x2="850" y2="380" stroke="#0a0a0a" stroke-width="1"/>
+  <text x="465" y="408" text-anchor="middle" fill="#707070" font-size="11" letter-spacing="2">HARNESS INVESTMENT →</text>
+  <polygon points="858,380 848,376 848,384" fill="#0a0a0a"/>
+
+  <!-- L1 step -->
+  <g>
+    <rect x="100" y="290" width="220" height="90" fill="#f5f3ea" stroke="#707070" stroke-width="1.5"/>
+    <text x="210" y="312" text-anchor="middle" fill="#707070" font-weight="700" font-size="14" letter-spacing="2">L1 · 打字机</text>
+    <text x="210" y="332" text-anchor="middle" fill="#0a0a0a" font-size="12" font-style="italic">Typewriter</text>
+    <line x1="120" y1="342" x2="300" y2="342" stroke="#707070" stroke-width="0.5"/>
+    <text x="210" y="358" text-anchor="middle" fill="#333" font-size="11">"帮我写一个 X"</text>
+    <text x="210" y="372" text-anchor="middle" fill="#707070" font-size="10" font-style="italic">每次从零开始</text>
+  </g>
+
+  <!-- L2 step -->
+  <g>
+    <rect x="340" y="200" width="220" height="180" fill="#fdfcf8" stroke="#1a3a7a" stroke-width="1.5"/>
+    <text x="450" y="222" text-anchor="middle" fill="#1a3a7a" font-weight="700" font-size="14" letter-spacing="2">L2 · 协作者</text>
+    <text x="450" y="242" text-anchor="middle" fill="#0a0a0a" font-size="12" font-style="italic">Collaborator</text>
+    <line x1="360" y1="252" x2="540" y2="252" stroke="#1a3a7a" stroke-width="0.5"/>
+    <text x="450" y="270" text-anchor="middle" fill="#333" font-size="11">用 skill / spec / 模板</text>
+    <text x="450" y="286" text-anchor="middle" fill="#333" font-size="11">让 AI 按既定流程做事</text>
+    <text x="450" y="312" text-anchor="middle" fill="#0a0a0a" font-size="11" font-style="italic">"按 brainstorming 流程</text>
+    <text x="450" y="328" text-anchor="middle" fill="#0a0a0a" font-size="11" font-style="italic">把 idea 变 spec"</text>
+    <text x="450" y="358" text-anchor="middle" fill="#1a3a7a" font-size="11" font-weight="700">★ 今天目标 ★</text>
+    <text x="450" y="374" text-anchor="middle" fill="#707070" font-size="10" font-style="italic">出门后能跳到这层</text>
+  </g>
+
+  <!-- L3 step -->
+  <g>
+    <rect x="580" y="80" width="240" height="300" fill="#1a3a7a" stroke="#0a0a0a" stroke-width="1.5"/>
+    <text x="700" y="102" text-anchor="middle" fill="#fdfcf8" font-weight="700" font-size="14" letter-spacing="2">L3 · 系统设计师</text>
+    <text x="700" y="122" text-anchor="middle" fill="#fdfcf8" font-size="12" font-style="italic">System Designer</text>
+    <line x1="600" y1="132" x2="800" y2="132" stroke="#fdfcf8" stroke-width="0.5"/>
+    <text x="700" y="156" text-anchor="middle" fill="#fdfcf8" font-size="11">写 CLAUDE.md / 模板 / hook</text>
+    <text x="700" y="172" text-anchor="middle" fill="#fdfcf8" font-size="11">Agent 自主完成多步任务</text>
+    <text x="700" y="200" text-anchor="middle" fill="#f5f3ea" font-size="11" font-style="italic">"按仓库规则消化今天的</text>
+    <text x="700" y="216" text-anchor="middle" fill="#f5f3ea" font-size="11" font-style="italic">HF papers"</text>
+    <text x="700" y="246" text-anchor="middle" fill="#f5f3ea" font-size="10" font-style="italic">15 字 prompt 背后</text>
+    <text x="700" y="262" text-anchor="middle" fill="#f5f3ea" font-size="10" font-style="italic">是 6 步流程 + memory + skills</text>
+    <text x="700" y="304" text-anchor="middle" fill="#fdfcf8" font-size="11" font-weight="700">前期投资搭 harness</text>
+    <text x="700" y="322" text-anchor="middle" fill="#fdfcf8" font-size="11" font-weight="700">复利指数级回报</text>
+    <text x="700" y="358" text-anchor="middle" fill="#f5f3ea" font-size="10" letter-spacing="1">FUTURE TARGET</text>
+  </g>
+
+  <!-- arrows up the steps -->
+  <g stroke="#1a3a7a" stroke-width="2" fill="none">
+    <line x1="320" y1="290" x2="340" y2="270" stroke-dasharray="0"/>
+    <polygon points="340,270 333,272 339,267" fill="#1a3a7a"/>
+    <line x1="560" y1="200" x2="580" y2="180" stroke-dasharray="0"/>
+    <polygon points="580,180 573,182 579,177" fill="#1a3a7a"/>
+  </g>
+
+  <!-- title -->
+  <text x="465" y="28" text-anchor="middle" fill="#0a0a0a" font-size="14" font-weight="700">3 层成熟度模型 · 大多数人卡在 L1</text>
+</svg>

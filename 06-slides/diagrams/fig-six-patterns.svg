@@ -1,0 +1,82 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 460" font-family="Georgia, 'Latin Modern Roman', serif">
+  <!-- center: HARNESS -->
+  <circle cx="450" cy="230" r="62" fill="#1a3a7a" stroke="#0a0a0a" stroke-width="2"/>
+  <text x="450" y="226" text-anchor="middle" fill="#fdfcf8" font-weight="700" font-size="20">HARNESS</text>
+  <text x="450" y="248" text-anchor="middle" fill="#fdfcf8" font-size="11" font-style="italic">6 patterns</text>
+
+  <!-- 6 surrounding cards in 2 rows × 3 cols -->
+  <!-- top row -->
+  <g>
+    <!-- ① -->
+    <rect x="40" y="50" width="240" height="100" fill="#fdfcf8" stroke="#1a3a7a" stroke-width="1.5"/>
+    <rect x="40" y="50" width="240" height="22" fill="#f5f3ea"/>
+    <text x="52" y="66" fill="#1a3a7a" font-weight="700" font-size="12">① 仓库即世界</text>
+    <text x="270" y="66" text-anchor="end" fill="#707070" font-size="10" font-style="italic">Repository as the World</text>
+    <text x="52" y="95" fill="#0a0a0a" font-size="12">Agent 看不到的就不存在</text>
+    <text x="52" y="115" fill="#333" font-size="11" font-style="italic">把一切推进仓库 — Slack/脑子里</text>
+    <text x="52" y="131" fill="#333" font-size="11" font-style="italic">的假设对它都不存在</text>
+
+    <!-- ② -->
+    <rect x="330" y="50" width="240" height="100" fill="#fdfcf8" stroke="#1a3a7a" stroke-width="1.5"/>
+    <rect x="330" y="50" width="240" height="22" fill="#f5f3ea"/>
+    <text x="342" y="66" fill="#1a3a7a" font-weight="700" font-size="12">② 渐进式披露</text>
+    <text x="560" y="66" text-anchor="end" fill="#707070" font-size="10" font-style="italic">Progressive Disclosure</text>
+    <text x="342" y="95" fill="#0a0a0a" font-size="12">CLAUDE.md 是地图不是百科</text>
+    <text x="342" y="115" fill="#333" font-size="11" font-style="italic">"When everything is important,</text>
+    <text x="342" y="131" fill="#333" font-size="11" font-style="italic">nothing is."</text>
+
+    <!-- ③ -->
+    <rect x="620" y="50" width="240" height="100" fill="#fdfcf8" stroke="#1a3a7a" stroke-width="1.5"/>
+    <rect x="620" y="50" width="240" height="22" fill="#f5f3ea"/>
+    <text x="632" y="66" fill="#1a3a7a" font-weight="700" font-size="12">③ 机械化约束</text>
+    <text x="850" y="66" text-anchor="end" fill="#707070" font-size="10" font-style="italic">Mechanical Enforcement</text>
+    <text x="632" y="95" fill="#0a0a0a" font-size="12">把品味编码为 linter / CI</text>
+    <text x="632" y="115" fill="#333" font-size="11" font-style="italic">"Constraints are what allows</text>
+    <text x="632" y="131" fill="#333" font-size="11" font-style="italic">speed without decay."</text>
+  </g>
+
+  <!-- bottom row -->
+  <g>
+    <!-- ④ -->
+    <rect x="40" y="310" width="240" height="100" fill="#fdfcf8" stroke="#1a3a7a" stroke-width="1.5"/>
+    <rect x="40" y="310" width="240" height="22" fill="#f5f3ea"/>
+    <text x="52" y="326" fill="#1a3a7a" font-weight="700" font-size="12">④ 应用可读性</text>
+    <text x="270" y="326" text-anchor="end" fill="#707070" font-size="10" font-style="italic">App Legibility</text>
+    <text x="52" y="355" fill="#0a0a0a" font-size="12">让 Agent 能"看见"运行中的应用</text>
+    <text x="52" y="375" fill="#333" font-size="11" font-style="italic">DOM / 日志 / 指标</text>
+    <text x="52" y="391" fill="#333" font-size="11" font-style="italic">Playwright · Chrome DevTools</text>
+
+    <!-- ⑤ -->
+    <rect x="330" y="310" width="240" height="100" fill="#fdfcf8" stroke="#1a3a7a" stroke-width="2.5"/>
+    <rect x="330" y="310" width="240" height="22" fill="#1a3a7a"/>
+    <text x="342" y="326" fill="#fdfcf8" font-weight="700" font-size="12">⑤ 生成-评估分离 ★</text>
+    <text x="560" y="326" text-anchor="end" fill="#fdfcf8" font-size="10" font-style="italic">Generator-Evaluator</text>
+    <text x="342" y="355" fill="#0a0a0a" font-size="12" font-weight="700">"Out of the box, Claude is</text>
+    <text x="342" y="372" fill="#0a0a0a" font-size="12" font-weight="700">a poor QA agent."</text>
+    <text x="342" y="394" fill="#333" font-size="11" font-style="italic">必须用独立 Agent 评估</text>
+
+    <!-- ⑥ -->
+    <rect x="620" y="310" width="240" height="100" fill="#fdfcf8" stroke="#1a3a7a" stroke-width="1.5"/>
+    <rect x="620" y="310" width="240" height="22" fill="#f5f3ea"/>
+    <text x="632" y="326" fill="#1a3a7a" font-weight="700" font-size="12">⑥ 熵管理</text>
+    <text x="850" y="326" text-anchor="end" fill="#707070" font-size="10" font-style="italic">Entropy &amp; GC</text>
+    <text x="632" y="355" fill="#0a0a0a" font-size="12">"Tech debt is a high-interest loan"</text>
+    <text x="632" y="375" fill="#333" font-size="11" font-style="italic">用后台 Agent 持续扫描</text>
+    <text x="632" y="391" fill="#333" font-size="11" font-style="italic">和重构</text>
+  </g>
+
+  <!-- Connecting lines from center to each card (subtle) -->
+  <g stroke="#1a3a7a" stroke-width="0.8" stroke-dasharray="3,3" fill="none">
+    <line x1="395" y1="200" x2="280" y2="115"/>
+    <line x1="450" y1="168" x2="450" y2="150"/>
+    <line x1="505" y1="200" x2="620" y2="115"/>
+    <line x1="395" y1="260" x2="280" y2="345"/>
+    <line x1="450" y1="292" x2="450" y2="310"/>
+    <line x1="505" y1="260" x2="620" y2="345"/>
+  </g>
+
+  <!-- caption -->
+  <text x="450" y="445" text-anchor="middle" fill="#0a0a0a" font-size="13" font-weight="700" font-style="italic">
+    ★ 下午 demo 第三幕重点演示生成-评估分离
+  </text>
+</svg>

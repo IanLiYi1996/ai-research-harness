@@ -1,0 +1,72 @@
+name: rope-from-scratch
+created: 2026-MM-DD
+owner: <your-name>
+
+hypothesis: |
+  从零实现 RoPE forward pass，满足 5 条数学 invariant。
+  这是一个学习性实验，目的是把 templ-3 (TDD-first) 流程练熟。
+
+motivation: |
+  RoPE 是 2026 年大模型的标配，理解它的数学性质和实现细节
+  对做长上下文 / 推理优化都有用。
+
+  这个实验也是 templ-3 的 reference example——
+  下次复现别的小算法时可以套同样的流程。
+
+stage_3_spec:
+  primary_metric: all_invariants_pass
+  primary_metric_target: 5/5
+
+  invariants:
+    - 范数保持: ||R x|| == ||x||
+    - 周期性: cos² + sin² == 1
+    - 位置 0 是单位变换: R(0) x == x
+    - 相对位置不变: <q_m, k_n> 只取决于 m-n
+    - 维度对独立: 第 (2k, 2k+1) 对不影响其他对
+
+  success_criteria:
+    - All 5 invariants pass under pytest
+    - Sub-agent reviewer finds ≤ 1 minor issue
+    - Implementation is < 50 lines
+
+stage_4_build:
+  base_model:
+    registry: null
+    id: null
+  dataset:
+    registry: null
+    id: null
+  trainer: null
+  hyperparams: {}
+  tracking:
+    backend: null
+  compute_budget:
+    gpu: CPU is enough
+    estimated_hours: 0.5
+
+stage_5_eval:
+  l1_benchmarks: []           # 不需要 standard benchmark
+  l2_invariants_test: ./tests/test_invariants.py
+  l3_reviewer:
+    enabled: true
+    sample_size: 1
+    prompt_template: |
+      你是批判性审稿人。审查 src/rope.py，
+      验证它与 RoFormer paper Equation 13 是否一致。
+      检查：
+      1. 旋转矩阵方向（逆 vs 顺时针）
+      2. 维度配对方式
+      3. 与 paper 的命名约定
+      输出至少 2 个潜在问题。
+
+stage_6_publish:
+  paper: null
+  model: null
+  dataset: null
+  demo: null
+
+reflect:
+  status: <to be filled after running>
+  what_worked: |
+  what_didnt: |
+  lessons: |

@@ -1,0 +1,1138 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-themes="academic-paper,swiss-grid,minimal-white,blueprint,rose-pine">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Harness 工程与 Claude Code · 学术研究 best practice</title>
+<link rel="stylesheet" href="./assets/fonts.css">
+<link rel="stylesheet" href="./assets/base.css">
+<link rel="stylesheet" id="theme-link" href="./assets/themes/academic-paper.css">
+<link rel="stylesheet" href="./assets/animations/animations.css">
+<link rel="stylesheet" href="./style.css">
+</head>
+<body class="tpl-harness-talk">
+<div class="deck">
+
+  <!-- ============ 1. COVER ============ -->
+  <section class="slide" data-title="Cover">
+    <div class="center-v">
+      <p class="kicker">tech sharing · 2026-05-21 · 75 min</p>
+      <h1 class="h1">用好 AI 工具做科研：<br>从 <span class="strike">Prompt</span> 到 <span class="accent">Harness</span></h1>
+      <p class="lede mt-m">硕士师弟师妹专题分享 · 按 <span class="mono">S</span> 进入演讲者视图 · <span class="mono">T</span> 切主题</p>
+      <div class="speaker">
+        <div class="av"></div>
+        <div><b>&lt;Your Name&gt;</b><span>AI/ML researcher · 75 min + Q&amp;A</span></div>
+      </div>
+    </div>
+    <aside class="notes">
+      <p>大家好，今天我们聊一件具体的事——<strong>怎么用好 AI 工具做科研</strong>。</p>
+      <p>很多分享会停留在 "你应该用 AI"、"prompt 要怎么写"。今天不一样——我会给大家看几个具体场景的<em>真实时间数据</em>，看看 AI 工具到底在哪些环节加速了科研，加速了多少；然后讲清楚一个 2026 年很关键的概念——<strong>Harness</strong>；最后给大家一套可以周末就动手的方法。</p>
+      <p>今天分享的内容和 demo 全部都基于真实工作流，<em>没有一句是凭印象编的</em>。</p>
+      <p>有问题随时打断。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 2. AGENDA ============ -->
+  <section class="slide" data-title="Agenda">
+    <div class="center-v">
+      <p class="kicker">agenda</p>
+      <h2 class="h2">今天 75 分钟，6 段</h2>
+      <div class="num-list mt-l">
+        <div class="agenda-row"><span class="num">01</span><span class="t">3 道自查 · 引出 Harness</span><span class="d">3 min</span></div>
+        <div class="agenda-row"><span class="num">02</span><span class="t">什么是 Harness：定义 / 病根 / 架构 / 6 模式</span><span class="d">10 min</span></div>
+        <div class="agenda-row"><span class="num">03</span><span class="t">如何用好：3 层成熟度 + 3 组 prompt 模板</span><span class="d">8 min</span></div>
+        <div class="agenda-row"><span class="num">04</span><span class="t">AI 研究 pipeline · 6 阶段 + 流程对比 + 科学性</span><span class="d">14 min</span></div>
+        <div class="agenda-row"><span class="num">05</span><span class="t">三幕实时 demo：读论文 / 写笔记 / 跑实验</span><span class="d">30 min</span></div>
+        <div class="agenda-row"><span class="num">06</span><span class="t">研究员的最小动作清单 · 4 件套 · takeaway</span><span class="d">10 min</span></div>
+      </div>
+    </div>
+    <aside class="notes">
+      <p>过一下议程。</p>
+      <p><strong>第一段</strong>是 3 道自查题，看你现在用 AI 是不是已经撞到了天花板。</p>
+      <p><strong>第二段</strong>讲清楚"Harness 到底是什么"——定义、3 大病根、5 层架构、6 大设计模式。这是今天的<em>概念锚点</em>。</p>
+      <p><strong>第三段</strong>讲方法论——3 层成熟度模型，从"打字机"到"协作者"到"系统设计师"，附 3 组立刻能抄走的 prompt 模板。</p>
+      <p><strong>第四段</strong>是<em>把 Harness 落地到 AI 研究上</em>——6 阶段 pipeline、registry 总线、实验流程对比图、5 个科学性属性、spec.yaml 范例。这一段最干货。</p>
+      <p><strong>第五段</strong>是主菜——三幕实时 demo，中间 5 分钟休息。</p>
+      <p><strong>第六段</strong>是给师弟师妹"本周就能动手"的最小动作清单。</p>
+      <p>OK 进入第一段。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 3. HOOK · 3 SELF-CHECK ============ -->
+  <section class="slide" data-title="Hook">
+    <p class="kicker">// 1. self-check</p>
+    <h2 class="h2">先做 3 道自查 ——</h2>
+    <p class="lede mt-s">如果三个都中招，今天的内容就值得听完。</p>
+    <div class="num-list mt-l">
+      <div class="item"><div class="n">①</div><div class="body">
+        <b>你的 prompt 越写越长，效果反而没变好？</b>
+        <p>"请你扮演 senior ML researcher，先做 X 再做 Y，注意 Z…" — 结果还是给你一坨平庸输出。</p>
+      </div></div>
+      <div class="item"><div class="n">②</div><div class="body">
+        <b>每次开新会话都要重新介绍背景？</b>
+        <p>"我在做 XX 课题，之前决定 YY 路线，请不要再建议 ZZ……" 一上来就 2000 字开场白。</p>
+      </div></div>
+      <div class="item"><div class="n">③</div><div class="body">
+        <b>让 AI 写实验代码，跑出来不对，它还说"完美"？</b>
+        <p>Anthropic 称之为 <em>Self-Evaluation Bias</em> —— Agent 会"<em>confidently praise mediocre work</em>"。</p>
+      </div></div>
+    </div>
+    <p class="quote-inline mt-l">这三件事都<strong>不是 prompt 能解决的问题</strong>。<br>它们需要系统层面的工程方案 —— <span class="accent">这就是 Harness</span>。</p>
+    <aside class="notes">
+      <p>开场我抛三个问题给大家自查一下。</p>
+      <p><strong>第一个</strong>：你有没有发现，自己写 prompt 越来越长，但效果没变好？前几年我们都被教"prompt engineering"——给它角色、给它步骤、给它注意事项。但现在你们有没有感觉——再怎么写 prompt，输出还是有上限。</p>
+      <p><strong>第二个</strong>：每次开新会话是不是都要从头讲一遍背景？"我在做 XX 课题、之前决定了 YY 路线、不要建议 ZZ……" 我自己以前每次开 Claude 都要先打 2000 字开场白。</p>
+      <p><strong>第三个</strong>：让 AI 写实验代码，跑出来不对，但它自己还说"完美"。Anthropic 给这个现象起了个名字叫 <em>Self-Evaluation Bias</em>——Agent 会自信地夸自己写的烂东西。</p>
+      <p>关键洞察来了——<strong>这三件事，没有任何一件是靠"再写一个更好的 prompt"能解决的</strong>。它们需要的是另一个东西——这个东西就是今天的主角，<em>Harness</em>。</p>
+      <p><strong>互动建议</strong>：每念一个问题问一句"中招的举手"，气氛会立刻活起来。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 4. WHAT IS HARNESS ============ -->
+  <section class="slide" data-title="What is Harness">
+    <p class="kicker">// 2. definition</p>
+    <h2 class="h2">什么是 Harness？</h2>
+    <p class="lede mt-s">Harness = <strong>包裹在 LLM 外面的程序化框架</strong> · 管理 Agent 的运行环境、上下文、状态、工具和生命周期。</p>
+    <div class="figure compact">
+      <img src="./diagrams/fig-harness-analogy.svg" alt="LLM alone vs LLM in a harness">
+    </div>
+    <p class="quote-inline mt-s" style="font-size: 18px"><strong>"Humans steer. Agents execute."</strong> &nbsp;— Ryan Lopopolo, OpenAI · 2026-02</p>
+    <aside class="notes">
+      <p>定义先讲清楚。Harness——脚手架——是<em>包裹在 LLM 外面的程序化框架</em>。它不改变模型本身，但通过工程手段让模型在复杂任务中接近能力上限。</p>
+      <p>类比讲：把 LLM 想象成一个能力出众的工程师，他写代码很快、思考很周全。但<strong>同一个工程师单干，跟在一个完善的团队里干，产出质量天差地别</strong>。</p>
+      <p>团队里有什么？项目管理、代码仓库、CI/CD、Code Review、协作协议。这些不是写代码的能力，但它们决定了写代码的人能发挥到什么水平。</p>
+      <p>Harness 就是 LLM 的"团队"。</p>
+      <p>OpenAI 的 Ryan Lopopolo 给了一句最精炼的总结——<strong>"Humans steer. Agents execute."</strong> 人定方向，Agent 做事。这是 2026 年新范式的核心。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 5. WHY PROMPTS FAIL ============ -->
+  <section class="slide" data-title="Why Prompts Fail">
+    <p class="kicker">// 2. diagnosis</p>
+    <h2 class="h2">为什么"写更好的 prompt"不够？</h2>
+    <p class="lede mt-m">Anthropic 和 OpenAI 各自从产品实践中诊断出三大病根：</p>
+    <div class="num-list mt-m">
+      <div class="item"><div class="n">①</div><div class="body">
+        <b>Context Anxiety · 上下文焦虑</b>
+        <p>模型接近上下文窗口上限时会"<em>begin wrapping up work prematurely</em>"——提前收尾、草草了事。</p>
+      </div></div>
+      <div class="item"><div class="n">②</div><div class="body">
+        <b>Self-Evaluation Bias · 自评偏差</b>
+        <p>"<em>Agents tend to respond by confidently praising the work — even when, to a human observer, the quality is obviously mediocre.</em>"</p>
+      </div></div>
+      <div class="item"><div class="n">③</div><div class="body">
+        <b>Session Amnesia · 会话失忆</b>
+        <p>"<em>Each new session begins with no memory of what came before.</em>" 每次开新会话都失忆。</p>
+      </div></div>
+    </div>
+    <div class="quote-big mt-l" style="font-size: clamp(20px, 2.4vw, 30px);">
+      "Early progress was slower than we expected, <strong>not because Codex was incapable, but because the environment was underspecified</strong>. The fix was almost <em>never</em> 'try harder.'"
+      <span class="author">— Ryan Lopopolo, OpenAI · 2026-02</span>
+    </div>
+    <aside class="notes">
+      <p>为什么"prompt 写得再好"也解决不了问题？两家公司的诊断刚好互补。</p>
+      <p><strong>Anthropic</strong> 的 Justin Young 和 Prithvi Rajasekaran 提了三个内在缺陷——</p>
+      <p>第一是 <em>Context Anxiety</em>，<strong>上下文焦虑</strong>——模型快没上下文了就开始草草收尾。</p>
+      <p>第二是 <em>Self-Evaluation Bias</em>，<strong>自评偏差</strong>——这个最致命。Agent 评自己写的烂代码会自信地说"完美"。</p>
+      <p>第三是 <strong>会话失忆</strong>——每次开新会话都从零开始，背景要重新讲。</p>
+      <p>这三个都是模型本身的限制，<em>不是 prompt 能解决的</em>。</p>
+      <p>OpenAI 的 Ryan Lopopolo 一句话总结得更狠——"Codex 不是不够聪明，是<strong>环境定义不充分</strong>。" 当 Agent 失败时，正确的反应不是"再试一次"，而是问"它缺哪个能力？这个能力怎么让它看见？"</p>
+      <p>这三大病根加这一句诊断，自然引出 harness 这个结构性方案。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 6. HARNESS ARCHITECTURE ============ -->
+  <section class="slide" data-title="Harness Architecture">
+    <p class="kicker">// 2. anatomy</p>
+    <h2 class="h2">Harness 由哪些层组成？</h2>
+    <p class="small mt-s">以 Claude Code（~512K 行 TS 实现）为例：</p>
+    <div class="figure compact">
+      <img src="./diagrams/fig-architecture.svg" alt="Claude Code 5-layer harness architecture">
+    </div>
+    <p class="lede mt-s">今天 demo 重点用到 <span class="accent">L1 (Memory + Skills)</span> 和 <span class="accent">L3 (Coordinator)</span>。</p>
+    <aside class="notes">
+      <p>这页给大家看 harness 的解剖图。Claude Code 的实际实现有 5 层，从底到上——</p>
+      <p><strong>L1 基础设施</strong>：Bootstrap、Context、Skills、Memory。这一层管"Agent 启动时知道什么、看到什么、记得什么"。</p>
+      <p><strong>L2 控制层</strong>：Hook 系统。在 prompt 提交、工具调用前后注入逻辑——比如自动跑 linter、自动加 git 提交。</p>
+      <p><strong>L3 协作层</strong>：Coordinator。主 Agent 派活，sub-Agent 干活，<em>每个 sub-Agent 只能看自己被授权的工具子集</em>。这一层是 Anthropic V2 那个 Generator-Evaluator 架构落到工程里的样子。</p>
+      <p><strong>L4 任务层</strong>：Task System，6 种任务类型——Shell（执行命令）、Agent（子 Agent）、Teammate（异步同事）、Remote（远程任务）、Dream（后台规划）、Workflow（多步骤）。</p>
+      <p><strong>L5 协议层</strong>：App Server 加 MCP 协议。这一层让一个 harness 能被多个客户端共享——你在 VS Code、Web、CLI 里看到的是同一个 Claude。</p>
+      <p>这页不展开。今天 demo 重点用 <em>L1 的 Memory 和 Skills</em>，加 <em>L3 的 Coordinator</em>——这两层是研究员最容易上手、收益最大的入口。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 7. SIX PATTERNS ============ -->
+  <section class="slide" data-title="6 Patterns">
+    <p class="kicker">// 2. core patterns</p>
+    <h2 class="h2">Harness 的 6 个跨公司共识设计模式</h2>
+    <div class="figure compact">
+      <img src="./diagrams/fig-six-patterns.svg" alt="6 harness design patterns">
+    </div>
+    <aside class="notes">
+      <p>这 6 个模式是 Anthropic 4 篇博客 + OpenAI 2 篇博客 + Claude Code 源码分析里提炼出来的<strong>跨公司共识</strong>——不是某一家的私货。</p>
+      <p>师弟师妹只需要记住 ①②⑤——其他 demo 时再说。</p>
+      <p>① <strong>仓库即世界</strong>：Agent 看不到的对它就不存在。Slack 里的讨论、Google Doc 里的决策、你脑子里的假设——对 Agent 全都<em>不存在</em>。所以要把一切推进仓库。</p>
+      <p>② <strong>渐进式披露</strong>：AGENTS.md 或 CLAUDE.md 应该是个目录、是个地图，<em>不是一份百科全书</em>。OpenAI 踩过这个坑——一个巨大的 AGENTS.md 反而让 Agent 抓不到重点。</p>
+      <p>⑤ <strong>生成-评估分离</strong>：今天 demo 第三幕会专门演示这个。Claude 不会评自己，必须起一个独立 sub-Agent 当 reviewer。</p>
+      <p>这 6 条是地图，后面 demo 我会指回来。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 8. THREE MATURITY LEVELS ============ -->
+  <section class="slide" data-title="3 Maturity Levels">
+    <p class="kicker">// 3. maturity</p>
+    <h2 class="h2">用好 AI 工具的 3 个成熟度层级</h2>
+    <div class="figure compact">
+      <img src="./diagrams/fig-maturity.svg" alt="3 maturity levels: typewriter / collaborator / system designer">
+    </div>
+    <table class="compare mt-s">
+      <thead>
+        <tr><th>层级</th><th>典型行为</th><th>典型 prompt</th><th>瓶颈</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>L1 · 打字机</td>
+          <td class="old">每次描述任务，看一行结果，改一行</td>
+          <td class="old"><span class="mono">"帮我写一个 X"</span></td>
+          <td class="old">每次都从零开始</td>
+        </tr>
+        <tr>
+          <td>L2 · 协作者</td>
+          <td>用 skill / spec / 模板，让 AI 按既定流程做事</td>
+          <td><span class="mono">"按 brainstorming 流程帮我把 idea 变成 spec"</span></td>
+          <td>仍需要人介入每一步</td>
+        </tr>
+        <tr>
+          <td>L3 · 系统设计师</td>
+          <td class="new">写 CLAUDE.md / 模板 / hook，Agent 自主完成多步任务</td>
+          <td class="new"><span class="mono">"按仓库规则消化今天的 HF papers"</span></td>
+          <td class="new">需要前期投资搭 harness</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="lede mt-l">大多数人卡在 <span class="accent">L1</span>。<br>今天目标：从 L1 跳到 L2，并理解 L3 怎么搭。</p>
+    <aside class="notes">
+      <p>这页是今天最有<em>诊断意义</em>的一页。"用好 AI" 不是布尔值，是个层级。</p>
+      <p><strong>L1 · 打字机</strong>。最常见的状态——每次想到任务就打 prompt，看一行结果，改一行。典型 prompt 是 "帮我写一个 X"。瓶颈是<em>每次都从零开始</em>，背景要重讲，偏好要重说。<strong>我估计在座大多数同学还在这个层级</strong>。</p>
+      <p><strong>L2 · 协作者</strong>。开始用 skill、用 spec、用模板，让 AI 按既定流程做事。典型 prompt 是 "按 brainstorming 流程帮我把 idea 变成 spec"——你不再描述 "做什么"，而是引用 "用什么流程做"。瓶颈是<em>仍需要人介入每一步</em>，但是质量已经稳定多了。</p>
+      <p><strong>L3 · 系统设计师</strong>。写 CLAUDE.md、模板、hook，让 Agent 在你预设好的环境里自主完成多步任务。典型 prompt 是 "按仓库规则消化今天的 HF papers"——这一句话背后是 6 步流程已经写在 CLAUDE.md 里。瓶颈是<em>前期要投资搭 harness</em>，但搭好之后回报指数级。</p>
+      <p>大多数师弟师妹卡在 L1。<strong>今天的目标，是让你们出门后能跳到 L2，并理解 L3 怎么搭</strong>。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 9. PROMPT TEMPLATES ============ -->
+  <section class="slide" data-title="Prompt Templates">
+    <p class="kicker">// 3. prompt templates</p>
+    <h2 class="h2">三组立刻可以抄的 prompt 模板</h2>
+
+    <div class="code-block mt-m">
+<span class="label">templ-1 · 读论文（替代 "总结这篇 paper"）</span>
+<span class="comment"># 读论文 spec-driven prompt</span>
+
+请按以下结构总结 [arXiv:XXXX.XXXXX] 这篇论文：
+1. <span class="cmd">一句话定位</span>：它在做什么、与最相关的 1-2 项前序工作的差异
+2. <span class="cmd">关键 insight</span>：1-3 条，每条 ≤ 30 字
+3. <span class="cmd">方法核心</span>：用 1 张架构图说明 + 不超过 200 字
+4. <span class="cmd">实验 takeaway</span>：3 个最关键数字（带引用页码）
+5. <span class="cmd">局限</span>：作者自己承认的 + 我应该追问的
+6. <span class="cmd">如果我要复现，最小可行版本是什么</span>
+
+<span class="comment"># 按仓库命名规则保存</span>
+    </div>
+
+    <div class="code-block">
+<span class="label">templ-2 · 写笔记（替代 "帮我总结一下 X"）</span>
+<span class="comment"># 不要直接动手，先 brainstorm 笔记的"用途"</span>
+
+我想就 [topic / paper / 实验] 写一份笔记。先<span class="cmd">不要动手</span>。
+先一问一答帮我把以下 5 件事确定下来：
+1. 这份笔记<span class="cmd">将来谁会读</span>？（自己 3 个月后？合作者？导师？）
+2. 笔记的<span class="cmd">用途</span>：备忘 / 引用源 / 综述素材 / 复现 SOP？
+3. 我想沉淀的<span class="cmd">核心结论</span>（不是知识点，是结论）
+4. 笔记结构草稿（标题 + 一级小标题）
+5. 需要外部引用 / 数据 / 图的位置（先列 placeholder）
+
+确定后再 <span class="flag">/writing-plans</span>，再写。
+    </div>
+
+    <div class="code-block">
+<span class="label">templ-3 · 跑实验（替代 "帮我实现 X"）</span>
+<span class="comment"># TDD-first，强制自我验证</span>
+
+我要实现 [algorithm]。请按 <span class="flag">test-driven-development</span> skill：
+1. <span class="cmd">先列 5 条数学/物理 invariant</span>（必须满足的性质）
+2. <span class="cmd">先写 pytest 测试</span>覆盖这 5 条 invariant
+3. 再写实现
+4. 跑测试 → 把<span class="cmd">完整输出贴回来</span>（不是"测试通过"四个字）
+5. 跑完后启动一个 <span class="flag">sub-agent reviewer</span>，
+   让它<span class="cmd">批判性</span>地审查，找数学错误
+    </div>
+
+    <aside class="notes">
+      <p>这一页是今天<em>最具体、最能立刻动手</em>的一页。三组 prompt 模板，各自替代一类常见的烂 prompt。</p>
+      <p><strong>第一组——读论文</strong>。把 "总结这篇 paper" 这种空 prompt，换成结构化的 6 段提示。重点在第 6 条——<em>"如果要复现，最小可行版本是什么"</em>。这一条逼 AI 不停留在 abstract 层，而是真正啃方法。</p>
+      <p><strong>第二组——写笔记</strong>。把 "帮我总结一下" 换成 "<em>先不要动手</em>，先一问一答确定 5 件事"。这就是 spec-driven。第 1 条和第 2 条最关键——<strong>谁读 + 用途</strong>。<em>给自己 3 个月后看的备忘</em> 和 <em>给导师看的汇报</em> 写法完全不同。AI 不知道这件事，你必须告诉它。第 3 条核心结论——不要让笔记沦为知识点堆砌，要有"我从这件事得出 X"的句子。</p>
+      <p><strong>第三组——跑实验</strong>。把 "帮我实现 X" 换成 5 步 TDD。重点在第 1 条——"先列 5 条数学 invariant"。让 AI 先把 "什么叫做对" 写成可测试的代码，<em>再去实现</em>。第 5 条是 sub-agent reviewer——别让 AI 自己评。</p>
+      <p>这三组模板我会发给大家。回去最快的练习——<em>明天读你的下一篇 paper 时用第一组</em>。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 10. PIPELINE OVERVIEW ============ -->
+  <section class="slide" data-title="Pipeline Overview">
+    <p class="kicker">// 4. ai research pipeline</p>
+    <h2 class="h2">AI 研究 pipeline · <span class="accent">6 个阶段</span></h2>
+    <p class="lede mt-s">每一阶段都有 HF / arXiv / Skill 工具栈对应，<em>不是宽泛的"读论文写论文"</em>。</p>
+    <div class="figure compact">
+      <img src="./diagrams/fig-pipeline.svg" alt="AI research pipeline: 6 stages with REFLECT loop">
+    </div>
+    <p class="lede mt-m">研究员的产物不再是"<strong>论文 + 一坨 colab</strong>"，<br>而是 <span class="accent">&lt;paper, model, dataset, space&gt;</span> 这一组互相引用的对象。</p>
+    <aside class="notes">
+      <p><strong>过渡</strong>：上面 7 页讲了 Harness 概念 + 三层成熟度 + prompt 模板。<em>接下来 12 页是把这套概念落到 AI 研究的具体场景上</em>——也就是这一段最干货的部分。</p>
+      <p>讲科研工作流不能只说"读论文写论文"那么粗。AI 时代的研究 pipeline 已经定型为 6 个阶段——<strong>Discover, Digest, Spec, Build, Evaluate, Publish</strong>。</p>
+      <p>这张表的关键是<em>第三列</em>——每个阶段都有具体工具栈对应。Discover 阶段用 HF MCP server 的 paper_search + arxiv-mcp 的 semantic_search 和 watch_topic；Digest 阶段用 huggingface-papers skill 直接拿到论文页 markdown，含社区讨论和关联的 model/dataset/space；Spec 阶段用 superpowers 的 brainstorming + writing-plans；Build 阶段是 fine-tuning skill 大全——peft、axolotl、trl、torchtitan；Evaluate 阶段是 lm-evaluation-harness 加自定义 invariant；Publish 阶段是 paper × model × dataset × demo 四件套。</p>
+      <p><strong>最关键的洞察在底下这句</strong>——研究员的产物不再是"一篇论文加一坨 colab"，而是 <em>paper, model, dataset, demo 四元组</em>，互相用<strong>稳定 ID</strong> 引用（HF Hub、GitHub、W&amp;B、ModelScope、内部 manifest 都行）。这是 AI 研究范式过去两年最深刻的变化，但很少有人讲清楚。</p>
+      <p>接下来 6 页我会把每个阶段展开 30 秒。这个 deck 我设计成可以会后回看，不用现场全记住。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 11. SPEED-UP DATA ============ -->
+  <section class="slide" data-title="Speedup Data">
+    <p class="kicker">// 4. real numbers</p>
+    <h2 class="h2">每阶段实际收益（按时间尺度分层）</h2>
+    <p class="small mt-s">研究实验的时间尺度天然在<strong>周-月</strong>级，单点加速比意义不大。<em>真正的收益分布在不同维度</em>。</p>
+    <table class="compare mt-m">
+      <thead>
+        <tr><th style="width:16%">阶段</th><th style="width:14%">尺度</th><th style="width:24%">AI 之前</th><th style="width:24%">AI + Harness</th><th>关键收益</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>① Discover</td>
+          <td class="old">日常</td>
+          <td class="old">读不完，靠运气漏过</td>
+          <td class="new">topic watcher 推送</td>
+          <td class="new">覆盖率：0 → 1</td>
+        </tr>
+        <tr>
+          <td>② Digest 单篇</td>
+          <td class="old">小时级</td>
+          <td class="old">45-90 min · 读完即忘</td>
+          <td class="new">10-15 min · 结构化笔记</td>
+          <td class="new">质量 + 可召回</td>
+        </tr>
+        <tr>
+          <td>③ Spec</td>
+          <td class="old">天级</td>
+          <td class="old">脑子里转 1-3 天</td>
+          <td class="new">brainstorm 半天出 spec</td>
+          <td class="new">前期阻力下降</td>
+        </tr>
+        <tr>
+          <td>④ Build · 单 component</td>
+          <td class="old">小时级</td>
+          <td class="old">4-8 hr</td>
+          <td class="new">1-2 hr（TDD-first）</td>
+          <td class="new">单点 ~4×</td>
+        </tr>
+        <tr>
+          <td>④ Build · <strong>真实实验</strong></td>
+          <td class="old"><strong>周-月级</strong></td>
+          <td class="old">数周-数月（不变）</td>
+          <td class="new">数周-数月（不变）</td>
+          <td class="new"><strong>不是更快，是更可复现</strong></td>
+        </tr>
+        <tr>
+          <td>⑤ Evaluate</td>
+          <td class="old">天级</td>
+          <td class="old">跑 1 个 benchmark 自慰</td>
+          <td class="new"><em>多花 1-2 天</em>跑三层评测</td>
+          <td class="new"><strong>"表面 work" 暴露</strong></td>
+        </tr>
+        <tr>
+          <td>⑥ Publish · draft</td>
+          <td class="old">周级</td>
+          <td class="old">2-4 周</td>
+          <td class="new">1-2 周（draft 加速）</td>
+          <td class="new">~2× + 复现链完整</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="lede mt-m">⚠ <strong>真实实验本身不会变快</strong>——训练就是要烧那么多 GPU 小时。<br>Harness 改变的是<span class="accent">"实验能不能算数"</span>：可复现 / 可证伪 / 可审计。</p>
+    <aside class="notes">
+      <p>这张表上一版我写得太乐观了，今天<strong>诚实地讲</strong>。</p>
+      <p>关键认知——<strong>研究实验的时间尺度天然在周-月级</strong>，训练一个模型本身就是要烧那么多 GPU 小时，<em>这件事 AI 改变不了</em>。所以单纯讲"几倍加速比"是误导的。</p>
+      <p>看表的关键观察是：<strong>不同阶段的时间尺度差几个数量级，收益的形态也完全不同</strong>。</p>
+      <p>① Discover · 日常级——这一段不是"快"，是覆盖率从 0 到 1。</p>
+      <p>② Digest 单篇 · 小时级——4 到 6 倍。但更值钱的是结构化笔记可以被未来的自己召回。</p>
+      <p>③ Spec · 天级——以前一个 idea 在脑子里磨 1 到 3 天才有勇气动手，现在半天能落到 spec。<em>前期阻力下降是研究最大的隐性收益</em>。</p>
+      <p>④ Build 我特意拆成两行讲——<strong>"复现一个 component"和"做真实实验"是两件事</strong>。复现 RoPE 这种 10 行算法是小时级，确实能 4 倍加速。但<em>真实研究实验</em>——预训练、微调、做 ablation——动辄数周数月，<strong>这件事 AI 改变不了</strong>。harness 改变的是这一段的<em>"可复现性"</em>——同样花 3 个月，以前结束后没人能复现，现在四件套出来别人能 git clone。</p>
+      <p>⑤ Evaluate——我特意标了"<strong>多花 1-2 天</strong>"。三层评测不是"更快"，是<em>多花一两天来防止你之前那个"看起来 work 的实验"是假阳性</em>。这是质量投资，不是时间节省。</p>
+      <p>⑥ Publish · draft——一篇 ML paper 写出来再怎么有 AI 帮也不可能两小时。draft 阶段大概 2 倍加速，但更重要的是发布时<em>整条复现链是完整的</em>。</p>
+      <p>底下那句话最重要——<strong>真实实验本身不会变快，harness 改变的是"实验能不能算数"</strong>。<em>这句话是后面流程对比页和"5 个科学性属性"页的伏笔，等会儿会回来收口</em>。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 12. STAGE ① DISCOVER ============ -->
+  <section class="slide" data-title="Stage 1: Discover">
+    <p class="kicker">// stage ① · discover</p>
+    <h2 class="h2">① Discover · <span class="accent">找该读什么</span></h2>
+    <p class="lede mt-s">核心问题：<em>每天 200+ 篇 arXiv，怎么不漏关键工作。</em></p>
+    <div class="two-col mt-m">
+      <div>
+        <h3 class="h3">关键工具</h3>
+        <ul>
+          <li><span class="mono">hf-mcp.paper_search</span> — HF Daily Papers + 标签 / 主题</li>
+          <li><span class="mono">arxiv-mcp.semantic_search</span> — 语义搜索本地索引</li>
+          <li><span class="mono">arxiv-mcp.watch_topic</span> + <span class="mono">check_alerts</span> — 后台订阅，新论文自动入列</li>
+          <li><span class="mono">arxiv-mcp.citation_graph</span> — 一篇关键 paper 上下游</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="h3">Harness 升级动作</h3>
+        <ul>
+          <li>把"今天刷 HF"<strong>cron-able 化</strong>：watch_topic 跑后台，每日 alert</li>
+          <li>新论文自动转换为 <span class="mono">inbox/</span> markdown：含 arxiv ID + 一句话定位</li>
+          <li>用 citation graph 建"前序 / 后续工作"图，避免读孤立单篇</li>
+          <li>每周一个固化的 cron job 跑这套，不再"想起来才读"</li>
+        </ul>
+      </div>
+    </div>
+    <p class="quote-inline mt-l">不漏论文不靠"我每天会刷"，靠"环境会推给你"。<em>从拉到推。</em></p>
+    <aside class="notes">
+      <p>第一阶段 <strong>Discover</strong>。核心问题就一个——<em>每天 200 多篇 arXiv，怎么不漏关键工作</em>。</p>
+      <p>关键工具是 4 个 MCP 工具的组合。<code>paper_search</code> 拿 HF Daily Papers 元数据；<code>semantic_search</code> 在本地索引上做语义搜索；<code>watch_topic</code> 加 <code>check_alerts</code> 是订阅机制——你定义"agentic RL"或"diffusion policy"作为关注主题，它自动在后台跑，新论文自动 alert；<code>citation_graph</code> 让你拿到一篇关键 paper 的上下游。</p>
+      <p>Harness 升级动作的核心一句话——<strong>从"拉"变成"推"</strong>。以前你"想起来才刷 HF"，现在 cron-able 的 watch_topic 把新论文推到你的 inbox 目录，<em>环境主动给你工作</em>。</p>
+      <p>底下这句话总结了这个阶段的精神——<em>不漏论文不靠"我每天会刷"，靠"环境会推给你"</em>。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 13. STAGE ② DIGEST ============ -->
+  <section class="slide" data-title="Stage 2: Digest">
+    <p class="kicker">// stage ② · digest</p>
+    <h2 class="h2">② Digest · <span class="accent">把论文变成知识</span></h2>
+    <p class="lede mt-s">核心问题：<em>读完之后 30 min 产出可复用笔记，而不是"看过就忘"。</em></p>
+    <div class="two-col mt-m">
+      <div>
+        <h3 class="h3">关键工具</h3>
+        <ul>
+          <li><span class="mono">huggingface-papers</span> skill — 直接拿 HF 论文页 markdown，<strong>含社区讨论 + 链接的 model/dataset/space</strong></li>
+          <li><span class="mono">arxiv-mcp.read_paper</span> — 拿全文 PDF</li>
+          <li><span class="mono">hub_repo_details</span> — 反查这篇 paper 有没有官方 model/dataset</li>
+          <li>templ-1 6 段结构化 prompt（一句话定位 / insight / 方法 / 数字 / 局限 / MVP）</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="h3">Harness 升级动作</h3>
+        <ul>
+          <li>每篇笔记用<strong>统一模板</strong>，结构稳定才能被 grep / re-read</li>
+          <li><strong>强制记录 <span class="mono">linked_models</span> 和 <span class="mono">linked_datasets</span> 的 registry ID</strong>（HF / GitHub / W&amp;B / 内部）— 这是后面 reproducibility 的钩子</li>
+          <li>命名规则 + 子目录放图，半年沉淀成私人 wiki</li>
+          <li>笔记本身能被下一次的 LLM 召回（写下一份笔记 / 综述时直接搜自己）</li>
+        </ul>
+      </div>
+    </div>
+    <p class="quote-inline mt-l"><strong>记下产物的稳定 ID</strong>（HF / GitHub / W&amp;B / 内部都行），是这一阶段最便宜也最重要的动作——<em>它让你的笔记和将来的实验之间有了机器可读的桥</em>。</p>
+    <aside class="notes">
+      <p>第二阶段 <strong>Digest</strong>，核心问题——<em>读完之后 30 分钟产出可复用笔记，而不是"看过就忘"</em>。</p>
+      <p>关键工具里我特别想强调 <code>huggingface-papers</code> 这个 skill。它不只是拿摘要，<strong>它能把整个 HF 论文页面的 markdown 拿到，包括社区讨论、关联的 model、dataset、space</strong>——这是 arXiv 给不了的。</p>
+      <p>但这一阶段最关键的不是工具，是一个看似不起眼的纪律——<strong>每篇笔记里强制记录 linked_models 和 linked_datasets 的稳定 ID</strong>。HF Hub、GitHub releases、W&amp;B Artifacts、ModelScope，甚至课题组内部的 manifest 都行——重点是<em>这个 ID 不会变</em>。这一步只多花 30 秒，是后面所有 reproducibility 的钩子。</p>
+      <p>为什么？因为这些 ID 是你笔记和将来实验之间的<em>机器可读桥</em>。下次你写综述、做对照实验，LLM 能从笔记里召回这些 ID，然后立刻去 registry 查最新 metadata、查复现情况、查最新评测——你的"读论文"和"做实验"在这个 ID 上对接了。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 14. STAGE ③ SPEC ============ -->
+  <section class="slide" data-title="Stage 3: Spec">
+    <p class="kicker">// stage ③ · spec</p>
+    <h2 class="h2">③ Spec · <span class="accent">把想法变成可测假设</span></h2>
+    <p class="lede mt-s">核心问题：<em>从"我觉得 X 有意思"到"X 满足 N 个 invariant"。</em></p>
+    <div class="two-col mt-m">
+      <div>
+        <h3 class="h3">关键工具</h3>
+        <ul>
+          <li><span class="mono">superpowers:brainstorming</span> — 一问一答把模糊想法变 spec</li>
+          <li><span class="mono">superpowers:writing-plans</span> — spec → 可执行计划</li>
+          <li>MEMORY 系统 — 你的偏好 / 过去课题 / 文风自动注入</li>
+          <li>YAML config 文件 — 让 axolotl / llama-factory 直接吃</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="h3">Harness 升级动作</h3>
+        <ul>
+          <li>每个新课题先建 <span class="mono">experiments/&lt;slug&gt;/spec.md</span></li>
+          <li>spec 必须含 <strong>hypothesis · metric · baseline · dataset-id · model-id</strong></li>
+          <li>后两个直接写 <strong>registry ID</strong>（HF / GitHub / W&amp;B / 内部），<em>让 ④ Build 阶段能机器读</em></li>
+          <li>所有 hyperparam 进 <span class="mono">config.yaml</span>，不藏在代码里</li>
+        </ul>
+      </div>
+    </div>
+    <p class="quote-inline mt-l">Spec-as-Config = 把 idea 变成<em>机器可读的对象</em>。<br>下游所有自动化都依赖这一步做对。</p>
+    <aside class="notes">
+      <p>第三阶段 <strong>Spec</strong>，核心问题——<em>从"我觉得 X 有意思"到"X 满足 N 个 invariant"</em>。</p>
+      <p>这一阶段是从"模糊想法"到"机器可读对象"的转折，研究里最容易被低估的一步。大多数硕士生跳过这一步，直接进 ④ Build——结果是改了 5 次代码也没真正回答问题，因为<em>问题本身从来没明确过</em>。</p>
+      <p>Harness 升级动作的核心是<strong>spec.md + config.yaml 双件套</strong>。spec.md 里有人类可读的假设、metric、baseline，外加两个最关键的字段——dataset-id 和 model-id 直接写 registry ID（你课题用什么 registry 就写什么）。<em>下游 ④ Build 阶段就能机器读</em>。</p>
+      <p>底下这句是这一阶段的精神——<strong>Spec-as-Config，把 idea 变成机器可读的对象</strong>。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 15. STAGE ④ BUILD ============ -->
+  <section class="slide" data-title="Stage 4: Build">
+    <p class="kicker">// stage ④ · build</p>
+    <h2 class="h2">④ Build · <span class="accent">数据 + 模型 + 训练</span></h2>
+    <p class="lede mt-s">核心问题：<em>把 spec 落成可跑代码，且不重新发明轮子。</em></p>
+    <div class="two-col mt-m">
+      <div>
+        <h3 class="h3">数据 / 模型 / 训练 Skill</h3>
+        <ul>
+          <li><strong>数据</strong>：<span class="mono">nemo-curator</span>（去重 + 过滤）· <span class="mono">ray-data</span> · HF datasets via <span class="mono">hub_repo_search</span></li>
+          <li><strong>架构</strong>：<span class="mono">litgpt</span> · <span class="mono">nanogpt</span> · <span class="mono">transformers</span> · <span class="mono">mamba</span> / <span class="mono">rwkv</span></li>
+          <li><strong>分词</strong>：<span class="mono">huggingface-tokenizers</span> · <span class="mono">sentencepiece</span></li>
+          <li><strong>训练</strong>：<span class="mono">peft</span>（LoRA/QLoRA）· <span class="mono">axolotl</span> / <span class="mono">llama-factory</span> / <span class="mono">unsloth</span> · <span class="mono">torchtitan</span></li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="h3">Scale / Quantize / RL</h3>
+        <ul>
+          <li><strong>分布式</strong>：<span class="mono">accelerate</span> · <span class="mono">deepspeed</span> · <span class="mono">pytorch-fsdp2</span> · <span class="mono">ray-train</span></li>
+          <li><strong>量化</strong>：<span class="mono">bitsandbytes</span> · <span class="mono">awq</span> · <span class="mono">gptq</span> · <span class="mono">hqq</span> · <span class="mono">gguf</span></li>
+          <li><strong>RLHF</strong>：<span class="mono">trl</span> · <span class="mono">openrlhf</span> · <span class="mono">verl</span> · <span class="mono">slime</span> · <span class="mono">grpo</span> · <span class="mono">simpo</span></li>
+          <li><strong>实验追踪</strong>：<span class="mono">wandb</span> · <span class="mono">mlflow</span> · <span class="mono">tensorboard</span></li>
+        </ul>
+      </div>
+    </div>
+    <p class="quote-inline mt-l">研究员的工作不是写训练 loop——<br>是<em>把对的工具组合在 YAML 里</em>。</p>
+    <aside class="notes">
+      <p>第四阶段 <strong>Build</strong>，问题是——<em>把 spec 落成可跑代码，且不重新发明轮子</em>。</p>
+      <p>这一页是 skill 大全。我把它分成两栏。</p>
+      <p>左栏是<strong>数据、架构、训练</strong>——数据用 nemo-curator 做去重和质量过滤，ray-data 做 streaming；架构用 litgpt 或 transformers，看你想用 reference implementation 还是 production 库；分词器选 HF tokenizers 或 sentencepiece；训练阶段用 peft 加 LoRA、用 axolotl 或 llama-factory 走 YAML 配置、用 torchtitan 做 4D 并行。</p>
+      <p>右栏是<strong>规模化、量化、RL</strong>——分布式 accelerate / deepspeed / fsdp2；量化 awq / gptq / bitsandbytes；RLHF 一整片——trl 是 HuggingFace 自家的，openrlhf 是大规模 PPO，verl 和 slime 是 Megatron 集成的高性能版，grpo 和 simpo 是新算法。</p>
+      <p>关键是底下这句——<strong>研究员的工作不是写训练 loop，而是把对的工具组合在 YAML 里</strong>。这一段不展开讲，给师弟师妹一份"想做哪种实验、用哪几个 skill"的查询表，会后慢慢看。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 16. STAGE ⑤ EVALUATE ============ -->
+  <section class="slide" data-title="Stage 5: Evaluate">
+    <p class="kicker">// stage ⑤ · evaluate</p>
+    <h2 class="h2">⑤ Evaluate · <span class="accent">三层评测防自评偏差</span></h2>
+    <p class="lede mt-s">核心问题：<em>模型表面 work 不等于真 work。</em></p>
+    <div class="num-list mt-m">
+      <div class="item"><div class="n">L1</div><div class="body">
+        <b>标准 benchmark</b>
+        <p><span class="mono">lm-evaluation-harness</span>（mmlu/hellaswag/...）· <span class="mono">bigcode-evaluation-harness</span>（HumanEval）· <span class="mono">nemo-evaluator</span> · 跨模型可比</p>
+      </div></div>
+      <div class="item"><div class="n">L2</div><div class="body">
+        <b>Spec invariant tests</b>
+        <p>从 ③ spec 里的 N 个 invariant 派生 pytest，覆盖<strong>数学/物理性质</strong>。<em>"测试通过 4 个字" 不算证据，要贴完整输出</em>。</p>
+      </div></div>
+      <div class="item"><div class="n">L3</div><div class="body">
+        <b>Sub-agent reviewer</b>
+        <p>独立 sub-agent 看输出样本，找定性问题。"<em>Out of the box, Claude is a poor QA agent</em>"——必须用<strong>独立 Agent</strong> 评。</p>
+      </div></div>
+    </div>
+    <p class="quote-inline mt-l">三层都过 = 真 work。<br>只过 L1 = 表面 work（90% 的"work"其实在这一档）。</p>
+    <aside class="notes">
+      <p>第五阶段 <strong>Evaluate</strong>，问题是——<em>表面 work 不等于真 work</em>。</p>
+      <p>这是整个 pipeline 最容易出"假阳性"的一段。我提的方案是<strong>三层评测</strong>，三层都过才算 work。</p>
+      <p><strong>L1 标准 benchmark</strong>——lm-evaluation-harness 跑 mmlu / hellaswag / gsm8k 这些跨模型可比的指标。这一层最容易跑，也最不能停在这里。</p>
+      <p><strong>L2 spec invariant tests</strong>——把第三阶段 spec 里写的 N 个 invariant 落成 pytest，测<em>数学和物理性质</em>。比如做 RoPE 实验就测旋转不变性、测周期性。这一层会暴露 90% 的"代码有 bug 但 benchmark 通过"。</p>
+      <p><strong>L3 sub-agent reviewer</strong>——起一个独立 agent 看模型输出样本，找定性问题。这一层是 Anthropic Generator-Evaluator 模式的落地。</p>
+      <p>底下这句话很狠——<strong>三层都过 = 真 work，只过 L1 = 表面 work</strong>。<em>大家觉得别人发的 paper 里 90% 的"work"其实在 L1 这一档</em>。这就是为什么很多 paper 复现不出来。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 17. STAGE ⑥ PUBLISH ============ -->
+  <section class="slide" data-title="Stage 6: Publish">
+    <p class="kicker">// stage ⑥ · publish</p>
+    <h2 class="h2">⑥ Publish · <span class="accent">让别人能引用、能复现</span></h2>
+    <p class="lede mt-s">核心问题：<em>研究产物的"可被发现性"和"可被复用性"。</em></p>
+    <div class="two-col mt-m">
+      <div>
+        <h3 class="h3">从 1 件到 4 件套</h3>
+        <ul>
+          <li><strong>arXiv paper</strong> — 论述 + 引用</li>
+          <li><strong>HF Model</strong> — checkpoints + tokenizer + model card（含 base_model / training data ID / eval 结果）</li>
+          <li><strong>HF Dataset</strong> — 训练 / 评测数据 + dataset card</li>
+          <li><strong>HF Space</strong> — interactive demo（gradio / streamlit）</li>
+        </ul>
+      </div>
+      <div>
+        <h3 class="h3">Harness 动作</h3>
+        <ul>
+          <li>Model card 必须写清 hyperparam + 训练数据 ID + eval 结果</li>
+          <li>Dataset card 必须含来源 / 许可 / 已知偏差</li>
+          <li>Space 必须有 reproducible <span class="mono">app.py</span></li>
+          <li>四件套互相用 <strong>registry ID 互相引用</strong>，形成 audit trail（HF / GitHub / W&amp;B 都行）</li>
+        </ul>
+      </div>
+    </div>
+    <p class="quote-inline mt-l">研究的"完成"不再是 paper accept，<br>而是<span class="accent">&lt;paper · model · dataset · space&gt;</span> 都能被人 git clone / hub clone。</p>
+    <aside class="notes">
+      <p>第六阶段 <strong>Publish</strong>，问题是——<em>研究产物的"可被发现性"和"可被复用性"</em>。</p>
+      <p>过去这一阶段就是写论文加 GitHub 一坨 colab。现在不一样——研究产物升级成<strong>四件套</strong>：arXiv paper、HF Model、HF Dataset、HF Space。每一件都是独立的、可引用、可被搜索到的对象。</p>
+      <p>关键是 model card / dataset card / space 必须写到位——<em>card 不是文档，是给 Agent 和后人的可执行 metadata</em>。</p>
+      <p>底下这句话定义了"研究的完成"在 2026 年的新形态——<strong>不再是 paper accept，而是四件套都能被人 git clone 或 hub clone</strong>。</p>
+      <p>师弟师妹现在准备硕士论文阶段就开始练这件事——你的硕士成果就不只是一篇毕业论文，而是带 model + dataset + space 的真实工程交付，找工作时含金量天差地别。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 18. ARTIFACT REGISTRY = BUS ============ -->
+  <section class="slide" data-title="Artifact Registry = Bus">
+    <p class="kicker">// 4. the unifier</p>
+    <h2 class="h2">把 6 阶段串起来：<br><span class="accent">Artifact Registry = pipeline 总线</span></h2>
+    <p class="lede mt-s"><strong>Artifact Registry</strong> = 任何能给产物提供"稳定 ID + 元数据 + 跨阶段引用"的系统。</p>
+    <div class="figure compact">
+      <img src="./diagrams/fig-registry-bus.svg" alt="Artifact Registry as the pipeline bus connecting 6 stages">
+    </div>
+    <aside class="notes">
+      <p>把刚才 6 阶段串起来看，会发现一件之前没强调的事——<strong>所有阶段都需要一种"产物注册中心"来当总线</strong>。</p>
+      <p>我把这种系统抽象叫 <strong>Artifact Registry</strong>。它的定义是——<em>任何能给产物提供"稳定 ID + 元数据 + 跨阶段引用"的系统</em>。</p>
+      <p>它给 pipeline 提供三件关键基础设施。</p>
+      <p><strong>第一，稳定 ID</strong>。重点是<em>稳定</em>——不是文件路径，因为文件路径会搬家、会失效；是跨机器、跨时间不变的引用。任何阶段都可以靠 ID 互相引用。</p>
+      <p><strong>第二，机器可读 provenance</strong>。每个产物有 base_model、dataset、commit、config 字段，能反查"这个产物从哪来"。这是"可审计"的物理基础。</p>
+      <p><strong>第三，跨阶段闭环</strong>——你 ① 阶段读到的 paper，往往链接到 ② 的 dataset、③ 的 model、④ 的 demo。研究的输入和输出是同一类对象。</p>
+      <p>下半页是<strong>实例对照表</strong>。这一页的关键在于——<em>不要绑死在某一个具体平台上</em>。</p>
+      <p>NLP 大模型场景，HF Hub 是事实标准；CV 或通用 ML，GitHub Releases 加自有 S3 也行；实验中间产物推荐 W&amp;B Artifacts 或 MLflow；国内合规需求或中文社区可以用 ModelScope；课题组内部最简单的方案是 DVC 加一个 manifest.json。</p>
+      <p>底下这句话是这一页的精神——<strong>关键不是用哪个 Registry，而是"凡是产物必须有稳定 ID"这个纪律</strong>。师弟师妹的课题组用什么、有什么合规要求、跨平台不跨平台——选 Registry 时考虑这些。但<em>"产物有稳定 ID"这件事不能省</em>。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 19. EXPERIMENT FLOW COMPARE ============ -->
+  <section class="slide" data-title="Experiment Flow Compare">
+    <p class="kicker">// 4. before vs after</p>
+    <h2 class="h2">实验流程对比 · <span class="accent">从碎片到管线</span></h2>
+    <div class="figure compact">
+      <img src="./diagrams/fig-experiment-flow.svg" alt="Before vs after: scattered experiment vs spec-driven pipeline">
+    </div>
+    <aside class="notes">
+      <p>这一页是今天<strong>最有冲击力</strong>的一页。我把"以前怎么做实验"和"现在怎么做实验"并排放出来。</p>
+      <p>看左边——这是绝大多数硕士生的真实状态。<em>"我觉得 X 可能 work"</em>，立刻动手写代码，超参藏在 colab cell 里，跑通就发微信给导师，跑一个 benchmark 看起来比 baseline 高就算赢，写进周报就完事。<strong>三个月后自己都看不懂自己做了什么</strong>——这就是"散点式实验"的代价。</p>
+      <p>看右边——同样的实验，但走 spec-driven 管线。从 <strong>DDD（Domain-Driven Design）</strong>开始：你为什么做 X？前序工作是什么？假设是什么？这一步逼你回答的问题，AIDLC 把它叫"<em>What should we build?</em>"。然后到 <strong>SDD（Spec-Driven Development）</strong>——spec.yaml 是 single source of truth，hypothesis、metric、invariant、各产物的 registry ID 全在这一份 yaml 里。再到 <strong>TDD</strong>——先写 invariant 测试再写实现，AIDLC 的话是"<em>tests before code, not after</em>"。然后三层评测、四件套发布、最后 reflect 把失败也写回知识库。</p>
+      <p>这套 <strong>DDD + SDD + TDD</strong> 不是我自己编的——是 AWS AIDLC 团队在 Amazon 内部 Frontier Teams 验证过的方法论栈，他们在工程项目上做到了 6 倍生产力。<em>我把它搬到科研场景</em>。</p>
+      <p>底下两句对比要慢——左边"上下文藏在脑子里 · 判据靠'我觉得对'"，右边"spec 是契约 · 测试是证据 · 反思可累积"。这就是从"个人手工业"到"科学管线"的差距。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 20. SCIENTIFIC PROPERTIES ============ -->
+  <section class="slide" data-title="Scientific Properties">
+    <p class="kicker">// 4. why is this scientific</p>
+    <h2 class="h2">为什么这个流程<span class="accent">才叫科学</span>？</h2>
+    <p class="lede mt-s">不是因为用了 AI——而是因为它满足科研方法论的<strong>5 个基本属性</strong>，每条都由具体 harness 部件保证：</p>
+    <div class="figure compact">
+      <img src="./diagrams/fig-science.svg" alt="5 scientific properties: reproducible / falsifiable / auditable / compounding / comparable">
+    </div>
+    <p class="small mt-s tc"><strong>反向自查</strong>：① 别人能复现吗？ ② 失败/成功有明确判据吗？ ③ 决策链有文字记录吗？ ④ 教训沉淀到团队了吗？ ⑤ 能跟同方向横向比吗？</p>
+    <aside class="notes">
+      <p>上一页讲了"以前 vs 现在"的流程对比。这一页回答<strong>更深的问题——为什么右边那个流程才叫"科学"？</strong></p>
+      <p>科学方法论本身有 5 个基本属性——<em>可重复、可证伪、可审计、可累积、可比较</em>。这些不是 AI 时代发明的，是从 17 世纪科学革命就定下来的标准。</p>
+      <p>但师弟师妹们做实验时，<strong>这 5 条往往只靠"自觉"在维持</strong>——你尽量记笔记、尽量多跑几个 seed、尽量写清楚——但因为是手工，常常只做到一半就放弃了。</p>
+      <p>新流程的关键不是"快"，是<strong>把这 5 条从自觉变成机械化保证</strong>。我一条一条说——</p>
+      <p><strong>① 可重复</strong>：spec.yaml 把 base model、dataset、超参全部锁定到稳定的 registry ID（HF / GitHub / W&amp;B / 内部都行）。别人 git clone 你的 spec，就能复现你的实验。<em>这件事手工做永远做不完整，自动化一次到位</em>。</p>
+      <p><strong>② 可证伪</strong>：TDD 的 invariant 测试把"<em>什么叫做对</em>"写成可执行代码。RoPE 实验，你必须先写"旋转不变性测试"——这就是 Karl Popper 说的"可证伪边界"用代码定义出来。</p>
+      <p><strong>③ 可审计</strong>：DDD 文档记录每个决策为什么这么做，wandb 记录每个 run，sub-agent reviewer 留 log——整条 audit trail 完整。<em>"为什么做这个实验"、"为什么改了这个超参"——以前都是脑子里的，现在都在文件里</em>。</p>
+      <p><strong>④ 可累积</strong>：REFLECT 阶段把失败原因写回 DDD 文档。<em>下次做相关实验时，AI 会自动读这份 DDD，先帮你避坑</em>——这是 AIDLC 提到的"self-evolving knowledge layer"。经验不再只在脑子里、不再只在毕业的师兄师姐脑子里。</p>
+      <p><strong>⑤ 可比较</strong>：三层评测加标准 metric，让你的实验和同方向其他工作能横向比。</p>
+      <p>底下这句话是这一页的精神——<strong>"AI 加速科研"的真正意义不是跑得快，是让 5 个属性从自觉变成机械化保证</strong>。</p>
+      <p>最后留一个反向自查给师弟师妹——<em>你最近一次实验，能勾几个？</em> 这一段如果能给大家留下"我得回去检查一下"的不安感，今天就成了。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 21. SPEC.YAML SAMPLE ============ -->
+  <section class="slide" data-title="spec.yaml Sample">
+    <p class="kicker">// 4. spec-as-config</p>
+    <h2 class="h2">把 pipeline 浓缩到一份 <span class="mono">spec.yaml</span></h2>
+    <div class="code-block mt-m">
+<span class="comment"># experiments/&lt;slug&gt;/spec.yaml</span>
+<span class="comment"># —— 一份 spec，串起 6 个阶段（registry 以 HF 为例，可换 GitHub / W&amp;B / 内部）</span>
+
+<span class="cmd">hypothesis</span>: <span class="str">"在指令微调中，加入 X 类数据能提升 Y 类任务 Z 个点"</span>
+
+<span class="cmd">stage_3_spec</span>:
+  metric:        [accuracy, brier_score]
+  invariants:    [permutation_invariant, length_robust]
+
+<span class="cmd">stage_4_build</span>:
+  base_model:    <span class="flag">meta-llama/Llama-3-8B</span>
+  dataset:       <span class="flag">HuggingFaceH4/ultrachat</span>
+  trainer:       <span class="flag">axolotl</span>
+  config:        <span class="str">./train.axolotl.yaml</span>
+  tracking:      <span class="flag">wandb</span>
+
+<span class="cmd">stage_5_eval</span>:
+  l1_benchmarks: [<span class="flag">mmlu</span>, <span class="flag">hellaswag</span>, <span class="flag">gsm8k</span>]
+  l2_invariants: <span class="str">./tests/test_invariants.py</span>
+  l3_reviewer:   <span class="flag">"sub-agent: critique-helpfulness"</span>
+
+<span class="cmd">stage_6_publish</span>:
+  paper:         <span class="str">"arxiv://&lt;to-be-assigned&gt;"</span>
+  model:         <span class="flag">&lt;username&gt;/llama3-ultrachat-lora-v1</span>
+  dataset:       <span class="flag">&lt;username&gt;/instr-ds-v1</span>
+  space:         <span class="flag">&lt;username&gt;/demo</span>
+    </div>
+    <p class="lede mt-m">这一份 yaml 就是整个研究项目的 <span class="accent">single source of truth</span>。<br><em>所有自动化（训练 / 评测 / 发布）都从这一份 spec 派生。</em></p>
+    <aside class="notes">
+      <p>讲了这么多，我给大家看最具体的一页——<strong>把整个 6 阶段 pipeline 浓缩到一份 spec.yaml 里长什么样</strong>。</p>
+      <p>看这份 yaml。最顶上是 <em>hypothesis</em>，整个项目要回答的科学问题。</p>
+      <p>然后 <strong>stage_3</strong> 是 spec——metric 和 invariant。</p>
+      <p><strong>stage_4 build</strong>——base_model 和 dataset 直接写 registry ID（这里举例用 HF，你也可以替换成 GitHub releases / W&amp;B Artifacts 里的 ID），trainer 选 axolotl，config 指向具体的 axolotl yaml。这意味着 axolotl 可以直接吃这份 config，<em>没有"再翻译一遍"的损耗</em>。</p>
+      <p><strong>stage_5 eval</strong>——三层评测都列出来：L1 benchmark 列表、L2 invariant 测试文件、L3 reviewer agent。</p>
+      <p><strong>stage_6 publish</strong>——预留 4 个产物的 ID 槽位，将来发布时直接填进去。</p>
+      <p>底下这句话——<strong>这一份 yaml 就是整个研究项目的 single source of truth</strong>。所有自动化都从这一份 spec 派生：训练读它、评测读它、发布读它。<em>这就是 spec-driven research 的具体实现</em>。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 22. DEMO INTRO ============ -->
+  <section class="slide" data-title="Demo Intro">
+    <div class="center-v">
+      <p class="kicker">// 5. live demo</p>
+      <h2 class="h2">三幕实时 demo</h2>
+      <p class="lede mt-m">每幕同样 4 步：<br><strong>痛点 → 裸 Claude → 加 harness → 拆解</strong></p>
+      <div class="num-list mt-l">
+        <div class="item"><div class="n">幕一</div><div class="body"><b>读论文 · Hugging Face × arXiv</b><p>HF Daily Papers + arxiv-mcp + 命名规则约束 · 10 min</p></div></div>
+        <div class="item"><div class="n">幕二</div><div class="body"><b>写笔记 · Spec-Driven 写作</b><p>brainstorming → spec → plan → 写作 · 10 min</p></div></div>
+        <div class="item"><div class="n">幕三</div><div class="body"><b>跑实验 · TDD + Reviewer</b><p>故意翻车，让 reviewer 揪出来 · 11 min</p></div></div>
+      </div>
+      <p class="small mt-m">中间 5 分钟休息，第二幕和第三幕之间。</p>
+    </div>
+    <aside class="notes">
+      <p>OK 进入主菜。三幕 demo。</p>
+      <p>每幕都是同样 4 步——<strong>抛痛点 → 跑裸 Claude → 加上 harness → 拆解部件</strong>。这样大家能感受到"差异"，也能看到"怎么搭起来"。</p>
+      <p>三幕分别是<em>读论文、写笔记、跑实验</em>，刚好覆盖研究生日常 80% 的工作。</p>
+      <p>切终端。建议大家也打开自己的电脑跟着试。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 23. ACT 1 · READ ============ -->
+  <section class="slide" data-title="Act 1: Read">
+    <p class="kicker">// 5. act 1 · 10 min</p>
+    <h2 class="h2">幕一：读论文</h2>
+    <div class="ba-row mt-m">
+      <div class="ba-col before">
+        <h4>Before · 裸 Claude</h4>
+        <ol>
+          <li>"今天 HF 上有什么好 paper？"</li>
+          <li>它瞎编几个不存在的 paper 名字</li>
+          <li>你逐个去 Google 验证</li>
+          <li>选 1 篇深读 → 自己手动总结</li>
+          <li><strong>耗时 1-2 hr，质量飘忽</strong></li>
+        </ol>
+      </div>
+      <div class="ba-arrow">→</div>
+      <div class="ba-col after">
+        <h4>After · 加 harness</h4>
+        <ol>
+          <li>"按 CLAUDE.md 的 HF 工作流跑"</li>
+          <li>它调 HF API 真实抓今天 50 篇</li>
+          <li>用 <span class="mono">huggingface-papers</span> 拿全文</li>
+          <li>按命名规则建笔记 + 子目录放图</li>
+          <li><strong>15 min 出 1 篇 digest</strong></li>
+        </ol>
+      </div>
+    </div>
+    <p class="ba-meta mt-s">实测：50 篇 → 1 篇 digest，<span class="gain">15 min</span>（之前 ≥ 2 hr）</p>
+    <p class="lede mt-l tc">→ 切终端 demo</p>
+    <aside class="notes">
+      <p>第一幕。痛点 vs 方案，左右对比。</p>
+      <p><strong>左边裸 Claude</strong>：你打 "今天 HF 有什么好 paper" — 它会瞎编几个不存在的 paper 名字（hallucination 高发区）。你只能自己 Google 一个个查，再手动选一篇深读、手动总结。1 到 2 小时，质量飘忽。</p>
+      <p><strong>右边加 harness</strong>：你打 "按 CLAUDE.md 的 HF 工作流跑" — Claude 看到这句话就去读 CLAUDE.md，找到 6 步工作流，调真实 HF API 抓数据，用 huggingface-papers skill 取全文，按我的命名规则建笔记和子目录。15 分钟出 1 篇覆盖所有论文的 digest。</p>
+      <p>核心区别是——<strong>右边那句 prompt 才 15 个字</strong>，但它背后调动了 CLAUDE.md（流程）、Skills（工具）、命名规则（输出约束）三件 harness 部件。</p>
+      <p>切终端。我会现场跑这个流程。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 24. ACT 1 RECAP ============ -->
+  <section class="slide" data-title="Act 1 Recap">
+    <p class="kicker">// 5. act 1 · recap</p>
+    <h2 class="h2">第一幕拆解</h2>
+    <p class="lede mt-m">那一句"按 CLAUDE.md 的 HF 工作流跑"背后，<span class="accent">3 个 harness 部件</span>在工作：</p>
+    <div class="num-list mt-l">
+      <div class="item"><div class="n">①</div><div class="body">
+        <b>CLAUDE.md = Spec-as-Code</b>
+        <p>"调 HF API → 去重 → 选 deep dive → 下图 → 写中文摘要" 写成 6 步流程，Agent 直接执行。<em>对应模式 ①仓库即世界</em>。</p>
+      </div></div>
+      <div class="item"><div class="n">②</div><div class="body">
+        <b>命名规则 = 物理约束</b>
+        <p>文件名必须 <span class="mono">YYYY-MM-DD-name.md</span>，图片必须放同名子目录。Agent 一旦照做，<strong>下一次就能自己找到上一次的产物</strong>。<em>对应模式 ③机械化约束</em>。</p>
+      </div></div>
+      <div class="item"><div class="n">③</div><div class="body">
+        <b>Skills = 渐进式加载</b>
+        <p><span class="mono">huggingface-papers</span> 不在主上下文里，<strong>用到才加载</strong>。"地图，不是百科"。<em>对应模式 ②渐进式披露</em>。</p>
+      </div></div>
+    </div>
+    <p class="quote-inline mt-m">"From the agent's point of view, anything it can't access in-context while running effectively does not exist."<br>— Ryan Lopopolo, OpenAI</p>
+    <aside class="notes">
+      <p>回到 PPT，拆刚才那段 demo。三个部件在悄悄起作用——</p>
+      <p>第一是 CLAUDE.md。我把"调 HF API → 去重 → 选 deep dive → 下图 → 写中文摘要"6 步流程写进去，Agent 看到这个文件就知道每步该做什么。这就是 Spec-as-Code，对应六模式里的<em>仓库即世界</em>。</p>
+      <p>第二是命名规则。看似不起眼，但它是物理约束——文件必须 YYYY-MM-DD-name.md，图片必须放同名子目录。<strong>这样 Agent 下次再读笔记时，能自己找到上次的产物</strong>。对应<em>机械化约束</em>。</p>
+      <p>第三是 Skills 系统。huggingface-papers 这个 skill 不在主上下文里，用到才加载。这就是<em>渐进式披露</em>——地图不是百科。</p>
+      <p>底下这句话是这一幕的精神——<strong>Agent 在运行时拿不到的东西，对它而言不存在</strong>。所以 harness 的工作就是——把它该看到的东西，按它能看见的方式，放到它能拿到的地方。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 25. ACT 2 · WRITE NOTES ============ -->
+  <section class="slide" data-title="Act 2: Write Notes">
+    <p class="kicker">// 5. act 2 · 10 min</p>
+    <h2 class="h2">幕二：写笔记</h2>
+    <div class="ba-row mt-m">
+      <div class="ba-col before">
+        <h4>Before · 裸 Claude</h4>
+        <ol>
+          <li>"帮我总结一下这篇 paper / 这个实验"</li>
+          <li>它输出泛而无重点的几段</li>
+          <li>没结构、没结论、没"用途"意识</li>
+          <li>3 个月后打开自己的笔记<strong>看不懂</strong></li>
+          <li><strong>笔记成了"读完就废"的废纸</strong></li>
+        </ol>
+      </div>
+      <div class="ba-arrow">→</div>
+      <div class="ba-col after">
+        <h4>After · spec-driven</h4>
+        <ol>
+          <li><span class="mono">/brainstorming</span> 先确定<strong>谁读 / 用途 / 结论</strong></li>
+          <li><span class="mono">/writing-plans</span> spec → 笔记骨架</li>
+          <li>按模板填每节，引真实出处</li>
+          <li>MEMORY.md 自动注入文风 / 命名 / 引用偏好</li>
+          <li><strong>笔记可被 grep / 被 LLM 召回 / 被自己复用</strong></li>
+        </ol>
+      </div>
+    </div>
+    <p class="ba-meta mt-s">spec-driven = 让笔记从"一次性消费"变成 <span class="gain">"可复用资产"</span></p>
+    <p class="lede mt-l tc">→ 切终端 demo</p>
+    <aside class="notes">
+      <p>第二幕，写笔记。这是研究生最高频、也最被低估的动作。</p>
+      <p><strong>左边</strong>是大多数人的真实经历——你说"帮我总结一下这篇 paper"，它输出泛而无重点的几段。结构散、没结论、没"用途"意识。<em>3 个月后你打开自己的笔记，看不懂</em>。笔记沦为读完就废的废纸。</p>
+      <p><strong>右边</strong>是 spec-driven 流程——<strong>第一步不是写笔记，是先想清楚"这份笔记将来谁读、做什么用"</strong>。给自己 3 个月后看的备忘和给导师看的汇报，写法完全不同——AI 不知道这件事，你必须先告诉它。然后才是 writing-plans 转骨架，按模板填，MEMORY 自动注入文风。</p>
+      <p>关键洞察在底下——<strong>spec-driven 让笔记从"一次性消费"变成"可复用资产"</strong>。你的笔记目录会变成能被 grep、能被 LLM 召回的私人 wiki。<em>这是科研最大的隐性复利</em>。</p>
+      <p>切终端，演示。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 26. ACT 2 RECAP ============ -->
+  <section class="slide" data-title="Act 2 Recap">
+    <p class="kicker">// 5. act 2 · recap</p>
+    <h2 class="h2">第二幕拆解</h2>
+    <p class="lede mt-m">这一幕展示了 <span class="accent">SDLC × 笔记</span> 的对应关系：</p>
+    <table class="compare mt-m">
+      <thead>
+        <tr><th>笔记步骤</th><th>对应 SDLC</th><th>实现 skill</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>谁读 / 用途 / 结论</td><td class="old">Requirements gathering</td><td><span class="mono">superpowers:brainstorming</span></td></tr>
+        <tr><td>笔记骨架</td><td class="old">Architecture design</td><td><span class="mono">superpowers:writing-plans</span></td></tr>
+        <tr><td>按模板填</td><td class="old">Implementation</td><td>Claude Code · 主会话 + 模板文件</td></tr>
+        <tr><td>命名 + 子目录约束</td><td class="old">Conventions / linter</td><td>CLAUDE.md 命名规则</td></tr>
+        <tr><td>MEMORY.md 注入文风</td><td class="old">Long-term context</td><td>Memory 系统 · auto-load</td></tr>
+      </tbody>
+    </table>
+    <p class="quote-inline mt-m">"3 个月后的自己"才是笔记的真正读者。<br>spec-driven 让你<em>替未来的自己</em>把上下文写进去。</p>
+    <aside class="notes">
+      <p>回到 PPT。第二幕的核心洞察——<strong>笔记不是写给现在的自己，是写给 3 个月后的自己</strong>。这个时间差是关键。</p>
+      <p>这张表把笔记流程映射到 SDLC——</p>
+      <p>软件工程的"需求收集"，对应"<em>谁读 / 用途 / 结论</em>"——这就是 brainstorming 在做的事。</p>
+      <p>软件工程的"架构设计"，对应笔记骨架——一级标题先列出来。</p>
+      <p>软件工程的"实现 + 编码规范"，对应"按模板填 + 命名规则约束"。</p>
+      <p>软件工程里没有但 AI 协作里有的概念——<strong>长期上下文</strong>。MEMORY.md 把你的文风、引用偏好、过去课题自动注入，每次新会话不再从零开始。</p>
+      <p>底下这句话是这一幕的精神——<em>"3 个月后的自己"才是笔记的真正读者</em>。spec-driven 让你<strong>替未来的自己</strong>把上下文先写进去。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 27. BREAK ============ -->
+  <section class="slide" data-title="Break">
+    <div class="center-v" style="text-align:center">
+      <p class="kicker">break · 5 min</p>
+      <h2 class="h2" style="font-size: clamp(48px, 6vw, 80px);">休息 5 分钟</h2>
+      <p class="lede mt-l">"<em>你日常哪件事最想让 AI 替你做？</em>"<br>欢迎现在就提问 / 反驳 / 抬杠。</p>
+    </div>
+    <aside class="notes">
+      <p>休息 5 分钟。大家可以站起来活动。</p>
+      <p>我留一个互动话题——"<em>你日常哪件事最想让 AI 替你做？</em>"</p>
+      <p>不要 5 分钟一到就硬切，看气氛。如果有人在聊问题就再多 1 分钟。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 28. ACT 3 · RUN ============ -->
+  <section class="slide" data-title="Act 3: Run">
+    <p class="kicker">// 5. act 3 · 11 min</p>
+    <h2 class="h2">幕三：跑实验 / 复现</h2>
+    <div class="ba-row mt-m">
+      <div class="ba-col before">
+        <h4>Before · 裸 Claude</h4>
+        <ol>
+          <li>"帮我实现 RoPE"</li>
+          <li>它写 100 行代码</li>
+          <li>它说"测试通过！完美！"</li>
+          <li>你跑一下：<strong>结果错的</strong></li>
+          <li>调试 2 hr 才发现角度方向反了</li>
+        </ol>
+      </div>
+      <div class="ba-arrow">→</div>
+      <div class="ba-col after">
+        <h4>After · TDD + reviewer</h4>
+        <ol>
+          <li>"先列 5 条 RoPE invariant"</li>
+          <li>"写 pytest 覆盖这 5 条"</li>
+          <li>"现在再写实现"</li>
+          <li>"跑测试，<strong>贴完整输出</strong>"</li>
+          <li>"启动 reviewer sub-agent 审查"</li>
+        </ol>
+      </div>
+    </div>
+    <p class="ba-meta mt-s">关键不是"AI 写代码"，而是 <span class="gain">"AI 不能评 AI"</span></p>
+    <p class="lede mt-l tc">→ 切终端 demo（会故意诱导一次翻车）</p>
+    <aside class="notes">
+      <p>第三幕，跑实验和复现 paper。</p>
+      <p><strong>左边</strong>是经典翻车现场——你说"帮我实现 RoPE"，它写 100 行代码，自信地说"测试通过完美"。你真去跑一下，结果错的。调试 2 小时才发现某个角度方向反了。</p>
+      <p><strong>右边</strong>是 TDD + reviewer 流程——先列 invariant、再写测试、再写实现、再贴完整输出（不是"测试通过"四个字）、最后起 reviewer。</p>
+      <p>关键洞察——<strong>不是"AI 不能写代码"，而是"AI 不能评 AI"</strong>。Self-Evaluation Bias 是写在模型行为里的，光靠 prompt 写得多狠都解决不了。</p>
+      <p>切终端，演示。我会故意诱导一次翻车，让大家看到 AI confidently praising 错代码的瞬间，再用 reviewer 揪出来。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 29. ACT 3 RECAP ============ -->
+  <section class="slide" data-title="Act 3 Recap">
+    <p class="kicker">// 5. act 3 · recap</p>
+    <h2 class="h2">第三幕的关键洞察</h2>
+    <div class="quote-big mt-m">
+      "Out of the box, Claude is a poor QA agent."
+      <span class="author">— Prithvi Rajasekaran, Anthropic · 2026-03</span>
+    </div>
+    <p class="lede mt-l">所以"研究员"的工作不是写代码——<br>而是<span class="accent">设计判据</span>（criterion design）。</p>
+    <table class="compare mt-m">
+      <thead><tr><th>关注点</th><th>旧模式</th><th>新模式</th></tr></thead>
+      <tbody>
+        <tr><td>问题表述</td><td class="old">"我能不能实现一个 RoPE？"</td><td class="new">"这个 RoPE 要满足哪 5 个性质？"</td></tr>
+        <tr><td>核心动作</td><td class="old">写代码</td><td class="new">写测试 + 评判标准</td></tr>
+        <tr><td>稀缺技能</td><td class="old">框架/算法熟练度</td><td class="new">数学直觉 + 系统品味</td></tr>
+        <tr><td>失败模式</td><td class="old">代码跑不动</td><td class="new">判据写错（更隐蔽，更危险）</td></tr>
+      </tbody>
+    </table>
+    <aside class="notes">
+      <p>第三幕的核心洞察用 Prithvi 这句话总结——<strong>"Claude 在开箱即用的状态下，是个糟糕的 QA。"</strong></p>
+      <p>这句话逼出一个关键问题——<em>如果 AI 不能评自己，那"对不对"由谁定？</em></p>
+      <p>答案是<strong>由人定，但定的方式变了</strong>。</p>
+      <p>看这张表。<strong>问题表述</strong>层面，旧模式是"我能不能实现一个 RoPE"，新模式是"这个 RoPE 要满足哪 5 个性质"。</p>
+      <p><strong>核心动作</strong>层面，旧模式是写代码，新模式是写测试和判据。</p>
+      <p><strong>稀缺技能</strong>层面，旧模式是框架熟练度，新模式是数学直觉和系统品味。</p>
+      <p><strong>失败模式</strong>层面变得更隐蔽——旧模式是代码跑不动，你能立刻发现；新模式是<em>判据写错</em>，你看到测试通过就放心了，但其实判据不对，问题埋得更深。</p>
+      <p>这就是为什么"研究员"在 AI 时代的稀缺力是<strong>设计判据</strong>而不是写代码。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 30. HARNESS × RESEARCH ============ -->
+  <section class="slide" data-title="Harness × Research">
+    <p class="kicker">// 6. harness × research</p>
+    <h2 class="h2">回到 6 阶段：每阶段你能做的<span class="accent">最小动作</span></h2>
+    <table class="compare mt-m">
+      <thead>
+        <tr><th style="width:14%">阶段</th><th style="width:43%">最小可行动作（本周内能做）</th><th>升级动作（一个月）</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>① Discover</td>
+          <td class="old">订阅 1 个 <span class="mono">watch_topic</span>，每天看 alert</td>
+          <td class="new">每周 1 个 cron 跑 auto-digest</td>
+        </tr>
+        <tr>
+          <td>② Digest</td>
+          <td class="old">用 templ-1 6 段模板写 5 篇笔记</td>
+          <td class="new">每篇都补 HF model/dataset ID</td>
+        </tr>
+        <tr>
+          <td>③ Spec</td>
+          <td class="old">下个 idea 不写代码，先写 spec.md</td>
+          <td class="new">spec.yaml 串起 build/eval/publish</td>
+        </tr>
+        <tr>
+          <td>④ Build</td>
+          <td class="old">用 axolotl YAML 跑一次 LoRA</td>
+          <td class="new">所有超参进 config，全程 wandb</td>
+        </tr>
+        <tr>
+          <td>⑤ Evaluate</td>
+          <td class="old">下次实验跑 lm-eval-harness</td>
+          <td class="new">三层评测全做（含 sub-agent）</td>
+        </tr>
+        <tr>
+          <td>⑥ Publish</td>
+          <td class="old">push 1 个 model / dataset 到 Hub</td>
+          <td class="new">硕士论文一并交付四件套</td>
+        </tr>
+      </tbody>
+    </table>
+    <p class="quote-inline mt-l">不要想着一次做完。<br><strong>挑一阶段先动手，闭环跑通了再下一段</strong>——harness 的复利是积累出来的。</p>
+    <aside class="notes">
+      <p>这一页直接回答核心问题——<strong>研究员能用 harness 做什么？</strong> 不是空话，是按 6 阶段给你具体动作。</p>
+      <p>这张表两列——左列<em>本周内</em>就能做的最小动作，右列<em>一个月内</em>能完成的升级版。</p>
+      <p><strong>① Discover</strong>：本周订阅一个 <code>watch_topic</code>，比如你关注的 RL 或 diffusion，每天看 alert——这就启动了"环境推论文给你"。一个月后升级到每周 cron 跑 auto-digest。</p>
+      <p><strong>② Digest</strong>：用 templ-1 模板写 5 篇笔记，每篇都<em>顺手补上稳定 ID</em>（HF / GitHub / W&amp;B / 内部都行）——这一步只多花 30 秒但回报巨大。</p>
+      <p><strong>③ Spec</strong>：下个 idea 不要立刻写代码。先写 spec.md，把假设、metric、baseline 列清楚。一个月后把它升级成 spec.yaml 串起整个 pipeline。</p>
+      <p><strong>④ Build</strong>：用 axolotl YAML 跑一次 LoRA，把"训练"从"写代码"变成"配 YAML"。</p>
+      <p><strong>⑤ Evaluate</strong>：下次实验认真跑一次 lm-evaluation-harness。</p>
+      <p><strong>⑥ Publish</strong>：先 push 1 个 model 或 dataset 到 Hub，把这件事的"心理门槛"破掉。师弟师妹的<em>硕士论文阶段是最佳起点</em>——一并交付四件套，求职时含金量天差地别。</p>
+      <p>底下这句最重要——<strong>不要想着一次做完，挑一段先动手</strong>。harness 的复利是积累出来的，不是从天而降的。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 31. 4-PIECE KIT ============ -->
+  <section class="slide" data-title="Min Harness Kit">
+    <p class="kicker">// 6. minimum viable harness</p>
+    <h2 class="h2">最小 harness · 4 件套</h2>
+    <p class="lede mt-m">周末就能搭起来，<strong>不需要任何编程</strong>。</p>
+
+    <div class="num-list mt-l">
+      <div class="item"><div class="n">📄</div><div class="body">
+        <b><span class="mono">CLAUDE.md</span> · 项目规则书（15 min 写一份）</b>
+        <p>项目说明 + 命名规则 + 工作流。Agent 一进入项目就读它。</p>
+      </div></div>
+      <div class="item"><div class="n">🧠</div><div class="body">
+        <b><span class="mono">MEMORY.md + memory/</span> · 跨会话记忆（5 min 起步）</b>
+        <p>身份、偏好、过去工作。每次新会话自动注入。<strong>从 L1 跳到 L2 的关键一步。</strong></p>
+      </div></div>
+      <div class="item"><div class="n">📐</div><div class="body">
+        <b><span class="mono">_template.md</span> · 模板文件（每类一个）</b>
+        <p>论文笔记、研究笔记、周报、综述模板。结构一致，AI 才能做得一致。</p>
+      </div></div>
+      <div class="item"><div class="n">🔧</div><div class="body">
+        <b><span class="mono">tools.sh</span> · 一个 shell 脚本（30 行）</b>
+        <p>"建笔记 / 索引 / 搜索"固化成命令。Agent 调脚本比写 50 行 bash 稳定。</p>
+      </div></div>
+    </div>
+
+    <p class="quote-inline mt-l">"Find the simplest solution possible, and only increase complexity when needed."<br>— Justin Young, Anthropic · 2025-11</p>
+    <aside class="notes">
+      <p>周末就能搭起来的 4 件套，不需要写任何代码。</p>
+      <p><strong>第一件，CLAUDE.md</strong>。15 分钟一份初版。一份成熟的 CLAUDE.md 通常包括项目说明、命名规则、关键工作流、外部工具配置——一两百行就够了。Agent 一进入项目就先读它。</p>
+      <p><strong>第二件，MEMORY.md 加 memory/ 目录</strong>。这是从 L1 跳到 L2 <em>最关键的一步</em>——你不再靠每次重复说话来传递背景。一个典型的 MEMORY.md 只是个几行索引，指向几个具体记忆文件——身份、写作风格、常用工具配置、引用偏好。</p>
+      <p><strong>第三件，模板文件</strong>。论文笔记一个、研究笔记一个、周报一个、综述一个。Anthropic V1 时代就强调：<em>用 JSON 而非 Markdown 存任务清单，模型不容易乱改</em>——背后逻辑就是结构性强，AI 才能做得一致。</p>
+      <p><strong>第四件，一个 shell 脚本</strong>，把"建笔记、刷索引、搜索"这些常用动作固化成命令。Agent 调一次脚本比让它每次重写 50 行 bash 稳定多了。</p>
+      <p>用 Anthropic Justin Young 这句话收尾——<strong>找最简单可行的方案，只在需要时再加复杂度</strong>。不要一上来就抄 OpenAI 的百万行架构，从这 4 件套开始就够了。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 32. CLAUDE.md SAMPLE ============ -->
+  <section class="slide" data-title="CLAUDE.md Sample">
+    <p class="kicker">// 6. concrete example</p>
+    <h2 class="h2">CLAUDE.md 长什么样（通用研究项目模板）</h2>
+    <div class="code-block mt-m">
+<span class="comment"># &lt;your-research-project&gt; · CLAUDE.md</span>
+
+## What This Is
+A research project on [topic]. Markdown notes organized into folders,
+managed by a shell CLI.
+
+## Naming Conventions
+| Folder | Pattern | Example |
+|---|---|---|
+| papers/ | YYYY-short-title.md | 2026-rope-encoding.md |
+| notes/ | YYYY-MM-DD-title.md | 2026-MM-DD-experiment-X.md |
+
+## Paper Reading Workflow
+1. <span class="cmd">Fetch metadata</span>: Get arXiv ID, abstract, authors
+2. <span class="cmd">Deduplicate</span>: Skip if already in <span class="str">papers/</span>
+3. <span class="cmd">Read</span>: Apply the 6-section reading template (see templ-1)
+4. <span class="cmd">Download figures</span>: Save to <span class="str">papers/&lt;slug&gt;/</span> subfolder
+5. <span class="cmd">Write summary</span>: Use <span class="str">_template.md</span> as starting point
+6. <span class="cmd">Update indexes</span>: Run <span class="flag">bash tools.sh index</span>
+    </div>
+    <p class="lede mt-m">这就是 <span class="accent">Spec-as-Code</span>——把工作流写成 markdown，Agent 直接当代码执行。</p>
+    <aside class="notes">
+      <p>给大家看一份通用模板的 CLAUDE.md 节选。</p>
+      <p>顶上 <em>"What This Is"</em> 一句话告诉 Agent 这是什么项目。</p>
+      <p>中间 <em>"Naming Conventions"</em> 一张表告诉它命名规则——这就是上一幕讲的"机械化约束"。</p>
+      <p>底下 <em>"Paper Reading Workflow"</em> 6 步流程，每步都是动词开头，每步都有具体动作（API 调用、子目录组织、模板使用、命令执行）。Agent 看到这个就直接执行。</p>
+      <p>这个文件本质上是 <strong>Spec-as-Code</strong>——把工作流写成 markdown，<em>但它不是文档，是给 Agent 的可执行 SOP</em>。</p>
+      <p>师弟师妹回去照这个结构写自己课题的 CLAUDE.md。一开始可以很短，10 行 20 行都行，慢慢补充。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 33. KEY TAKEAWAYS ============ -->
+  <section class="slide" data-title="Takeaways">
+    <p class="kicker">// 6. takeaways</p>
+    <h2 class="h2">5 个 takeaway · 记住 1 条就够</h2>
+    <div class="num-list mt-l">
+      <div class="item"><div class="n">1</div><div class="body"><b>Prompt engineering 不够了，Harness engineering 来了</b><p>模型能力上限取决于包在外面的工程系统。</p></div></div>
+      <div class="item"><div class="n">2</div><div class="body"><b>仓库即 Agent 的世界</b><p>命名规则、模板、CLAUDE.md、MEMORY 都是 harness 的物理实体。</p></div></div>
+      <div class="item"><div class="n">3</div><div class="body"><b>Spec-Driven 不止是软件工程</b><p>写笔记、跑实验、做汇报——任何复杂工作都能 SDLC 化。</p></div></div>
+      <div class="item"><div class="n">4</div><div class="body"><b>不让 AI 评自己</b><p>Generator-Evaluator 是省下 80% 踩坑的捷径。</p></div></div>
+      <div class="item"><div class="n">5</div><div class="body"><b>研究员的稀缺力 = 提出问题 + 设计判据</b><p>不是写代码，不是调 prompt。</p></div></div>
+    </div>
+    <aside class="notes">
+      <p>5 条 takeaway。希望大家走出这个房间记住 1 到 2 条。</p>
+      <p><strong>第一条，Prompt engineering 不够了，Harness engineering 来了。</strong></p>
+      <p><strong>第二条，仓库即 Agent 的世界。</strong></p>
+      <p><strong>第三条，Spec-Driven 不止是软件工程。</strong></p>
+      <p><strong>第四条，不让 AI 评自己。</strong>这一条记住就行。</p>
+      <p><strong>第五条，研究员的稀缺力是提出问题加设计判据。</strong></p>
+      <p>OK，进 Q&amp;A。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 34. Q&A ============ -->
+  <section class="slide" data-title="Q&amp;A">
+    <div class="center-v" style="text-align:center">
+      <p class="kicker">q &amp; a · 至少 10 min</p>
+      <h2 class="h2" style="font-size: clamp(56px, 7vw, 96px);">Q &amp; A</h2>
+      <p class="lede mt-l">三个我希望你们问的问题：</p>
+      <p class="lede mt-s">①  <em>"我连 Claude Code 都没装，从哪开始？"</em></p>
+      <p class="lede">②  <em>"实验代码 AI 能写到什么深度？边界在哪？"</em></p>
+      <p class="lede">③  <em>"先做研究还是先搭 harness？"</em></p>
+    </div>
+    <aside class="notes">
+      <p>到 Q&amp;A 时间。我列了 3 个我最希望你们问的问题——一时想不到的话可以从这里挑。</p>
+      <p>第一个新手向。第二个技术深度向。第三个哲学向——我的回答会让你们有点意外：<em>"先把研究做出来，再回头搭 harness"</em>。原因留给提问的人现场听。</p>
+      <p>30 秒没人提我就自己抛第一个问题。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 35. REFERENCES ============ -->
+  <section class="slide" data-title="References">
+    <p class="kicker">// references · 全部参考资料</p>
+    <h2 class="h2">参考资料 · 想深入看从这里开始</h2>
+
+    <div class="ref-section">
+      <h3>核心 4 篇博客 · Harness 工程的源头文献</h3>
+      <ul class="ref-list">
+        <li><span class="ttl">Effective Harnesses for Long-Running Agents</span> · <span class="meta">Anthropic · Justin Young · 2025-11-26</span><br><span class="url">anthropic.com/engineering/effective-harnesses-for-long-running-agents</span></li>
+        <li><span class="ttl">Harness Design for Long-Running Application Development</span> · <span class="meta">Anthropic · Prithvi Rajasekaran · 2026-03-24</span><br><span class="url">anthropic.com/engineering/harness-design-long-running-apps</span></li>
+        <li><span class="ttl">Harness Engineering: Leveraging Codex in an Agent-First World</span> · <span class="meta">OpenAI · Ryan Lopopolo · 2026-02-11</span><br><span class="url">openai.com/index/harness-engineering</span></li>
+        <li><span class="ttl">Unlocking the Codex Harness: How We Built the App Server</span> · <span class="meta">OpenAI · Celia Chen · 2026-02-04</span><br><span class="url">openai.com/index/unlocking-the-codex-harness</span></li>
+      </ul>
+    </div>
+
+    <div class="ref-section">
+      <h3>关键工具 · 上手即用</h3>
+      <ul class="ref-list">
+        <li><span class="ttl">Claude Code</span> · <span class="meta">CLI / VS Code / JetBrains / Web</span> · <span class="url">claude.ai/code</span></li>
+        <li><span class="ttl">awslabs/aidlc-workflows</span> · <span class="meta">25KB 单文件 · spec-driven SDLC 落地</span> · <span class="url">github.com/awslabs/aidlc-workflows</span></li>
+        <li><span class="ttl">superpowers</span> · <span class="meta">brainstorming / writing-plans / TDD / debugging skills</span></li>
+        <li><span class="ttl">huggingface-papers · arxiv-mcp-server</span> · <span class="meta">读论文相关 skill 与 MCP server</span></li>
+        <li><span class="ttl">html-ppt</span> · <span class="meta">本 deck 用的演示工具，36 主题 + 演讲者模式</span></li>
+      </ul>
+    </div>
+
+    <div class="ref-section">
+      <h3>关键概念延伸</h3>
+      <ul class="ref-list">
+        <li><span class="ttl">Spec-Driven Development</span> · <span class="meta">把 SDLC 重写成 AI 可执行 markdown 的方法论</span></li>
+        <li><span class="ttl">Generator-Evaluator Pattern</span> · <span class="meta">受 GAN 启发的多 Agent 协作模式</span></li>
+        <li><span class="ttl">Agent-First Engineering</span> · <span class="meta">把仓库当作 Agent 的"操作系统"来设计</span></li>
+      </ul>
+    </div>
+
+    <aside class="notes">
+      <p>这一页就是大家会后唯一需要保留的一页——<strong>所有参考资料都汇总在这里</strong>。</p>
+      <p>分三块：</p>
+      <p><em>第一块</em>是核心 4 篇博客，Harness 工程的源头文献，2 篇 Anthropic + 2 篇 OpenAI。今天所有内容数据都来自这 4 篇。<strong>会后想深入看，从这 4 篇开始</strong>。</p>
+      <p><em>第二块</em>是关键工具——Claude Code、AI-DLC、superpowers、huggingface-papers、html-ppt。这些都是开箱即用的。</p>
+      <p><em>第三块</em>是几个值得继续追的概念——Spec-Driven、Generator-Evaluator、Agent-First Engineering。这些关键词去搜，能延伸出一整片新文献。</p>
+      <p>这页停留 30 秒，让感兴趣的人拍照，然后就翻最后一页。</p>
+    </aside>
+  </section>
+
+
+</div>
+
+<div style="position:fixed;bottom:12px;left:12px;font-size:11px;color:var(--text-3);opacity:0.5;z-index:100;pointer-events:none;font-family:var(--font-mono,monospace)">
+  S 演讲者视图 · T 切主题 · ← → 翻页 · F 全屏 · O 总览
+</div>
+
+<script src="./assets/runtime.js"></script>
+</body>
+</html>

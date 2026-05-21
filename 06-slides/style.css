@@ -1,0 +1,567 @@
+/* tpl-harness-talk · scoped styles
+ * Clean, content-dense, academic-paper friendly.
+ */
+
+/* ---------- Layout ---------- */
+.tpl-harness-talk .slide {
+  padding: 56px 88px 64px;
+  display: flex;
+  flex-direction: column;
+}
+
+.tpl-harness-talk .center-v {
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+/* ---------- Type ---------- */
+.tpl-harness-talk .kicker {
+  font-family: var(--font-mono, monospace);
+  font-size: 12px;
+  color: var(--text-3);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin: 0 0 18px 0;
+  font-weight: 600;
+}
+
+.tpl-harness-talk .h1 {
+  font-size: clamp(40px, 5.4vw, 76px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin: 0 0 22px 0;
+  font-weight: 700;
+}
+
+.tpl-harness-talk .h2 {
+  font-size: clamp(28px, 3.6vw, 46px);
+  line-height: 1.2;
+  letter-spacing: -0.01em;
+  margin: 0 0 24px 0;
+  font-weight: 700;
+}
+
+.tpl-harness-talk .h3 {
+  font-size: clamp(20px, 2.4vw, 28px);
+  line-height: 1.3;
+  margin: 0 0 14px 0;
+  font-weight: 700;
+  color: var(--text-1);
+}
+
+.tpl-harness-talk .lede {
+  font-size: 20px;
+  line-height: 1.6;
+  color: var(--text-2);
+  margin: 0;
+}
+
+.tpl-harness-talk .small {
+  font-size: 14px;
+  line-height: 1.55;
+  color: var(--text-3);
+  margin: 0;
+}
+
+.tpl-harness-talk .mono {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.86em;
+  padding: 1px 6px;
+  border-radius: 3px;
+  background: var(--surface-2, rgba(127,127,127,0.08));
+  color: var(--accent, #1a3a7a);
+}
+
+.tpl-harness-talk .accent {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.tpl-harness-talk .strike {
+  text-decoration: line-through;
+  color: var(--text-3);
+  text-decoration-thickness: 2px;
+}
+
+/* ---------- Speaker block (cover) ---------- */
+.tpl-harness-talk .speaker {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-top: 28px;
+}
+.tpl-harness-talk .speaker .av {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+.tpl-harness-talk .speaker b { display: block; font-size: 16px; }
+.tpl-harness-talk .speaker span { font-size: 13px; color: var(--text-3); }
+
+/* ---------- Agenda ---------- */
+.tpl-harness-talk .agenda-row {
+  display: grid;
+  grid-template-columns: 36px 1fr auto;
+  gap: 18px;
+  align-items: baseline;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--border, rgba(127,127,127,0.14));
+}
+.tpl-harness-talk .agenda-row:last-child { border-bottom: none; }
+.tpl-harness-talk .agenda-row .num {
+  font-family: var(--font-mono, monospace);
+  font-size: 14px;
+  color: var(--accent);
+  font-weight: 700;
+}
+.tpl-harness-talk .agenda-row .t {
+  font-size: 18px;
+  color: var(--text-1);
+}
+.tpl-harness-talk .agenda-row .d {
+  font-family: var(--font-mono, monospace);
+  font-size: 12px;
+  color: var(--text-3);
+}
+
+/* ---------- Big quote (single page focus) ---------- */
+.tpl-harness-talk .quote-big {
+  font-size: clamp(28px, 3.4vw, 44px);
+  line-height: 1.35;
+  font-weight: 600;
+  color: var(--text-1);
+  border-left: 3px solid var(--accent);
+  padding: 4px 0 4px 28px;
+  margin: 28px 0;
+}
+.tpl-harness-talk .quote-big .author {
+  display: block;
+  font-style: normal;
+  font-size: 14px;
+  color: var(--text-3);
+  margin-top: 16px;
+  letter-spacing: 0.04em;
+  font-weight: 400;
+  font-family: var(--font-mono, monospace);
+}
+
+.tpl-harness-talk .quote-inline {
+  font-size: 16px;
+  line-height: 1.55;
+  font-style: italic;
+  color: var(--text-2);
+  border-left: 2px solid var(--border-strong, var(--border));
+  padding: 4px 0 4px 14px;
+  margin: 14px 0;
+}
+
+/* ---------- Before/After comparison row ---------- */
+.tpl-harness-talk .ba-row {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  gap: 18px;
+  align-items: stretch;
+  margin: 18px 0;
+}
+.tpl-harness-talk .ba-col {
+  padding: 18px 22px;
+  border: 1px solid var(--border, rgba(127,127,127,0.14));
+}
+.tpl-harness-talk .ba-col.before {
+  background: var(--surface-2, rgba(127,127,127,0.04));
+}
+.tpl-harness-talk .ba-col.after {
+  background: var(--surface, transparent);
+  border-left: 3px solid var(--accent);
+}
+.tpl-harness-talk .ba-arrow {
+  display: flex;
+  align-items: center;
+  font-family: var(--font-mono, monospace);
+  font-size: 22px;
+  color: var(--accent);
+  font-weight: 700;
+  padding: 0 4px;
+}
+.tpl-harness-talk .ba-col h4 {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  font-weight: 700;
+}
+.tpl-harness-talk .ba-col ol,
+.tpl-harness-talk .ba-col ul {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text-2);
+}
+.tpl-harness-talk .ba-col ol li,
+.tpl-harness-talk .ba-col ul li { margin-bottom: 4px; }
+.tpl-harness-talk .ba-col strong { color: var(--text-1); }
+
+.tpl-harness-talk .ba-meta {
+  text-align: center;
+  font-family: var(--font-mono, monospace);
+  font-size: 13px;
+  color: var(--text-3);
+  margin-top: 10px;
+}
+.tpl-harness-talk .ba-meta .gain {
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 16px;
+}
+
+/* ---------- Era timeline (clean) ---------- */
+.tpl-harness-talk .era-row {
+  display: grid;
+  grid-template-columns: 130px 1fr;
+  gap: 22px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border, rgba(127,127,127,0.12));
+}
+.tpl-harness-talk .era-row:last-child { border-bottom: none; }
+.tpl-harness-talk .era-row .yr {
+  font-family: var(--font-mono, monospace);
+  font-size: 14px;
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: 0.06em;
+}
+.tpl-harness-talk .era-row b { display: block; font-size: 18px; margin-bottom: 4px; color: var(--text-1); }
+.tpl-harness-talk .era-row p { margin: 0; font-size: 14px; line-height: 1.6; color: var(--text-2); }
+
+/* ---------- Numbered list (clean, no boxes) ---------- */
+.tpl-harness-talk .num-list { margin: 18px 0; }
+.tpl-harness-talk .num-list .item {
+  display: grid;
+  grid-template-columns: 44px 1fr;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--border, rgba(127,127,127,0.1));
+  align-items: baseline;
+}
+.tpl-harness-talk .num-list .item:last-child { border-bottom: none; }
+.tpl-harness-talk .num-list .n {
+  font-family: var(--font-mono, monospace);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent);
+}
+.tpl-harness-talk .num-list .body b { display: block; font-size: 17px; color: var(--text-1); margin-bottom: 4px; }
+.tpl-harness-talk .num-list .body p { margin: 0; font-size: 14px; line-height: 1.6; color: var(--text-2); }
+
+/* ---------- Three-layer model ---------- */
+.tpl-harness-talk .layer {
+  display: grid;
+  grid-template-columns: 130px 80px 1fr;
+  gap: 18px;
+  padding: 16px 0;
+  border-bottom: 1px solid var(--border, rgba(127,127,127,0.14));
+  align-items: baseline;
+}
+.tpl-harness-talk .layer:last-child { border-bottom: none; }
+.tpl-harness-talk .layer .lvl {
+  font-family: var(--font-mono, monospace);
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--accent);
+  letter-spacing: 0.04em;
+}
+.tpl-harness-talk .layer .pct {
+  font-family: var(--font-mono, monospace);
+  font-size: 14px;
+  color: var(--text-3);
+}
+.tpl-harness-talk .layer .desc b { display: block; font-size: 17px; color: var(--text-1); margin-bottom: 4px; }
+.tpl-harness-talk .layer .desc p { margin: 0; font-size: 14px; line-height: 1.6; color: var(--text-2); }
+
+/* ---------- Code block (theme-aware) ---------- */
+.tpl-harness-talk .code-block {
+  background: var(--surface-2, rgba(127,127,127,0.05));
+  border: 1px solid var(--border, rgba(127,127,127,0.18));
+  border-radius: var(--radius-sm, 6px);
+  padding: 18px 22px;
+  font-family: var(--font-mono, "SF Mono", monospace);
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-1);
+  white-space: pre-wrap;
+  text-align: left;
+  overflow: auto;
+  margin: 14px 0;
+}
+.tpl-harness-talk .code-block .comment { color: var(--text-3); font-style: italic; }
+.tpl-harness-talk .code-block .cmd { color: var(--good, var(--accent)); font-weight: 600; }
+.tpl-harness-talk .code-block .flag { color: var(--accent); font-weight: 600; }
+.tpl-harness-talk .code-block .str { color: var(--accent-3, var(--text-2)); }
+.tpl-harness-talk .code-block .label { display: block; font-family: var(--font-mono, monospace); font-size: 11px; color: var(--text-3); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 8px; font-weight: 600; }
+
+/* ---------- ASCII arch box ---------- */
+.tpl-harness-talk .arch {
+  background: var(--surface-2, rgba(127,127,127,0.04));
+  border: 1px solid var(--border, rgba(127,127,127,0.14));
+  border-radius: var(--radius-sm, 6px);
+  padding: 22px 26px;
+  font-family: var(--font-mono, monospace);
+  font-size: 13px;
+  line-height: 1.65;
+  color: var(--text-2);
+  white-space: pre;
+  overflow: auto;
+  margin: 14px 0;
+}
+
+/* ---------- Compare table ---------- */
+.tpl-harness-talk table.compare {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 16px;
+  font-size: 14px;
+}
+.tpl-harness-talk table.compare th,
+.tpl-harness-talk table.compare td {
+  text-align: left;
+  padding: 11px 14px;
+  border-bottom: 1px solid var(--border, rgba(127,127,127,0.14));
+  vertical-align: top;
+}
+.tpl-harness-talk table.compare th {
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  font-weight: 700;
+  border-bottom: 2px solid var(--border-strong, var(--text-1));
+}
+.tpl-harness-talk table.compare td:first-child { font-weight: 600; color: var(--text-1); width: 22%; }
+.tpl-harness-talk table.compare .old { color: var(--text-2); }
+.tpl-harness-talk table.compare .new { color: var(--accent); font-weight: 600; }
+
+/* ---------- Stat row ---------- */
+.tpl-harness-talk .stat-row {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 28px;
+  margin: 22px 0;
+}
+.tpl-harness-talk .stat {
+  text-align: left;
+  padding: 6px 0;
+}
+.tpl-harness-talk .stat .num {
+  font-family: var(--font-mono, monospace);
+  font-size: clamp(36px, 4.6vw, 60px);
+  font-weight: 800;
+  color: var(--accent);
+  letter-spacing: -0.02em;
+  line-height: 1;
+  display: block;
+  margin-bottom: 8px;
+}
+.tpl-harness-talk .stat .lbl { font-size: 13px; color: var(--text-2); line-height: 1.5; }
+
+/* ---------- Two-col grid ---------- */
+.tpl-harness-talk .two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 36px;
+  margin-top: 18px;
+}
+.tpl-harness-talk .two-col h3 { margin-bottom: 12px; }
+.tpl-harness-talk .two-col ul,
+.tpl-harness-talk .two-col ol {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 15px;
+  line-height: 1.75;
+  color: var(--text-2);
+}
+.tpl-harness-talk .two-col ul li,
+.tpl-harness-talk .two-col ol li { margin-bottom: 4px; }
+
+/* ---------- Reference list (final reference page) ---------- */
+.tpl-harness-talk .ref-section { margin-top: 16px; }
+.tpl-harness-talk .ref-section h3 {
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border, rgba(127,127,127,0.18));
+}
+.tpl-harness-talk .ref-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.tpl-harness-talk .ref-list li {
+  padding: 6px 0;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--text-2);
+}
+.tpl-harness-talk .ref-list .ttl { color: var(--text-1); font-weight: 600; }
+.tpl-harness-talk .ref-list .meta { color: var(--text-3); font-size: 12px; font-family: var(--font-mono, monospace); }
+.tpl-harness-talk .ref-list .url { font-family: var(--font-mono, monospace); font-size: 12px; color: var(--accent); word-break: break-all; }
+
+/* ---------- Flow comparison (before / after experiment pipeline) ---------- */
+.tpl-harness-talk .flow-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-top: 18px;
+}
+.tpl-harness-talk .flow-col {
+  border: 1px solid var(--border, rgba(127,127,127,0.18));
+  border-radius: var(--radius-sm, 6px);
+  padding: 18px 20px;
+  background: var(--surface, transparent);
+}
+.tpl-harness-talk .flow-col.bad { background: var(--surface-2, rgba(127,127,127,0.05)); }
+.tpl-harness-talk .flow-col.good { border-left: 4px solid var(--accent); }
+.tpl-harness-talk .flow-col h4 {
+  margin: 0 0 12px 0;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--text-3);
+  font-weight: 700;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border, rgba(127,127,127,0.14));
+}
+.tpl-harness-talk .flow-col.good h4 { color: var(--accent); }
+
+.tpl-harness-talk .flow-step {
+  position: relative;
+  padding: 10px 14px;
+  margin-bottom: 6px;
+  border-radius: var(--radius-sm, 4px);
+  font-size: 14px;
+  line-height: 1.4;
+  background: rgba(127,127,127,0.05);
+  border: 1px solid transparent;
+}
+.tpl-harness-talk .flow-step.bad-step {
+  border-color: rgba(180, 30, 30, 0.25);
+  color: var(--text-2);
+}
+.tpl-harness-talk .flow-step.bad-step .label-tag {
+  display: inline-block;
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  color: rgba(180, 30, 30, 0.7);
+  letter-spacing: 0.06em;
+  margin-right: 8px;
+  font-weight: 700;
+}
+.tpl-harness-talk .flow-step.good-step {
+  border-color: var(--border, rgba(127,127,127,0.2));
+  background: var(--surface, rgba(255,255,255,0.5));
+}
+.tpl-harness-talk .flow-step.good-step .label-tag {
+  display: inline-block;
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  color: var(--accent);
+  letter-spacing: 0.06em;
+  margin-right: 8px;
+  font-weight: 700;
+}
+.tpl-harness-talk .flow-step .artifact {
+  display: block;
+  margin-top: 4px;
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  color: var(--text-3);
+  letter-spacing: 0.02em;
+}
+.tpl-harness-talk .flow-step b { color: var(--text-1); }
+
+.tpl-harness-talk .flow-arrow-down {
+  text-align: center;
+  font-family: var(--font-mono, monospace);
+  font-size: 14px;
+  color: var(--text-3);
+  line-height: 1;
+  margin: 2px 0;
+}
+.tpl-harness-talk .flow-col.good .flow-arrow-down { color: var(--accent); }
+
+.tpl-harness-talk .flow-outcome {
+  margin-top: 10px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm, 4px);
+  font-size: 13px;
+  font-style: italic;
+  border-top: 2px solid var(--border, rgba(127,127,127,0.18));
+}
+.tpl-harness-talk .flow-col.bad .flow-outcome {
+  color: rgba(180, 30, 30, 0.85);
+  border-top-color: rgba(180, 30, 30, 0.4);
+}
+.tpl-harness-talk .flow-col.good .flow-outcome {
+  color: var(--accent);
+  border-top-color: var(--accent);
+}
+
+/* science properties row */
+.tpl-harness-talk .science-row {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 12px;
+  margin-top: 18px;
+}
+.tpl-harness-talk .science-prop {
+  padding: 12px 14px;
+  border: 1px solid var(--border, rgba(127,127,127,0.18));
+  border-top: 3px solid var(--accent);
+  border-radius: var(--radius-sm, 4px);
+}
+.tpl-harness-talk .science-prop .name {
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--text-1);
+  margin-bottom: 4px;
+}
+.tpl-harness-talk .science-prop .by {
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  color: var(--text-3);
+  line-height: 1.45;
+}
+
+/* ---------- Diagram embed (SVG figures) ---------- */
+.tpl-harness-talk .figure {
+  width: 100%;
+  margin: 16px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.tpl-harness-talk .figure img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+.tpl-harness-talk .figure.compact { margin: 8px 0; }
+.tpl-harness-talk .figure-caption {
+  margin-top: 8px;
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  color: var(--text-3);
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+/* ---------- Spacing helpers ---------- */
+.tpl-harness-talk .mt-s { margin-top: 12px; }
+.tpl-harness-talk .mt-m { margin-top: 22px; }
+.tpl-harness-talk .mt-l { margin-top: 36px; }
+.tpl-harness-talk .tc { text-align: center; }

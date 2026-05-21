@@ -1,0 +1,51 @@
+---
+name: tooling-preferences
+description: 偏好的工具 / 框架 / 库——避免每次新会话重新告知
+metadata:
+  type: feedback
+---
+
+# Tooling Preferences
+
+## 编程语言 + 框架
+
+- **主语言**：<Python 3.11+ / TypeScript / ...>
+- **ML 框架**：<PyTorch 2.x / JAX / TensorFlow>
+- **训练库**：<peft / axolotl / llama-factory / 自家代码>
+- **推理库**：<vLLM / sglang / transformers / 自家>
+
+## 实验 / 追踪
+
+- **实验追踪**：<wandb / mlflow / tensorboard / 不用>
+- **数据集托管**：<HuggingFace Datasets / 自家 S3 / 本地>
+- **模型 registry**：<HF Hub / GitHub Releases / 自家 / 不固定>
+
+## 开发环境
+
+- **OS**：<Linux / macOS / Windows WSL>
+- **Python 包管理**：<uv / pip / conda / poetry>
+- **shell**：<bash / zsh / fish>
+- **编辑器**：<VS Code / Cursor / vim>
+
+## AI 工具配置
+
+- **主用 AI agent**：<Claude Code / Cursor / Codex>
+- **常用 skills**：<列出我经常调用的 skill 名字，例如 superpowers:brainstorming>
+- **常用 MCP server**：<arxiv-mcp-server / huggingface-papers / ...>
+
+## 偏好的依赖风格
+
+- ✅ <例如："优先用稳定的、训练数据里有的库"——参考 OpenAI "boring tech" 原则>
+- ❌ <例如："不要引入两年内的实验性库，除非必要">
+
+## 计算资源约束
+
+- **可用 GPU**：<e.g. A100 80GB × 1 / RTX 4090 × 2 / 校内集群按需申请>
+- **训练预算**：<e.g. 单次实验 ≤ 24 hr / ≤ $50>
+- **数据规模约束**：<e.g. 不超过 100GB / 必须本地存储>
+
+## 一些硬性偏好
+
+- <e.g. "永远不要用 break_system_packages">
+- <e.g. "Python 永远用 uv 管依赖">
+- <e.g. "不要创建新文件除非必要——优先编辑已有文件">

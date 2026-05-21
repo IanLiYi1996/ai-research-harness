@@ -1,0 +1,108 @@
+"""
+HF Space demo · Gradio minimal example
+
+部署方式：
+1. 把这个文件 + requirements.txt 上传到 HF Space (Gradio SDK)
+2. Space 会自动启动
+
+修改 <PLACEHOLDERS> 后即可使用。
+"""
+
+import gradio as gr
+from transformers import AutoModelForCausalLM, AutoTokenizer
+import torch
+
+
+# ============ 配置 ============
+
+MODEL_ID = "<your-username>/<model-id>"
+DEFAULT_PROMPT = "Hello, "
+MAX_NEW_TOKENS = 200
+
+
+# ============ 模型加载 ============
+
+print(f"Loading model {MODEL_ID}...")
+tokenizer = AutoTokenizer.from_pretrained(MODEL_ID)
+model = AutoModelForCausalLM.from_pretrained(
+    MODEL_ID,
+    torch_dtype=torch.float16,
+    device_map="auto",
+)
+
+
+# ============ 推理 ============
+
+def generate(prompt: str, max_tokens: int, temperature: float) -> str:
+    """生成回复"""
+    inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
+    with torch.no_grad():
+        outputs = model.generate(
+            **inputs,
+            max_new_tokens=max_tokens,
+            temperature=temperature,
+            do_sample=True,
+            pad_token_id=tokenizer.eos_token_id,
+        )
+    return tokenizer.decode(outputs[0][inputs.input_ids.shape[1]:], skip_special_tokens=True)
+
+
+# ============ Gradio UI ============
+
+with gr.Blocks(title="<Your Model Name>") as demo:
+    gr.Markdown("""
+    # <Your Model Name>
+
+    <one-line description of what this demo does>
+
+    Repository: [<github-link>](<github-link>) ·
+    Model: [<model-id>](https://huggingface.co/<your-username>/<model-id>)
+    """)
+
+    with gr.Row():
+        with gr.Column():
+            prompt = gr.Textbox(
+                label="Prompt",
+                value=DEFAULT_PROMPT,
+                lines=4,
+            )
+            with gr.Row():
+                max_tokens_slider = gr.Slider(
+                    minimum=10, maximum=1000, value=MAX_NEW_TOKENS, step=10,
+                    label="Max new tokens",
+                )
+                temperature_slider = gr.Slider(
+                    minimum=0.1, maximum=2.0, value=0.7, step=0.1,
+                    label="Temperature",
+                )
+            submit = gr.Button("Generate", variant="primary")
+
+        with gr.Column():
+            output = gr.Textbox(label="Output", lines=10)
+
+    submit.click(
+        fn=generate,
+        inputs=[prompt, max_tokens_slider, temperature_slider],
+        outputs=output,
+    )
+
+    gr.Markdown("""
+    ## Example prompts
+
+    - <example 1>
+    - <example 2>
+    - <example 3>
+
+    ## Citation
+
+    ```bibtex
+    @misc{<your-citekey>,
+      title={<Title>},
+      year={2026},
+    }
+    ```
+    """)
+
+
+if __name__ == "__main__":
+    demo.launch()

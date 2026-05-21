@@ -1,0 +1,78 @@
+# TECH.md · "Can we do this?"
+
+> 这份文档回答**技术层面**的问题。**不要写战略 / 优先级**——那些进 PRODUCT.md。
+
+## 架构 / 关键技术决策
+
+### 模型 / 算法选择
+
+- **base model**: <e.g. Llama-3-8B>
+- **理由**: <为什么是这个不是别的>
+- **替代方案**:
+  - <alternative 1>: 否决原因
+  - <alternative 2>: 否决原因
+
+### 数据栈
+
+- **数据来源**: <list>
+- **预处理工具**: <e.g. nemo-curator, ray-data, 自家>
+- **存储**: <HF Hub / 本地 / S3 / DVC>
+
+### 训练栈
+
+- **框架**: <axolotl / llama-factory / peft / 自家>
+- **分布式**: <accelerate / deepspeed / fsdp2 / N/A>
+- **量化**: <bitsandbytes / awq / N/A>
+
+### 评测栈
+
+- **L1 benchmark**: <list>
+- **L2 invariant test**: <pytest / unittest>
+- **L3 reviewer**: <sub-agent / human / hybrid>
+
+### 推理 / 部署
+
+- **推理框架**: <vLLM / sglang / transformers / N/A>
+- **部署形态**: <HF Space / 本地 / API / N/A>
+
+## 关键约束
+
+### 计算资源
+
+- **可用 GPU**: <e.g. A100-80GB × 4>
+- **每月预算**: <e.g. ≤ 200 GPU-hours>
+- **存储**: <e.g. ≤ 2TB local>
+
+### 数据约束
+
+- **license**: <commercial / non-commercial / academic only>
+- **PII / 隐私**: <列出处理方式>
+- **大小约束**: <e.g. < 100GB>
+
+### 工程约束
+
+- **代码语言**: <Python 3.11+>
+- **依赖管理**: <uv / pip>
+- **CI / CD**: <github actions / 内部>
+
+## 已知风险
+
+| 风险 | 概率 | 影响 | 缓解 |
+|---|---|---|---|
+| <risk 1> | high/med/low | high/med/low | <plan> |
+
+## 架构图
+
+<可选——如果有架构图，链接到 docs/arch.svg 或者直接 mermaid>
+
+## "禁忌" 区
+
+明确**不该用**的技术（和原因）：
+
+- ❌ <tech>: <why>
+
+## 升级路径
+
+- **现在**: <current state>
+- **3 个月后**: <intended state>
+- **触发条件**: <when to upgrade>

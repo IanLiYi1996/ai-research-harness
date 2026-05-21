@@ -1,0 +1,23 @@
+{
+  "ignorePatterns": [
+    {
+      "pattern": "^http://localhost"
+    },
+    {
+      "pattern": "^https://github.com/<your"
+    },
+    {
+      "pattern": "^https://huggingface.co/<your"
+    },
+    {
+      "pattern": "<.*-id>"
+    },
+    {
+      "pattern": "^https?://.*\\.local"
+    }
+  ],
+  "timeout": "10s",
+  "retryOn429": true,
+  "retryCount": 3,
+  "fallbackRetryDelay": "5s"
+}

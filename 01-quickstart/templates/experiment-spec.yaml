@@ -1,0 +1,135 @@
+# Experiment Spec · single source of truth
+#
+# 一份 spec.yaml 串起 6 个阶段（Discover → Publish）。
+# 训练读它、评测读它、发布读它。
+#
+# Registry 选择：HF Hub / GitHub Releases / W&B Artifacts / ModelScope / 内部 manifest 都行。
+# 关键是 "凡是产物，必须有稳定 ID"。
+
+# ============ META ============
+
+name: <slug-of-this-experiment>          # 短 slug，会用来生成目录、wandb run 名等
+created: YYYY-MM-DD
+owner: <your-name>
+
+hypothesis: |
+  <一句话陈述：你期待这个实验回答什么问题？验证什么假设？>
+  <例子：在 Llama-3-8B 上用 X 类数据做 LoRA 微调，能让 GSM8K 提升 ≥ 3 个点>
+
+motivation: |
+  <为什么做这个实验？前序工作是什么？为什么现在做？>
+  <参考 03-pipeline/3-spec/ddd/PRODUCT.md 里 "Should we do this?">
+
+
+# ============ STAGE 3 · SPEC ============
+
+stage_3_spec:
+
+  # 你期望的核心 metric
+  primary_metric: <e.g. accuracy, F1, BLEU, perplexity>
+  primary_metric_target: <e.g. ≥ 70.0>
+
+  secondary_metrics:
+    - <e.g. brier_score>
+    - <e.g. inference_throughput>
+
+  # 必须满足的不变性 invariant —— 这是 "什么叫做对" 的代码表达
+  invariants:
+    - <e.g. permutation_invariant>
+    - <e.g. length_robust_to_2k_tokens>
+    - <e.g. no_regression_on_baseline_tasks>
+
+  # 评判这个实验 work 不 work 的明确标准
+  success_criteria:
+    - primary_metric ≥ <target>
+    - all invariants pass
+    - <e.g. inference_latency 不超过 baseline 1.2x>
+
+
+# ============ STAGE 4 · BUILD ============
+
+stage_4_build:
+
+  base_model:
+    registry: huggingface       # huggingface / github / wandb / local
+    id: <e.g. meta-llama/Llama-3-8B>
+    revision: <commit hash if applicable>
+
+  dataset:
+    registry: huggingface
+    id: <e.g. HuggingFaceH4/ultrachat>
+    split: train
+    num_samples: <e.g. 100000>
+
+  # 训练框架（参考 03-pipeline/4-build/）
+  trainer: axolotl              # axolotl / llama-factory / unsloth / peft / 自家
+  trainer_config: ./train.config.yaml
+
+  # 关键超参（仅写不直观的；细节进 trainer_config）
+  hyperparams:
+    method: lora                # full / lora / qlora / sft / dpo / grpo
+    lora_rank: 16
+    learning_rate: 2.0e-4
+    batch_size: 8
+    epochs: 3
+    seed: 42                    # 可重复性的最低保证
+
+  # 实验追踪
+  tracking:
+    backend: wandb              # wandb / mlflow / tensorboard / null
+    project: <your-project-name>
+
+  # 计算预算
+  compute_budget:
+    gpu: <e.g. A100-80GB × 1>
+    estimated_hours: <e.g. 12>
+
+
+# ============ STAGE 5 · EVALUATE ============
+
+stage_5_eval:
+
+  # L1 标准 benchmark
+  l1_benchmarks:
+    - mmlu
+    - hellaswag
+    - gsm8k
+    - <add your domain-specific>
+
+  # L2 spec invariant 测试（pytest）
+  l2_invariants_test: ./tests/test_invariants.py
+
+  # L3 sub-agent reviewer
+  l3_reviewer:
+    enabled: true
+    prompt_template: <e.g. "critically review N output samples for correctness">
+
+
+# ============ STAGE 6 · PUBLISH ============
+
+stage_6_publish:
+
+  # 待发布的产物（先留 placeholder，跑完填）
+  paper:
+    arxiv: <to-be-assigned>
+  model:
+    registry: huggingface
+    id: <username>/<model-slug>-v1
+  dataset:
+    registry: huggingface
+    id: <username>/<dataset-slug>-v1
+  demo:
+    registry: huggingface
+    id: spaces/<username>/<demo-slug>
+
+
+# ============ STAGE 6+ · REFLECT (跑完之后填) ============
+
+reflect:
+  status: <pending / success / failure>
+  what_worked: |
+    <跑完之后写——work 的部分>
+  what_didnt: |
+    <跑完之后写——没 work 的部分>
+  lessons: |
+    <把教训抽象成"下次做相关实验时要注意 X"——会被写回 03-pipeline/3-spec/ddd/IMPROVEMENT.md>

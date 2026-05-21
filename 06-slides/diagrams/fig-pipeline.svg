@@ -1,0 +1,98 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" font-family="Georgia, 'Latin Modern Roman', serif">
+  <defs>
+    <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#1a3a7a"/>
+    </marker>
+  </defs>
+
+  <!-- 6 stage boxes -->
+  <g font-size="14">
+    <!-- ① Discover -->
+    <rect x="20" y="80" width="140" height="120" fill="#fdfcf8" stroke="#1a3a7a" stroke-width="2"/>
+    <rect x="20" y="80" width="140" height="26" fill="#1a3a7a"/>
+    <text x="90" y="98" text-anchor="middle" fill="#fdfcf8" font-weight="700" font-size="13" letter-spacing="1">① DISCOVER</text>
+    <text x="90" y="130" text-anchor="middle" fill="#0a0a0a" font-weight="700">找该读什么</text>
+    <text x="90" y="155" text-anchor="middle" fill="#333" font-size="11">paper_search</text>
+    <text x="90" y="170" text-anchor="middle" fill="#333" font-size="11">watch_topic</text>
+    <text x="90" y="185" text-anchor="middle" fill="#707070" font-size="10" font-style="italic">日常 · 推送</text>
+
+    <!-- ② Digest -->
+    <rect x="180" y="80" width="140" height="120" fill="#fdfcf8" stroke="#1a3a7a" stroke-width="2"/>
+    <rect x="180" y="80" width="140" height="26" fill="#1a3a7a"/>
+    <text x="250" y="98" text-anchor="middle" fill="#fdfcf8" font-weight="700" font-size="13" letter-spacing="1">② DIGEST</text>
+    <text x="250" y="130" text-anchor="middle" fill="#0a0a0a" font-weight="700">把论文变成知识</text>
+    <text x="250" y="155" text-anchor="middle" fill="#333" font-size="11">huggingface-papers</text>
+    <text x="250" y="170" text-anchor="middle" fill="#333" font-size="11">read_paper</text>
+    <text x="250" y="185" text-anchor="middle" fill="#707070" font-size="10" font-style="italic">小时级 · 4-6×</text>
+
+    <!-- ③ Spec -->
+    <rect x="340" y="80" width="140" height="120" fill="#fdfcf8" stroke="#1a3a7a" stroke-width="2"/>
+    <rect x="340" y="80" width="140" height="26" fill="#1a3a7a"/>
+    <text x="410" y="98" text-anchor="middle" fill="#fdfcf8" font-weight="700" font-size="13" letter-spacing="1">③ SPEC</text>
+    <text x="410" y="130" text-anchor="middle" fill="#0a0a0a" font-weight="700">想法 → 假设</text>
+    <text x="410" y="155" text-anchor="middle" fill="#333" font-size="11">brainstorming</text>
+    <text x="410" y="170" text-anchor="middle" fill="#333" font-size="11">writing-plans</text>
+    <text x="410" y="185" text-anchor="middle" fill="#707070" font-size="10" font-style="italic">天级 · ~10×</text>
+
+    <!-- ④ Build -->
+    <rect x="500" y="80" width="140" height="120" fill="#fdfcf8" stroke="#1a3a7a" stroke-width="2"/>
+    <rect x="500" y="80" width="140" height="26" fill="#1a3a7a"/>
+    <text x="570" y="98" text-anchor="middle" fill="#fdfcf8" font-weight="700" font-size="13" letter-spacing="1">④ BUILD</text>
+    <text x="570" y="130" text-anchor="middle" fill="#0a0a0a" font-weight="700">数据 + 模型 + 训练</text>
+    <text x="570" y="155" text-anchor="middle" fill="#333" font-size="11">peft · axolotl · trl</text>
+    <text x="570" y="170" text-anchor="middle" fill="#333" font-size="11">torchtitan</text>
+    <text x="570" y="185" text-anchor="middle" fill="#707070" font-size="10" font-style="italic">周-月级 · 不变</text>
+
+    <!-- ⑤ Evaluate -->
+    <rect x="660" y="80" width="140" height="120" fill="#fdfcf8" stroke="#1a3a7a" stroke-width="2"/>
+    <rect x="660" y="80" width="140" height="26" fill="#1a3a7a"/>
+    <text x="730" y="98" text-anchor="middle" fill="#fdfcf8" font-weight="700" font-size="13" letter-spacing="1">⑤ EVALUATE</text>
+    <text x="730" y="130" text-anchor="middle" fill="#0a0a0a" font-weight="700">三层评测</text>
+    <text x="730" y="155" text-anchor="middle" fill="#333" font-size="11">lm-eval-harness</text>
+    <text x="730" y="170" text-anchor="middle" fill="#333" font-size="11">invariant + reviewer</text>
+    <text x="730" y="185" text-anchor="middle" fill="#707070" font-size="10" font-style="italic">质量阶跃</text>
+
+    <!-- ⑥ Publish -->
+    <rect x="820" y="80" width="160" height="120" fill="#fdfcf8" stroke="#1a3a7a" stroke-width="2"/>
+    <rect x="820" y="80" width="160" height="26" fill="#1a3a7a"/>
+    <text x="900" y="98" text-anchor="middle" fill="#fdfcf8" font-weight="700" font-size="13" letter-spacing="1">⑥ PUBLISH</text>
+    <text x="900" y="130" text-anchor="middle" fill="#0a0a0a" font-weight="700">让别人能复现</text>
+    <text x="900" y="155" text-anchor="middle" fill="#333" font-size="11">paper · model</text>
+    <text x="900" y="170" text-anchor="middle" fill="#333" font-size="11">dataset · demo</text>
+    <text x="900" y="185" text-anchor="middle" fill="#707070" font-size="10" font-style="italic">周级 · 2×</text>
+  </g>
+
+  <!-- arrows between stages -->
+  <g stroke="#1a3a7a" stroke-width="2" fill="none">
+    <line x1="160" y1="140" x2="180" y2="140" marker-end="url(#arr)"/>
+    <line x1="320" y1="140" x2="340" y2="140" marker-end="url(#arr)"/>
+    <line x1="480" y1="140" x2="500" y2="140" marker-end="url(#arr)"/>
+    <line x1="640" y1="140" x2="660" y2="140" marker-end="url(#arr)"/>
+    <line x1="800" y1="140" x2="820" y2="140" marker-end="url(#arr)"/>
+  </g>
+
+  <!-- top label: Input -->
+  <text x="20" y="55" fill="#707070" font-size="11" letter-spacing="2">INPUT (FROM RESEARCH WORLD)</text>
+  <line x1="20" y1="62" x2="980" y2="62" stroke="#707070" stroke-width="0.5" stroke-dasharray="3,3"/>
+
+  <!-- bottom: feedback loop ⑥ → ① -->
+  <path d="M 900 200 L 900 245 L 90 245 L 90 200" stroke="#707070" stroke-width="1.5" stroke-dasharray="6,4" fill="none" marker-end="url(#arr)"/>
+  <text x="495" y="265" text-anchor="middle" fill="#707070" font-size="11" font-style="italic">REFLECT · 失败也是产物 · 写回 DDD 知识层 · 下次实验避坑</text>
+
+  <!-- bottom labels: artifacts -->
+  <g font-size="10" fill="#707070" font-style="italic">
+    <text x="90" y="295" text-anchor="middle">inbox/*.md</text>
+    <text x="250" y="295" text-anchor="middle">papers/*.md + figs/</text>
+    <text x="410" y="295" text-anchor="middle">spec.yaml</text>
+    <text x="570" y="295" text-anchor="middle">checkpoints/ + runs</text>
+    <text x="730" y="295" text-anchor="middle">eval/*.json</text>
+    <text x="900" y="295" text-anchor="middle">⟨ paper · model · dataset · demo ⟩</text>
+  </g>
+  <text x="20" y="295" fill="#707070" font-size="11" letter-spacing="2">PRODUCTS</text>
+  <line x1="20" y1="280" x2="980" y2="280" stroke="#707070" stroke-width="0.5" stroke-dasharray="3,3"/>
+
+  <!-- caption -->
+  <text x="500" y="335" text-anchor="middle" fill="#0a0a0a" font-size="13" font-weight="700" font-style="italic">
+    AI Research Pipeline · 6 阶段串行 + REFLECT 反馈闭环
+  </text>
+</svg>

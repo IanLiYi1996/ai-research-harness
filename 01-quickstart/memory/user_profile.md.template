@@ -1,0 +1,33 @@
+---
+name: user-profile
+description: 我是谁、在做什么、AI 应该怎么称呼我和理解我的工作背景
+metadata:
+  type: user
+---
+
+# User Profile
+
+## 基本信息
+
+- **名字 / 称呼**：<your name or preferred handle>
+- **当前角色**：<e.g. 硕士生 / 博士生 / 研究员 / 工程师>
+- **学校 / 单位**：<your institution>
+- **研究方向**：<short phrase, e.g. "long-context LLMs" / "diffusion policy for robotics">
+
+## 工作背景
+
+- **使用 AI 的经验水平**：<新手 / 熟练 / 专家——决定 Agent 解释的详细程度>
+- **代码能力**：<什么语言熟练、什么框架熟练>
+- **数学背景**：<本科 / 研究生级别、强在哪些方向>
+
+## AI 协作偏好
+
+- **倾向决策风格**：<例如 "我喜欢被给 2-3 个 option 然后我选" 或 "我喜欢直接给推荐">
+- **不喜欢的 AI 行为**：<例如 "不要在我没问的时候给免责声明" / "不要重复我已经知道的内容">
+- **解释偏好**：<例如 "数学公式优先于代码片段" 或 "总是给一个最小可跑的 example">
+
+## 当前 / 近期目标
+
+- <e.g. 完成 ICLR 2026 投稿>
+- <e.g. 训练第一个能跑通的 LoRA>
+- <e.g. 把组里的 baseline pipeline 重做一遍>

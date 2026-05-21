@@ -1,0 +1,54 @@
+# PROJECT.md · "Should we do it now?"
+
+> 这份文档是**当前 sprint 的状态**。每周更新。过期的内容会误导，必须维护。
+
+## 当前 Sprint
+
+**Sprint 名称**: <e.g. "Sprint 7 · RoPE Long-context"
+**起止时间**: YYYY-MM-DD ~ YYYY-MM-DD
+**主要目标**: <一句话>
+
+## 当前焦点（Top 3）
+
+1. **<task>** — owner: <name> — status: <todo / in-progress / blocked / done>
+2. **<task>** — owner: — status:
+3. **<task>** — owner: — status:
+
+## 进行中的实验
+
+| 实验 slug | hypothesis | 状态 | ETA |
+|---|---|---|---|
+| <slug> | <one-liner> | <running/pending/done> | YYYY-MM-DD |
+
+## 阻塞 / 等待中
+
+- <blocker 1> — 等谁 / 什么
+- <blocker 2>
+
+## 本周决策
+
+| 日期 | 决定 | 原因 | 影响 |
+|---|---|---|---|
+| YYYY-MM-DD | <decision> | <rationale> | <which experiments / docs need update> |
+
+## 上周回顾
+
+- ✅ <what got done>
+- ❌ <what didn't get done — and why>
+- 🔁 <what carries over>
+
+## 下周计划
+
+- <task 1>
+- <task 2>
+- <task 3>
+
+## 风险 / 注意
+
+- <thing to watch>
+
+## 关于本文档
+
+- 每周一更新（10 分钟）
+- 过期超过两周会误导 Agent，宁可标 "deprecated" 也不要留旧内容
+- 这是给"未来一周的自己 + 协作者 + Agent"看的，不是给老板看的

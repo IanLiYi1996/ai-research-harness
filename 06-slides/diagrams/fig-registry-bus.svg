@@ -1,0 +1,84 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 480" font-family="Georgia, 'Latin Modern Roman', serif">
+  <!-- center: Artifact Registry -->
+  <ellipse cx="450" cy="240" rx="140" ry="60" fill="#1a3a7a" stroke="#0a0a0a" stroke-width="2"/>
+  <text x="450" y="232" text-anchor="middle" fill="#fdfcf8" font-weight="700" font-size="16" letter-spacing="2">ARTIFACT REGISTRY</text>
+  <text x="450" y="252" text-anchor="middle" fill="#f5f3ea" font-size="11" font-style="italic">stable IDs · provenance · cross-stage refs</text>
+  <text x="450" y="272" text-anchor="middle" fill="#f5f3ea" font-size="10" font-style="italic">HF Hub / GitHub / W&amp;B / ModelScope / DVC</text>
+
+  <!-- 6 spokes around center -->
+  <!-- positions: top-left, top-right, mid-left, mid-right, bot-left, bot-right -->
+
+  <!-- ① Discover -->
+  <g>
+    <rect x="40" y="50" width="160" height="56" fill="#fdfcf8" stroke="#1a3a7a" stroke-width="1.5"/>
+    <text x="120" y="72" text-anchor="middle" fill="#1a3a7a" font-weight="700" font-size="13">① DISCOVER</text>
+    <text x="120" y="91" text-anchor="middle" fill="#333" font-size="11" font-style="italic">→ paper IDs</text>
+  </g>
+
+  <!-- ② Digest -->
+  <g>
+    <rect x="40" y="155" width="160" height="56" fill="#fdfcf8" stroke="#1a3a7a" stroke-width="1.5"/>
+    <text x="120" y="177" text-anchor="middle" fill="#1a3a7a" font-weight="700" font-size="13">② DIGEST</text>
+    <text x="120" y="196" text-anchor="middle" fill="#333" font-size="11" font-style="italic">→ linked model/data IDs</text>
+  </g>
+
+  <!-- ③ Spec -->
+  <g>
+    <rect x="40" y="260" width="160" height="56" fill="#fdfcf8" stroke="#1a3a7a" stroke-width="1.5"/>
+    <text x="120" y="282" text-anchor="middle" fill="#1a3a7a" font-weight="700" font-size="13">③ SPEC</text>
+    <text x="120" y="301" text-anchor="middle" fill="#333" font-size="11" font-style="italic">→ base_model, dataset</text>
+  </g>
+
+  <!-- ④ Build -->
+  <g>
+    <rect x="700" y="50" width="160" height="56" fill="#fdfcf8" stroke="#1a3a7a" stroke-width="1.5"/>
+    <text x="780" y="72" text-anchor="middle" fill="#1a3a7a" font-weight="700" font-size="13">④ BUILD</text>
+    <text x="780" y="91" text-anchor="middle" fill="#333" font-size="11" font-style="italic">→ checkpoint IDs</text>
+  </g>
+
+  <!-- ⑤ Evaluate -->
+  <g>
+    <rect x="700" y="155" width="160" height="56" fill="#fdfcf8" stroke="#1a3a7a" stroke-width="1.5"/>
+    <text x="780" y="177" text-anchor="middle" fill="#1a3a7a" font-weight="700" font-size="13">⑤ EVALUATE</text>
+    <text x="780" y="196" text-anchor="middle" fill="#333" font-size="11" font-style="italic">→ eval run IDs</text>
+  </g>
+
+  <!-- ⑥ Publish -->
+  <g>
+    <rect x="700" y="260" width="160" height="56" fill="#fdfcf8" stroke="#1a3a7a" stroke-width="1.5"/>
+    <text x="780" y="282" text-anchor="middle" fill="#1a3a7a" font-weight="700" font-size="13">⑥ PUBLISH</text>
+    <text x="780" y="301" text-anchor="middle" fill="#333" font-size="11" font-style="italic">⟨paper · model · data · demo⟩</text>
+  </g>
+
+  <!-- spokes connecting boxes to center hub (bidirectional via dashed lines) -->
+  <g stroke="#1a3a7a" stroke-width="1.5" fill="none">
+    <line x1="200" y1="78" x2="320" y2="200"/>
+    <line x1="200" y1="183" x2="310" y2="240"/>
+    <line x1="200" y1="288" x2="320" y2="280"/>
+    <line x1="700" y1="78" x2="580" y2="200"/>
+    <line x1="700" y1="183" x2="590" y2="240"/>
+    <line x1="700" y1="288" x2="580" y2="280"/>
+  </g>
+
+  <!-- bottom row: examples by scenario -->
+  <text x="450" y="370" text-anchor="middle" fill="#707070" font-size="11" letter-spacing="2">EXAMPLES · 按场景挑一个</text>
+  <line x1="60" y1="380" x2="840" y2="380" stroke="#707070" stroke-width="0.5"/>
+
+  <g font-size="11">
+    <text x="80" y="408" fill="#0a0a0a" font-weight="700">NLP / 大模型</text>
+    <text x="80" y="425" fill="#1a3a7a" font-style="italic">→ Hugging Face Hub</text>
+
+    <text x="280" y="408" fill="#0a0a0a" font-weight="700">CV / 通用 ML</text>
+    <text x="280" y="425" fill="#1a3a7a" font-style="italic">→ GitHub Releases · S3</text>
+
+    <text x="500" y="408" fill="#0a0a0a" font-weight="700">实验追踪</text>
+    <text x="500" y="425" fill="#1a3a7a" font-style="italic">→ W&amp;B Artifacts · MLflow</text>
+
+    <text x="730" y="408" fill="#0a0a0a" font-weight="700">课题组内部</text>
+    <text x="730" y="425" fill="#1a3a7a" font-style="italic">→ DVC · manifest.json</text>
+  </g>
+
+  <text x="450" y="465" text-anchor="middle" fill="#0a0a0a" font-size="13" font-weight="700" font-style="italic">
+    关键不是用哪个 — 而是 "凡产物必有稳定 ID" 这个纪律
+  </text>
+</svg>

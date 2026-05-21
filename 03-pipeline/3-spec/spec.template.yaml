@@ -1,0 +1,74 @@
+# 这是 01-quickstart/templates/experiment-spec.yaml 的副本，方便此目录单独引用。
+# 实际使用时请从 templates/ 复制到 experiments/<slug>/spec.yaml。
+
+name: <slug>
+created: YYYY-MM-DD
+owner: <your-name>
+
+hypothesis: |
+  <一句话陈述>
+
+motivation: |
+  <为什么做？>
+
+stage_3_spec:
+  primary_metric: <e.g. accuracy>
+  primary_metric_target: <e.g. ≥ 70.0>
+  secondary_metrics: []
+  invariants:
+    - <invariant 1>
+    - <invariant 2>
+  success_criteria:
+    - <criterion>
+
+stage_4_build:
+  base_model:
+    registry: huggingface
+    id: <your-base-model-id>
+    revision: main
+  dataset:
+    registry: huggingface
+    id: <your-dataset-id>
+    split: train
+    num_samples: <N>
+  trainer: axolotl
+  trainer_config: ./train.config.yaml
+  hyperparams:
+    method: lora
+    lora_rank: 16
+    learning_rate: 2.0e-4
+    batch_size: 8
+    epochs: 3
+    seed: 42
+  tracking:
+    backend: wandb
+    project: <your-project>
+  compute_budget:
+    gpu: <e.g. A100-80GB × 1>
+    estimated_hours: <e.g. 12>
+
+stage_5_eval:
+  l1_benchmarks: [mmlu, hellaswag, gsm8k]
+  l2_invariants_test: ./tests/test_invariants.py
+  l3_reviewer:
+    enabled: true
+    prompt_template: "critically review N output samples for correctness"
+
+stage_6_publish:
+  paper:
+    arxiv: <to-be-assigned>
+  model:
+    registry: huggingface
+    id: <username>/<model-slug>-v1
+  dataset:
+    registry: huggingface
+    id: <username>/<dataset-slug>-v1
+  demo:
+    registry: huggingface
+    id: spaces/<username>/<demo-slug>
+
+reflect:
+  status: pending
+  what_worked: |
+  what_didnt: |
+  lessons: |

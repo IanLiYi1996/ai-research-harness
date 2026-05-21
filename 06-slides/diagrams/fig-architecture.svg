@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 460" font-family="Georgia, 'Latin Modern Roman', serif">
+  <defs>
+    <marker id="arr2" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#707070"/>
+    </marker>
+  </defs>
+
+  <!-- title -->
+  <text x="20" y="30" fill="#707070" font-size="11" letter-spacing="2">CLAUDE CODE · ~512K LINES OF TYPESCRIPT · 5 LAYERS</text>
+  <line x1="20" y1="38" x2="880" y2="38" stroke="#707070" stroke-width="0.5"/>
+
+  <!-- L5 protocol (top) -->
+  <g>
+    <rect x="60" y="60" width="780" height="62" fill="#fdfcf8" stroke="#1a3a7a" stroke-width="2"/>
+    <rect x="60" y="60" width="120" height="62" fill="#1a3a7a"/>
+    <text x="120" y="86" text-anchor="middle" fill="#fdfcf8" font-weight="700" font-size="13">L5 PROTOCOL</text>
+    <text x="120" y="106" text-anchor="middle" fill="#fdfcf8" font-size="10" letter-spacing="1">接口</text>
+    <text x="200" y="84" fill="#0a0a0a" font-weight="700" font-size="14">App Server · MCP · JSON-RPC</text>
+    <text x="200" y="105" fill="#333" font-size="11" font-style="italic">对外暴露 harness 能力，让 IDE / Web / CLI 共享同一套底层</text>
+  </g>
+
+  <!-- L4 task -->
+  <g>
+    <rect x="60" y="138" width="780" height="62" fill="#fdfcf8" stroke="#1a3a7a" stroke-width="2"/>
+    <rect x="60" y="138" width="120" height="62" fill="#1a3a7a"/>
+    <text x="120" y="164" text-anchor="middle" fill="#fdfcf8" font-weight="700" font-size="13">L4 TASK</text>
+    <text x="120" y="184" text-anchor="middle" fill="#fdfcf8" font-size="10" letter-spacing="1">调度</text>
+    <text x="200" y="162" fill="#0a0a0a" font-weight="700" font-size="14">Task System · 6 类任务</text>
+    <text x="200" y="183" fill="#333" font-size="11" font-style="italic">Shell · Agent · Teammate · Remote · Dream · Workflow</text>
+  </g>
+
+  <!-- L3 coord (highlight) -->
+  <g>
+    <rect x="60" y="216" width="780" height="62" fill="#f5f3ea" stroke="#1a3a7a" stroke-width="2.5"/>
+    <rect x="60" y="216" width="120" height="62" fill="#1a3a7a"/>
+    <text x="120" y="242" text-anchor="middle" fill="#fdfcf8" font-weight="700" font-size="13">L3 COORD</text>
+    <text x="120" y="262" text-anchor="middle" fill="#fdfcf8" font-size="10" letter-spacing="1">分工</text>
+    <text x="200" y="240" fill="#0a0a0a" font-weight="700" font-size="14">Coordinator · Lead + Worker Agents</text>
+    <text x="200" y="261" fill="#333" font-size="11" font-style="italic">主 Agent 调度，sub-agent 隔离工具集；解耦"做事"和"评估"</text>
+    <text x="800" y="240" text-anchor="end" fill="#1a3a7a" font-size="10" font-weight="700" letter-spacing="1">★ DEMO</text>
+  </g>
+
+  <!-- L2 control -->
+  <g>
+    <rect x="60" y="294" width="780" height="62" fill="#fdfcf8" stroke="#1a3a7a" stroke-width="2"/>
+    <rect x="60" y="294" width="120" height="62" fill="#1a3a7a"/>
+    <text x="120" y="320" text-anchor="middle" fill="#fdfcf8" font-weight="700" font-size="13">L2 CONTROL</text>
+    <text x="120" y="340" text-anchor="middle" fill="#fdfcf8" font-size="10" letter-spacing="1">拦截</text>
+    <text x="200" y="318" fill="#0a0a0a" font-weight="700" font-size="14">Hook 系统</text>
+    <text x="200" y="339" fill="#333" font-size="11" font-style="italic">UserPromptSubmit → PreToolUse → 执行 → PostToolUse</text>
+  </g>
+
+  <!-- L1 infra (highlight) -->
+  <g>
+    <rect x="60" y="372" width="780" height="62" fill="#f5f3ea" stroke="#1a3a7a" stroke-width="2.5"/>
+    <rect x="60" y="372" width="120" height="62" fill="#1a3a7a"/>
+    <text x="120" y="398" text-anchor="middle" fill="#fdfcf8" font-weight="700" font-size="13">L1 INFRA</text>
+    <text x="120" y="418" text-anchor="middle" fill="#fdfcf8" font-size="10" letter-spacing="1">基础设施</text>
+    <text x="200" y="396" fill="#0a0a0a" font-weight="700" font-size="14">Bootstrap · Context · Skills · Memory</text>
+    <text x="200" y="417" fill="#333" font-size="11" font-style="italic">状态初始化 / 上下文管理 / 行为扩展 / 跨会话记忆</text>
+    <text x="800" y="396" text-anchor="end" fill="#1a3a7a" font-size="10" font-weight="700" letter-spacing="1">★ DEMO</text>
+  </g>
+
+  <!-- left side stack arrow -->
+  <line x1="40" y1="60" x2="40" y2="434" stroke="#707070" stroke-width="1" stroke-dasharray="4,3" marker-end="url(#arr2)"/>
+  <text x="32" y="245" fill="#707070" font-size="10" letter-spacing="2" transform="rotate(-90 32 245)">FROM TOP TO BOTTOM</text>
+</svg>
