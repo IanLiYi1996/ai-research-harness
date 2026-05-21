@@ -40,7 +40,7 @@
 ```bash
 # 1. 用 GitHub "Use this template" 创建你自己的研究项目仓库
 #    或直接 clone：
-git clone https://github.com/<your-username>/ai-research-harness my-research
+git clone https://github.com/IanLiYi1996/ai-research-harness my-research
 cd my-research
 
 # 2. 把 01-quickstart 的 4 件套移到根目录
@@ -98,7 +98,7 @@ You should be here if any of these apply:
 ### Quick Start
 
 ```bash
-git clone https://github.com/<your-username>/ai-research-harness my-research
+git clone https://github.com/IanLiYi1996/ai-research-harness my-research
 cd my-research
 cp 01-quickstart/CLAUDE.md ./
 cp 01-quickstart/MEMORY.md ./

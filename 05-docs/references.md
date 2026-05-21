@@ -102,6 +102,6 @@ AWS · 2026-04
   title  = {AI Research Harness: A starter kit for doing research with AI harnesses},
   author = {<contributors>},
   year   = {2026},
-  url    = {https://github.com/<your-username>/ai-research-harness}
+  url    = {https://github.com/IanLiYi1996/ai-research-harness}
 }
 ```
