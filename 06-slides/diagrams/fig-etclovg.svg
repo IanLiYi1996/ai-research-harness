@@ -1,0 +1,110 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 480" font-family="Georgia, 'Latin Modern Roman', serif">
+  <!-- Title strip -->
+  <text x="20" y="28" fill="#707070" font-size="11" letter-spacing="2">ETCLOVG · 7-LAYER TAXONOMY · Li et al. 2026 · TMLR Survey</text>
+  <line x1="20" y1="36" x2="980" y2="36" stroke="#707070" stroke-width="0.5"/>
+
+  <!-- ============ Structural Core: 4 layers (E T C L) ============ -->
+  <text x="500" y="62" text-anchor="middle" fill="#1a3a7a" font-size="13" font-weight="700" letter-spacing="2">STRUCTURAL CORE · 系统主干</text>
+
+  <!-- E -->
+  <g>
+    <rect x="40" y="80" width="220" height="86" fill="#fdfcf8" stroke="#1a3a7a" stroke-width="2"/>
+    <rect x="40" y="80" width="44" height="86" fill="#1a3a7a"/>
+    <text x="62" y="128" text-anchor="middle" fill="#fdfcf8" font-weight="800" font-size="32">E</text>
+    <text x="100" y="102" fill="#0a0a0a" font-weight="700" font-size="14">Execution &amp; Sandbox</text>
+    <text x="100" y="120" fill="#333" font-size="11">执行环境 / 容器 / 浏览器</text>
+    <text x="100" y="135" fill="#333" font-size="11">computer-use / OS-level</text>
+    <text x="248" y="160" text-anchor="end" fill="#1a3a7a" font-size="13" font-weight="700" font-family="monospace">N=20</text>
+  </g>
+
+  <!-- T -->
+  <g>
+    <rect x="280" y="80" width="220" height="86" fill="#fdfcf8" stroke="#1a3a7a" stroke-width="2"/>
+    <rect x="280" y="80" width="44" height="86" fill="#1a3a7a"/>
+    <text x="302" y="128" text-anchor="middle" fill="#fdfcf8" font-weight="800" font-size="32">T</text>
+    <text x="340" y="102" fill="#0a0a0a" font-weight="700" font-size="14">Tool Interface</text>
+    <text x="340" y="120" fill="#333" font-size="11">协议（MCP / A2A）</text>
+    <text x="340" y="135" fill="#333" font-size="11">工具发现 / 选择 / 训练</text>
+    <text x="488" y="160" text-anchor="end" fill="#1a3a7a" font-size="13" font-weight="700" font-family="monospace">N=12</text>
+  </g>
+
+  <!-- C -->
+  <g>
+    <rect x="520" y="80" width="220" height="86" fill="#fdfcf8" stroke="#1a3a7a" stroke-width="2"/>
+    <rect x="520" y="80" width="44" height="86" fill="#1a3a7a"/>
+    <text x="542" y="128" text-anchor="middle" fill="#fdfcf8" font-weight="800" font-size="32">C</text>
+    <text x="580" y="102" fill="#0a0a0a" font-weight="700" font-size="14">Context &amp; Memory</text>
+    <text x="580" y="120" fill="#333" font-size="11">短期窗口 / 跨 session 状态</text>
+    <text x="580" y="135" fill="#333" font-size="11">长期 memory / 100+ turns</text>
+    <text x="728" y="160" text-anchor="end" fill="#1a3a7a" font-size="13" font-weight="700" font-family="monospace">N=9</text>
+  </g>
+
+  <!-- L (highlighted: largest category) -->
+  <g>
+    <rect x="760" y="80" width="220" height="86" fill="#f5f3ea" stroke="#1a3a7a" stroke-width="2.5"/>
+    <rect x="760" y="80" width="44" height="86" fill="#1a3a7a"/>
+    <text x="782" y="128" text-anchor="middle" fill="#fdfcf8" font-weight="800" font-size="32">L</text>
+    <text x="820" y="102" fill="#0a0a0a" font-weight="700" font-size="14">Lifecycle &amp; Orchestration ★</text>
+    <text x="820" y="120" fill="#333" font-size="11">单 / 多 agent loop</text>
+    <text x="820" y="135" fill="#333" font-size="11">issue → PR pipeline</text>
+    <text x="968" y="160" text-anchor="end" fill="#1a3a7a" font-size="13" font-weight="700" font-family="monospace">N=47</text>
+  </g>
+
+  <!-- divider -->
+  <line x1="20" y1="200" x2="980" y2="200" stroke="#1a3a7a" stroke-width="0.6" stroke-dasharray="4,3"/>
+  <text x="500" y="220" text-anchor="middle" fill="#1a3a7a" font-size="13" font-weight="700" letter-spacing="2">CONTROL PLANE · 控制平面</text>
+
+  <!-- ============ Control Plane: 3 layers (O V G) ============ -->
+  <!-- O -->
+  <g>
+    <rect x="40" y="240" width="300" height="86" fill="#fdfcf8" stroke="#1a3a7a" stroke-width="2"/>
+    <rect x="40" y="240" width="44" height="86" fill="#1a3a7a"/>
+    <text x="62" y="288" text-anchor="middle" fill="#fdfcf8" font-weight="800" font-size="32">O</text>
+    <text x="100" y="262" fill="#0a0a0a" font-weight="700" font-size="14">Observability &amp; Operations</text>
+    <text x="100" y="280" fill="#333" font-size="11">trace / 成本 / 失败信号</text>
+    <text x="100" y="295" fill="#333" font-size="11">Langfuse · OpenTelemetry · Phoenix</text>
+    <text x="328" y="320" text-anchor="end" fill="#1a3a7a" font-size="13" font-weight="700" font-family="monospace">N=15</text>
+  </g>
+
+  <!-- V -->
+  <g>
+    <rect x="360" y="240" width="300" height="86" fill="#fdfcf8" stroke="#1a3a7a" stroke-width="2"/>
+    <rect x="360" y="240" width="44" height="86" fill="#1a3a7a"/>
+    <text x="382" y="288" text-anchor="middle" fill="#fdfcf8" font-weight="800" font-size="32">V</text>
+    <text x="420" y="262" fill="#0a0a0a" font-weight="700" font-size="14">Verification &amp; Evaluation</text>
+    <text x="420" y="280" fill="#333" font-size="11">benchmark / invariant test</text>
+    <text x="420" y="295" fill="#333" font-size="11">trace-native eval / 失败归因</text>
+    <text x="648" y="320" text-anchor="end" fill="#1a3a7a" font-size="13" font-weight="700" font-family="monospace">N=21</text>
+  </g>
+
+  <!-- G -->
+  <g>
+    <rect x="680" y="240" width="300" height="86" fill="#fdfcf8" stroke="#1a3a7a" stroke-width="2"/>
+    <rect x="680" y="240" width="44" height="86" fill="#1a3a7a"/>
+    <text x="702" y="288" text-anchor="middle" fill="#fdfcf8" font-weight="800" font-size="32">G</text>
+    <text x="740" y="262" fill="#0a0a0a" font-weight="700" font-size="14">Governance &amp; Security</text>
+    <text x="740" y="280" fill="#333" font-size="11">权限 / 身份 / 审计 / 沙盒逃逸</text>
+    <text x="740" y="295" fill="#333" font-size="11">guardrails · prompt injection 防护</text>
+    <text x="968" y="320" text-anchor="end" fill="#1a3a7a" font-size="13" font-weight="700" font-family="monospace">N=14</text>
+  </g>
+
+  <!-- ============ Bottom: insights ============ -->
+  <line x1="20" y1="358" x2="980" y2="358" stroke="#707070" stroke-width="0.5" stroke-dasharray="3,3"/>
+
+  <g>
+    <text x="20" y="380" fill="#707070" font-size="11" letter-spacing="2">EMPIRICAL FINDINGS · 170+ OPEN-SOURCE PROJECTS MAPPED</text>
+
+    <text x="40" y="408" fill="#0a0a0a" font-weight="700" font-size="12">★ Densely covered</text>
+    <text x="40" y="425" fill="#333" font-size="12" font-style="italic">L (47) · V (21) · E (20)</text>
+
+    <text x="280" y="408" fill="#0a0a0a" font-weight="700" font-size="12">⚠ Coverage gaps</text>
+    <text x="280" y="425" fill="#333" font-size="12" font-style="italic">O (15) · G (14) · C (9)</text>
+
+    <text x="520" y="408" fill="#0a0a0a" font-weight="700" font-size="12">📊 New 2026 categories</text>
+    <text x="520" y="425" fill="#333" font-size="12" font-style="italic">spec-driven dev tools · multi-agent orchestrators</text>
+  </g>
+
+  <text x="500" y="465" text-anchor="middle" fill="#0a0a0a" font-size="13" font-weight="700" font-style="italic">
+    ETCLOVG: 4 structural pillars (E T C L) + 3 control plane layers (O V G)
+  </text>
+</svg>

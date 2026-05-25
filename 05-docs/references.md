@@ -1,6 +1,37 @@
 # References · 参考资料
 
-## 核心 4 篇博客 · Harness 工程的源头文献
+## 学术综述（必读）
+
+**[Agent Harness Engineering: A Survey](https://openreview.net/forum?id=eONq7FdiHa)**
+Li, Xiao, Zhang, Liu et al. · TMLR under review · 2026
+*第一篇把 agent harness engineering 作为独立学科系统化的综述。提出 binding-constraint thesis、ETCLOVG 七层分类法（Execution / Tool / Context / Lifecycle / Observability / Verification / Governance），把 170+ 开源项目按层级映射。作者来自 CMU / Yale / JHU / Tulane / UAB / OSU / Virginia Tech / Amazon。*
+
+- 项目主页：[picrew.github.io/LLM-Harness/](https://picrew.github.io/LLM-Harness/)
+- 配套数据集：[huggingface.co/datasets/ChenLiu1996/Agent-Harness-Engineering](https://huggingface.co/datasets/ChenLiu1996/Agent-Harness-Engineering)
+- GitHub 目录：[Picrew/awesome-agent-harness](https://github.com/Picrew/awesome-agent-harness) — 持续维护的 170+ 项目分类清单
+
+### 论文核心贡献
+
+1. **Binding-Constraint Thesis** — 对长程任务，benchmark 差异主要来自 harness 不是模型。3 个支撑数据：
+   - Bölük 2026: 改 edit-tool 格式 → +10× 编程 benchmark
+   - LangChain DeepAgents: 固定 GPT-5.2-Codex + harness 改造 → 52.8% → 66.5% (+13.7pp)
+   - Meta-Harness (Stanford/MIT): 自动化优化 → 76.4% on Terminal-Bench-2
+
+2. **ETCLOVG 七层分类法** — 4 结构主干（E·T·C·L）+ 3 控制平面（O·V·G）
+
+3. **Three Engineering Phases**：
+   - 2022-2024 · Prompt Engineering
+   - 2025 · Context Engineering
+   - 2026+ · Harness Engineering
+
+4. **5 个开放问题**：
+   - 强化和扩展 execution environment
+   - 长程 state 管理（recast as state estimation）
+   - Trace-native 失败诊断
+   - 标准化交接协议
+   - 随模型能力提升的自适应简化
+
+## 核心 4 篇博客 · Harness 工程的工业实践源头
 
 这一组博客是 2025-11 到 2026-03 由 Anthropic 和 OpenAI 不约而同提出的"harness engineering" 概念的奠基文献。
 

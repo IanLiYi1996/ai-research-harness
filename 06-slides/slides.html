@@ -39,9 +39,9 @@
       <h2 class="h2">今天 75 分钟，6 段</h2>
       <div class="num-list mt-l">
         <div class="agenda-row"><span class="num">01</span><span class="t">3 道自查 · 引出 Harness</span><span class="d">3 min</span></div>
-        <div class="agenda-row"><span class="num">02</span><span class="t">什么是 Harness：定义 / 病根 / 架构 / 6 模式</span><span class="d">10 min</span></div>
+        <div class="agenda-row"><span class="num">02</span><span class="t">什么是 Harness：定义 / 病根 / 架构 / 6 模式 + 学术背书 / ETCLOVG</span><span class="d">12 min</span></div>
         <div class="agenda-row"><span class="num">03</span><span class="t">如何用好：3 层成熟度 + 3 组 prompt 模板</span><span class="d">8 min</span></div>
-        <div class="agenda-row"><span class="num">04</span><span class="t">AI 研究 pipeline · 6 阶段 + 流程对比 + 科学性</span><span class="d">14 min</span></div>
+        <div class="agenda-row"><span class="num">04</span><span class="t">AI 研究 pipeline · 6 阶段 + 流程对比 + 科学性</span><span class="d">12 min</span></div>
         <div class="agenda-row"><span class="num">05</span><span class="t">三幕实时 demo：读论文 / 写笔记 / 跑实验</span><span class="d">30 min</span></div>
         <div class="agenda-row"><span class="num">06</span><span class="t">研究员的最小动作清单 · 4 件套 · takeaway</span><span class="d">10 min</span></div>
       </div>
@@ -49,7 +49,7 @@
     <aside class="notes">
       <p>过一下议程。</p>
       <p><strong>第一段</strong>是 3 道自查题，看你现在用 AI 是不是已经撞到了天花板。</p>
-      <p><strong>第二段</strong>讲清楚"Harness 到底是什么"——定义、3 大病根、5 层架构、6 大设计模式。这是今天的<em>概念锚点</em>。</p>
+      <p><strong>第二段</strong>讲清楚"Harness 到底是什么"——定义、3 大病根、5 层架构、6 大设计模式，<em>外加</em>学术界的背书（binding-constraint thesis + ETCLOVG 七层分类）。这是今天的<em>概念锚点</em>。</p>
       <p><strong>第三段</strong>讲方法论——3 层成熟度模型，从"打字机"到"协作者"到"系统设计师"，附 3 组立刻能抄走的 prompt 模板。</p>
       <p><strong>第四段</strong>是<em>把 Harness 落地到 AI 研究上</em>——6 阶段 pipeline、registry 总线、实验流程对比图、5 个科学性属性、spec.yaml 范例。这一段最干货。</p>
       <p><strong>第五段</strong>是主菜——三幕实时 demo，中间 5 分钟休息。</p>
@@ -175,6 +175,67 @@
       <p>② <strong>渐进式披露</strong>：AGENTS.md 或 CLAUDE.md 应该是个目录、是个地图，<em>不是一份百科全书</em>。OpenAI 踩过这个坑——一个巨大的 AGENTS.md 反而让 Agent 抓不到重点。</p>
       <p>⑤ <strong>生成-评估分离</strong>：今天 demo 第三幕会专门演示这个。Claude 不会评自己，必须起一个独立 sub-Agent 当 reviewer。</p>
       <p>这 6 条是地图，后面 demo 我会指回来。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 7b. ACADEMIC BACKING ============ -->
+  <section class="slide" data-title="Academic Backing">
+    <p class="kicker">// 2. academic backing</p>
+    <h2 class="h2">学术界也来了：<br><span class="accent">"Binding-Constraint Thesis"</span></h2>
+    <p class="lede mt-s">Li et al. 2026 (TMLR) 的 survey 把 Anthropic / OpenAI 那批博客提到学术综述层级：<br><strong>对长程任务，benchmark 差异主要来自 harness，不是模型</strong>。</p>
+
+    <div class="num-list mt-m">
+      <div class="item"><div class="n">①</div><div class="body">
+        <b>Bölük 2026 · 改 edit-tool 格式</b>
+        <p><strong>+10× 编程 benchmark 提升</strong>（跨 15 个模型，<em>模型权重未动</em>）</p>
+      </div></div>
+      <div class="item"><div class="n">②</div><div class="body">
+        <b>LangChain DeepAgents (Trivedy 2026)</b>
+        <p>固定 GPT-5.2-Codex，仅改 system prompt + middleware + self-verify hooks → <strong>52.8% → 66.5% (+13.7pp)</strong> on Terminal-Bench 2.0</p>
+      </div></div>
+      <div class="item"><div class="n">③</div><div class="body">
+        <b>Meta-Harness (Lee et al. 2026, Stanford/MIT)</b>
+        <p><strong>76.4% on Terminal-Bench-2</strong>，自动化 harness 优化超过所有手工调优</p>
+      </div></div>
+    </div>
+
+    <p class="quote-inline mt-l">这些"harness-only" 改动每个都<strong>超过同期"更好的模型"在同 benchmark 上 2-4pp 的典型涨幅</strong>。<br><em>变量是 harness，不是模型。</em></p>
+
+    <aside class="notes">
+      <p>之前讲的都是工业博客（Anthropic / OpenAI），有人会问"是不是只是大厂自吹"。这一页给学术层面的反驳。</p>
+      <p>2026 年 TMLR 上有一篇 survey 论文叫 <strong>Agent Harness Engineering: A Survey</strong>，作者来自 CMU、Yale、JHU、Amazon 等机构。它提出一个核心论断——<em>"binding-constraint thesis"</em>，意思是：对长程 agent 任务，benchmark 表现的差异主要来自 harness，不是来自模型。</p>
+      <p>论文给了 3 个最近半年的硬数据来支持——</p>
+      <p><strong>第一</strong>：Bölük 2026 只改了 edit-tool 的格式（怎么让 Agent 编辑文件），跨 15 个模型测，得到了<em>10 倍</em>的编程 benchmark 提升。模型权重没动。</p>
+      <p><strong>第二</strong>：LangChain 的 DeepAgents 团队，固定 GPT-5.2-Codex 不变，只通过改 system prompt、加 middleware 注入上下文、加自验证 hook，把 Terminal-Bench 2.0 从 52.8% 拉到 66.5%——<em>13.7 个百分点</em>。</p>
+      <p><strong>第三</strong>：Stanford 和 MIT 的 Meta-Harness 工作，做自动化 harness 优化，<em>76.4% 超过所有手工调优</em>。</p>
+      <p>关键是底下这句——这些改动每一个都<strong>超过</strong>同期"更好的模型"在同 benchmark 上 2-4 个百分点的典型涨幅。也就是说：<em>变量是 harness，不是模型</em>。</p>
+      <p>讲完这一页，听众会觉得"这件事不是噱头"——是有学术分量的、有数据的。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 7c. ETCLOVG TAXONOMY ============ -->
+  <section class="slide" data-title="ETCLOVG Taxonomy">
+    <p class="kicker">// 2. etclovg taxonomy</p>
+    <h2 class="h2">ETCLOVG · <span class="accent">7 层分类法</span></h2>
+    <p class="small mt-s">Li et al. 2026 (TMLR) 综合 170+ 开源项目提出的统一分类。<em>把"Claude Code 5 层架构"提到了通用学术框架层级。</em></p>
+
+    <div class="figure compact">
+      <img src="./diagrams/fig-etclovg.svg" alt="ETCLOVG 7-layer taxonomy: Execution, Tool, Context, Lifecycle, Observability, Verification, Governance">
+    </div>
+
+    <p class="quote-inline mt-s">Observability 和 Governance <strong>升级为独立层</strong>——以前被埋在 lifecycle hook 里。<em>现实中各有独立工具栈，由不同团队维护。</em></p>
+
+    <aside class="notes">
+      <p>同一篇 survey 的另一个核心贡献——<strong>ETCLOVG 七层分类法</strong>。</p>
+      <p>它把 agent harness 拆成 7 层，前面 4 层（E T C L）是<em>结构主干</em>，后面 3 层（O V G）是<em>控制平面</em>。</p>
+      <p><strong>E · Execution &amp; Sandbox</strong>：Agent 代码在哪跑，沙盒约束是什么。容器、computer-use、OS 权限。</p>
+      <p><strong>T · Tool Interface</strong>：协议（MCP、A2A）、工具描述、工具发现、工具训练。</p>
+      <p><strong>C · Context &amp; Memory</strong>：短期窗口 / 跨 session 状态 / 长期 memory。100+ turns 的连贯性。</p>
+      <p><strong>L · Lifecycle &amp; Orchestration</strong>：单 agent loop / 多 agent / issue → PR pipeline。<em>开源项目最多的一层（47 个）</em>。</p>
+      <p><strong>O · Observability</strong>：trace、成本、失败信号。Langfuse、OpenTelemetry。</p>
+      <p><strong>V · Verification &amp; Evaluation</strong>：benchmark、invariant test、trace-native eval。</p>
+      <p><strong>G · Governance &amp; Security</strong>：权限、身份、审计、prompt injection 防护。</p>
+      <p>不用记每一层。<strong>记 3 件事</strong>：一是"4 主干 + 3 控制平面"的结构；二是 L 层（生命周期）开源项目最多说明大家都在卷这块；三是 O 和 G 在开源里覆盖最稀缺，<em>这就是机会</em>——师弟师妹想做研究方向的可以看这两块。</p>
     </aside>
   </section>
 
@@ -1097,6 +1158,14 @@ managed by a shell CLI.
     </div>
 
     <div class="ref-section">
+      <h3>学术综述（必读）</h3>
+      <ul class="ref-list">
+        <li><span class="ttl">Agent Harness Engineering: A Survey</span> · <span class="meta">Li, Xiao, Zhang, Liu et al. · TMLR under review · 2026</span><br><span class="url">openreview.net/forum?id=eONq7FdiHa</span> · <span class="url">picrew.github.io/LLM-Harness/</span></li>
+        <li><span class="ttl">awesome-agent-harness</span> · <span class="meta">170+ 开源项目按 ETCLOVG 分类的目录</span><br><span class="url">github.com/Picrew/awesome-agent-harness</span></li>
+      </ul>
+    </div>
+
+    <div class="ref-section">
       <h3>关键工具 · 上手即用</h3>
       <ul class="ref-list">
         <li><span class="ttl">Claude Code</span> · <span class="meta">CLI / VS Code / JetBrains / Web</span> · <span class="url">claude.ai/code</span></li>
@@ -1110,18 +1179,20 @@ managed by a shell CLI.
     <div class="ref-section">
       <h3>关键概念延伸</h3>
       <ul class="ref-list">
-        <li><span class="ttl">Spec-Driven Development</span> · <span class="meta">把 SDLC 重写成 AI 可执行 markdown 的方法论</span></li>
-        <li><span class="ttl">Generator-Evaluator Pattern</span> · <span class="meta">受 GAN 启发的多 Agent 协作模式</span></li>
-        <li><span class="ttl">Agent-First Engineering</span> · <span class="meta">把仓库当作 Agent 的"操作系统"来设计</span></li>
+        <li><span class="ttl">Binding-Constraint Thesis</span> · <span class="meta">长程任务，benchmark 差异主要来自 harness 不是模型 — Bölük 2026</span></li>
+        <li><span class="ttl">ETCLOVG 七层分类法</span> · <span class="meta">E·T·C·L·O·V·G — Li et al. TMLR 2026</span></li>
+        <li><span class="ttl">Spec-Driven Development (SDD)</span> · <span class="meta">spec 是单一真理 — AIDLC</span></li>
+        <li><span class="ttl">Generator-Evaluator Pattern</span> · <span class="meta">受 GAN 启发的多 Agent 协作 — Anthropic V2</span></li>
       </ul>
     </div>
 
     <aside class="notes">
       <p>这一页就是大家会后唯一需要保留的一页——<strong>所有参考资料都汇总在这里</strong>。</p>
-      <p>分三块：</p>
-      <p><em>第一块</em>是核心 4 篇博客，Harness 工程的源头文献，2 篇 Anthropic + 2 篇 OpenAI。今天所有内容数据都来自这 4 篇。<strong>会后想深入看，从这 4 篇开始</strong>。</p>
-      <p><em>第二块</em>是关键工具——Claude Code、AI-DLC、superpowers、huggingface-papers、html-ppt。这些都是开箱即用的。</p>
-      <p><em>第三块</em>是几个值得继续追的概念——Spec-Driven、Generator-Evaluator、Agent-First Engineering。这些关键词去搜，能延伸出一整片新文献。</p>
+      <p>分四块：</p>
+      <p><em>第一块</em>是核心 4 篇博客，Harness 工程的工业实践源头，2 篇 Anthropic + 2 篇 OpenAI。今天大部分数据都来自这 4 篇。<strong>会后想深入工业实践，从这 4 篇开始</strong>。</p>
+      <p><em>第二块</em>是<strong>学术综述</strong>——Li et al. 2026 TMLR，刚才讲 binding-constraint thesis 和 ETCLOVG 那一篇。还有他们维护的 awesome-agent-harness 目录，<em>170+ 开源项目按七层分类</em>，做研究找方向必看。</p>
+      <p><em>第三块</em>是关键工具——Claude Code、AI-DLC、superpowers、huggingface-papers、html-ppt。开箱即用。</p>
+      <p><em>第四块</em>是几个值得继续追的概念关键词——binding-constraint thesis、ETCLOVG、Spec-Driven、Generator-Evaluator。<strong>这些是搜索关键词</strong>，会带你进入一整片新文献。</p>
       <p>这页停留 30 秒，让感兴趣的人拍照，然后就翻最后一页。</p>
     </aside>
   </section>
