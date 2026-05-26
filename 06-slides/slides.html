@@ -173,7 +173,67 @@
     </aside>
   </section>
 
-  <!-- ============ 5. WHAT IS HARNESS ============ -->
+  <!-- ============ 5. AGENT IN 30 LINES ============ -->
+  <section class="slide" data-dense data-title="Agent in 30 Lines">
+    <p class="kicker">// 1.5 · agent in 30 lines</p>
+    <h2 class="h2">在讲 Harness 之前 · <span class="accent">Agent 是什么？</span></h2>
+    <p class="lede mt-s">剥掉所有装饰，<strong>agent 内核就是这 8 行</strong>——剩下的<em>都</em>是 harness。</p>
+
+    <div class="two-col mt-m">
+      <div>
+        <pre class="code-block" style="margin:0;"><span class="label">// agent loop · 8 lines</span>while True:
+    <span class="comment"># 1. 让模型决定下一步</span>
+    resp = llm(messages, tools=TOOLS)
+    messages.append(resp)
+
+    <span class="comment"># 2. 模型说停就停</span>
+    if resp.stop_reason != <span class="str">"tool_use"</span>:
+        return
+
+    <span class="comment"># 3. 工具调用 → 执行 → 结果回灌</span>
+    for call in resp.tool_calls:
+        out = TOOL_HANDLERS[call.name](**call.input)
+        messages.append(tool_result(out))</pre>
+      </div>
+      <div>
+        <h3 class="h3" style="font-size:18px;">3 个组件</h3>
+        <div class="num-list" style="margin-top:8px;">
+          <div class="item"><div class="n">①</div><div class="body">
+            <b>Loop</b>
+            <p><span class="mono">while True</span> · 模型决定继续还是停（不是程序员）</p>
+          </div></div>
+          <div class="item"><div class="n">②</div><div class="body">
+            <b>Tools</b>
+            <p>给模型一组可调用的函数（bash / read / write / API）</p>
+          </div></div>
+          <div class="item"><div class="n">③</div><div class="body">
+            <b>tool_use 触发</b>
+            <p>模型主动喊"我要用 X"，loop 执行后回灌结果</p>
+          </div></div>
+        </div>
+      </div>
+    </div>
+
+    <p class="quote-inline mt-s"><strong>"Loop 属于 agent，机制属于 harness。"</strong>
+      <em>这就是为什么后面 30 多页都在讲机制（memory / skills / sub-agent / permissions / observability ……）。</em></p>
+
+    <aside class="notes">
+      <p>讲 harness 之前，<strong>先把 agent 是什么讲清楚</strong>——不然后面所有讨论都悬空。</p>
+      <p>看左边——<strong>这就是 agent 的全部</strong>。剥掉所有装饰，8 行 Python。Claude Code、Cursor、Codex、aider，内核都是这个。</p>
+      <p>三件事在循环里——</p>
+      <p><strong>① Loop</strong>：<span class="mono">while True</span>。<em>模型自己决定继续还是停</em>，不是程序员决定。</p>
+      <p><strong>② Tools</strong>：你给模型一组可调用的函数——bash 命令、读文件、写文件、调 API、控制浏览器。每个工具就是 agent 在环境里的一个动作。</p>
+      <p><strong>③ tool_use 触发</strong>：模型推理后说"我要用 bash 跑 ls"，loop 接到这个信号就执行，把输出回灌给模型，loop 继续。</p>
+      <p>就这些。<strong>如果你能想象一下</strong>——一个研究生坐在终端前，能看到、能动手、能停手——这就是 agent。</p>
+      <p>那为什么后面我们要讲 30 多页？<strong>因为这 8 行能跑，但跑不好</strong>。</p>
+      <p>它会忘记上下文（session amnesia）、它会自欺（self-evaluation bias）、它会越界（permission）、它会一直撞墙（无 reviewer）……</p>
+      <p>把这 8 行<em>变得能可靠工作</em>所需要的所有外壳——上下文管理、记忆、工具描述、子 agent、权限、可观测、评估——<strong>那个外壳就是 harness</strong>。</p>
+      <p>所以这 8 行属于 agent，剩下 1000 行属于 harness。这是今天讨论 harness 时永远要在脑子里想的事。</p>
+      <p><strong>讲 1.5 分钟</strong>，不展开，转下一页 What is Harness。</p>
+    </aside>
+  </section>
+
+  <!-- ============ 6. WHAT IS HARNESS ============ -->
   <section class="slide" data-title="What is Harness">
     <p class="kicker">// 2. definition</p>
     <h2 class="h2">什么是 Harness？</h2>
@@ -191,7 +251,7 @@
     </aside>
   </section>
 
-  <!-- ============ 6. WHY PROMPTS FAIL ============ -->
+  <!-- ============ 7. WHY PROMPTS FAIL ============ -->
   <section class="slide" data-dense data-title="Why Prompts Fail">
     <p class="kicker">// 2. diagnosis</p>
     <h2 class="h2">为什么"写更好的 prompt"不够？</h2>
@@ -226,7 +286,7 @@
     </aside>
   </section>
 
-  <!-- ============ 7. HARNESS ARCHITECTURE ============ -->
+  <!-- ============ 8. HARNESS ARCHITECTURE ============ -->
   <section class="slide" data-dense data-title="Harness Architecture">
     <p class="kicker">// 2. anatomy</p>
     <h2 class="h2">Harness 由哪些层组成？</h2>
@@ -246,7 +306,7 @@
     </aside>
   </section>
 
-  <!-- ============ 8. SIX PATTERNS ============ -->
+  <!-- ============ 9. SIX PATTERNS ============ -->
   <section class="slide" data-dense data-title="6 Patterns">
     <p class="kicker">// 2. core patterns</p>
     <h2 class="h2">Harness 的 6 个跨公司共识设计模式</h2>
@@ -263,7 +323,7 @@
     </aside>
   </section>
 
-  <!-- ============ 9. ACADEMIC BACKING ============ -->
+  <!-- ============ 10. ACADEMIC BACKING ============ -->
   <section class="slide" data-dense data-title="Academic Backing">
     <p class="kicker">// 2. academic backing</p>
     <h2 class="h2">学术界也来了：<br><span class="accent">"Binding-Constraint Thesis"</span></h2>
@@ -304,7 +364,7 @@
     </aside>
   </section>
 
-  <!-- ============ 10. ETCLOVG TAXONOMY ============ -->
+  <!-- ============ 11. ETCLOVG TAXONOMY ============ -->
   <section class="slide" data-dense data-title="ETCLOVG Taxonomy">
     <p class="kicker">// 2. etclovg taxonomy</p>
     <h2 class="h2">ETCLOVG · <span class="accent">7 层分类法</span></h2>
@@ -330,7 +390,7 @@
     </aside>
   </section>
 
-  <!-- ============ 11. THREE MATURITY LEVELS ============ -->
+  <!-- ============ 12. THREE MATURITY LEVELS ============ -->
   <section class="slide" data-dense data-title="3 Maturity Levels">
     <p class="kicker">// 3. maturity</p>
     <h2 class="h2">用好 AI 工具的 3 个成熟度层级</h2>
@@ -372,7 +432,7 @@
     </aside>
   </section>
 
-  <!-- ============ 12. PROMPT TEMPLATES ============ -->
+  <!-- ============ 13. PROMPT TEMPLATES ============ -->
   <section class="slide" data-dense data-title="Prompt Templates">
     <p class="kicker">// 3. prompt templates</p>
     <h2 class="h2">三组立刻可以抄的 prompt 模板</h2>
@@ -429,7 +489,7 @@
     </aside>
   </section>
 
-  <!-- ============ 13. PIPELINE OVERVIEW ============ -->
+  <!-- ============ 14. PIPELINE OVERVIEW ============ -->
   <section class="slide" data-dense data-title="Pipeline Overview">
     <p class="kicker">// 4. ai research pipeline</p>
     <h2 class="h2">AI 研究 pipeline · <span class="accent">6 个阶段</span></h2>
@@ -447,7 +507,7 @@
     </aside>
   </section>
 
-  <!-- ============ 14. SPEED-UP DATA ============ -->
+  <!-- ============ 15. SPEED-UP DATA ============ -->
   <section class="slide" data-dense data-title="Speedup Data">
     <p class="kicker">// 4. real numbers</p>
     <h2 class="h2">每阶段实际收益（按时间尺度分层）</h2>
@@ -523,7 +583,7 @@
     </aside>
   </section>
 
-  <!-- ============ 15. STAGE ① DISCOVER ============ -->
+  <!-- ============ 16. STAGE ① DISCOVER ============ -->
   <section class="slide" data-dense data-title="Stage 1: Discover">
     <p class="kicker">// stage ① · discover</p>
     <h2 class="h2">① Discover · <span class="accent">找该读什么</span></h2>
@@ -557,7 +617,7 @@
     </aside>
   </section>
 
-  <!-- ============ 16. STAGE ② DIGEST ============ -->
+  <!-- ============ 17. STAGE ② DIGEST ============ -->
   <section class="slide" data-dense data-title="Stage 2: Digest">
     <p class="kicker">// stage ② · digest</p>
     <h2 class="h2">② Digest · <span class="accent">把论文变成知识</span></h2>
@@ -591,7 +651,7 @@
     </aside>
   </section>
 
-  <!-- ============ 17. STAGE ③ SPEC ============ -->
+  <!-- ============ 18. STAGE ③ SPEC ============ -->
   <section class="slide" data-dense data-title="Stage 3: Spec">
     <p class="kicker">// stage ③ · spec</p>
     <h2 class="h2">③ Spec · <span class="accent">把想法变成可测假设</span></h2>
@@ -625,7 +685,7 @@
     </aside>
   </section>
 
-  <!-- ============ 18. STAGE ④ BUILD ============ -->
+  <!-- ============ 19. STAGE ④ BUILD ============ -->
   <section class="slide" data-dense data-title="Stage 4: Build">
     <p class="kicker">// stage ④ · build</p>
     <h2 class="h2">④ Build · <span class="accent">数据 + 模型 + 训练</span></h2>
@@ -660,7 +720,7 @@
     </aside>
   </section>
 
-  <!-- ============ 19. STAGE ⑤ EVALUATE ============ -->
+  <!-- ============ 20. STAGE ⑤ EVALUATE ============ -->
   <section class="slide" data-dense data-title="Stage 5: Evaluate">
     <p class="kicker">// stage ⑤ · evaluate</p>
     <h2 class="h2">⑤ Evaluate · <span class="accent">三层评测防自评偏差</span></h2>
@@ -690,7 +750,7 @@
     </aside>
   </section>
 
-  <!-- ============ 20. STAGE ⑥ PUBLISH ============ -->
+  <!-- ============ 21. STAGE ⑥ PUBLISH ============ -->
   <section class="slide" data-dense data-title="Stage 6: Publish">
     <p class="kicker">// stage ⑥ · publish</p>
     <h2 class="h2">⑥ Publish · <span class="accent">让别人能引用、能复现</span></h2>
@@ -725,7 +785,7 @@
     </aside>
   </section>
 
-  <!-- ============ 21. ARTIFACT REGISTRY · BUS ============ -->
+  <!-- ============ 22. ARTIFACT REGISTRY · BUS ============ -->
   <section class="slide" data-dense data-title="Artifact Registry = Bus">
     <p class="kicker">// 4. the unifier</p>
     <h2 class="h2">把 6 阶段串起来：<br><span class="accent">Artifact Registry = pipeline 总线</span></h2>
@@ -746,7 +806,7 @@
     </aside>
   </section>
 
-  <!-- ============ 22. EXPERIMENT FLOW COMPARE ============ -->
+  <!-- ============ 23. EXPERIMENT FLOW COMPARE ============ -->
   <section class="slide" data-dense data-title="Experiment Flow Compare">
     <p class="kicker">// 4. before vs after</p>
     <h2 class="h2">实验流程对比 · <span class="accent">从碎片到管线</span></h2>
@@ -762,7 +822,7 @@
     </aside>
   </section>
 
-  <!-- ============ 23. SCIENTIFIC PROPERTIES ============ -->
+  <!-- ============ 24. SCIENTIFIC PROPERTIES ============ -->
   <section class="slide" data-dense data-title="Scientific Properties">
     <p class="kicker">// 4. why is this scientific</p>
     <h2 class="h2">为什么这个流程<span class="accent">才叫科学</span>？</h2>
@@ -786,7 +846,7 @@
     </aside>
   </section>
 
-  <!-- ============ 24. SPEC.YAML SAMPLE ============ -->
+  <!-- ============ 25. SPEC.YAML SAMPLE ============ -->
   <section class="slide" data-dense data-title="spec.yaml Sample">
     <p class="kicker">// 4. spec-as-config</p>
     <h2 class="h2">把 pipeline 浓缩到一份 <span class="mono">spec.yaml</span></h2>
@@ -830,7 +890,7 @@
     </aside>
   </section>
 
-  <!-- ============ 25. DEMO INTRO ============ -->
+  <!-- ============ 26. DEMO INTRO ============ -->
   <section class="slide" data-title="Demo Intro">
     <div class="center-v">
       <p class="kicker">// 5. live demo</p>
@@ -851,7 +911,7 @@
     </aside>
   </section>
 
-  <!-- ============ 26. ACT 1 · READ ============ -->
+  <!-- ============ 27. ACT 1 · READ ============ -->
   <section class="slide" data-title="Act 1: Read">
     <p class="kicker">// 5. act 1 · read</p>
     <h2 class="h2">幕一：读论文</h2>
@@ -889,7 +949,7 @@
     </aside>
   </section>
 
-  <!-- ============ 27. ACT 1 RECAP ============ -->
+  <!-- ============ 28. ACT 1 RECAP ============ -->
   <section class="slide" data-title="Act 1 Recap">
     <p class="kicker">// 5. act 1 · recap</p>
     <h2 class="h2">第一幕拆解</h2>
@@ -918,7 +978,7 @@
     </aside>
   </section>
 
-  <!-- ============ 28. ACT 2 · WRITE NOTES ============ -->
+  <!-- ============ 29. ACT 2 · WRITE NOTES ============ -->
   <section class="slide" data-title="Act 2: Write Notes">
     <p class="kicker">// 5. act 2 · write</p>
     <h2 class="h2">幕二：写笔记</h2>
@@ -956,7 +1016,7 @@
     </aside>
   </section>
 
-  <!-- ============ 29. ACT 2 RECAP ============ -->
+  <!-- ============ 30. ACT 2 RECAP ============ -->
   <section class="slide" data-title="Act 2 Recap">
     <p class="kicker">// 5. act 2 · recap</p>
     <h2 class="h2">第二幕拆解</h2>
@@ -985,7 +1045,7 @@
     </aside>
   </section>
 
-  <!-- ============ 30. BREAK ============ -->
+  <!-- ============ 31. BREAK ============ -->
   <section class="slide" data-title="Break">
     <div class="center-v" style="text-align:center">
       <p class="kicker">break</p>
@@ -999,7 +1059,7 @@
     </aside>
   </section>
 
-  <!-- ============ 31. ACT 3 · RUN ============ -->
+  <!-- ============ 32. ACT 3 · RUN ============ -->
   <section class="slide" data-title="Act 3: Run">
     <p class="kicker">// 5. act 3 · run</p>
     <h2 class="h2">幕三：跑实验 / 复现</h2>
@@ -1037,7 +1097,7 @@
     </aside>
   </section>
 
-  <!-- ============ 32. ACT 3 RECAP ============ -->
+  <!-- ============ 33. ACT 3 RECAP ============ -->
   <section class="slide" data-title="Act 3 Recap">
     <p class="kicker">// 5. act 3 · recap</p>
     <h2 class="h2">第三幕的关键洞察</h2>
@@ -1067,7 +1127,7 @@
     </aside>
   </section>
 
-  <!-- ============ 33. HARNESS × RESEARCH ============ -->
+  <!-- ============ 34. HARNESS × RESEARCH ============ -->
   <section class="slide" data-dense data-title="Harness × Research">
     <p class="kicker">// 6. harness × research</p>
     <h2 class="h2">回到 6 阶段：每阶段你能做的<span class="accent">最小动作</span></h2>
@@ -1122,7 +1182,7 @@
     </aside>
   </section>
 
-  <!-- ============ 34. 4-PIECE KIT ============ -->
+  <!-- ============ 35. 4-PIECE KIT ============ -->
   <section class="slide" data-dense data-title="Min Harness Kit">
     <p class="kicker">// 6. minimum viable harness</p>
     <h2 class="h2">最小 harness · 4 件套</h2>
@@ -1158,7 +1218,7 @@
     </aside>
   </section>
 
-  <!-- ============ 35. CLAUDE.md SAMPLE ============ -->
+  <!-- ============ 36. CLAUDE.md SAMPLE ============ -->
   <section class="slide" data-dense data-title="CLAUDE.md Sample">
     <p class="kicker">// 6. concrete example</p>
     <h2 class="h2">CLAUDE.md 长什么样（通用研究项目模板）</h2>
@@ -1194,7 +1254,7 @@ managed by a shell CLI.
     </aside>
   </section>
 
-  <!-- ============ 36. KEY TAKEAWAYS ============ -->
+  <!-- ============ 37. KEY TAKEAWAYS ============ -->
   <section class="slide" data-title="Takeaways">
     <p class="kicker">// 6. takeaways</p>
     <h2 class="h2">5 个 takeaway · 记住 1 条就够</h2>
@@ -1216,7 +1276,7 @@ managed by a shell CLI.
     </aside>
   </section>
 
-  <!-- ============ 37. Q&A ============ -->
+  <!-- ============ 38. Q&A ============ -->
   <section class="slide" data-title="Q&amp;A">
     <div class="center-v" style="text-align:center">
       <p class="kicker">q &amp; a · 至少 10 min</p>
@@ -1233,7 +1293,7 @@ managed by a shell CLI.
     </aside>
   </section>
 
-  <!-- ============ 38. REFERENCES ============ -->
+  <!-- ============ 39. REFERENCES ============ -->
   <section class="slide" data-dense data-title="References">
     <p class="kicker">// references · 全部参考资料</p>
     <h2 class="h2">参考资料 · 想深入看从这里开始</h2>
