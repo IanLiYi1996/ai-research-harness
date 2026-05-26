@@ -9,6 +9,14 @@
 
 —
 
+## [v1.4.0] · 2026-05-26
+
+### Added · 新增 · 引入第二份 2026-05 同月综述（Ning et al. *Code as Agent Harness*）
+- `05-docs/references.md` · 学术综述段重组为 A (ETCLOVG · Li) + B (Code-as-Substrate · Ning) 两个视角，并给两者一个对比表
+- `05-docs/05-spec-driven.md` · 顶部加"学术背书 · Code as Substrate 视角" 段——用 Ning 的 4 个角色（reasoning / action / environment / verification）给 SDD 的 single-source-of-truth 提供更深的理论支持
+- `05-docs/07-glossary.md` · 加术语 **#21 · Code as Substrate · 代码即基底**（含 4 个角色表 + 跟 SDD/ETCLOVG 的关系），互参索引把 Ning 列为"学术综述 B"
+- 互参索引同时加 [shareAI-lab/learn-claude-code](https://github.com/shareAI-lab/learn-claude-code) 作为造 harness 教程
+
 ## [v1.3.0] · 2026-05-26
 
 ### Added · 新增（受 [shareAI-lab/learn-claude-code](https://github.com/shareAI-lab/learn-claude-code) 启发）

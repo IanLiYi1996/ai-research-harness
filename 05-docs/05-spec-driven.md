@@ -2,6 +2,25 @@
 
 > 来源：AWS AIDLC（[awslabs/aidlc-workflows](https://github.com/awslabs/aidlc-workflows)）的核心方法论之一。
 
+## 学术背书 · "Code as Substrate" 视角
+
+> Ning et al. 2026 在 [*Code as Agent Harness*](https://arxiv.org/abs/2605.18747) 里给 SDD 提供了一个更深的理论支持：
+>
+> **"Code is no longer only a target output. It increasingly serves as an operational substrate for agent reasoning, acting, environment modeling, and execution-based verification."**
+
+也就是说，code（包括 spec.yaml）同时承担四件事：
+
+| 角色 | SDD 怎么用 |
+|---|---|
+| 推理基底（reasoning） | spec.yaml 是 agent 推断"实验在做什么" 的输入 |
+| 行动接口（action） | `axolotl train spec.yaml` 让 agent 一行命令跑出整个实验 |
+| 环境模型（environment） | spec.yaml 用 registry ID 把外部世界的状态钉死 |
+| 可执行验证（verification） | TDD invariant + spec.yaml 一起，让"对不对" 可以自动判定 |
+
+SDD 不是"用 yaml 写实验" 这么轻——它是把<u>整个实验</u>从"代码 + 隐含约定" 变成"code as substrate"：所有变量、状态、验证一致地用 code 表达。
+
+> 这条线索的另一种叙述见 [`07-glossary.md` · Code as Substrate](./07-glossary.md#21--code-as-substrate--代码即基底)。
+
 ## 一句话定义
 
 **Spec is the single source of truth. Code is never edited directly.**

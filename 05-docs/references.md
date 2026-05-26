@@ -2,8 +2,12 @@
 
 ## 学术综述（必读）
 
+> **2026 年 5 月一个月之内，两份独立的 harness 综述同时挂出**——一份用 7 层结构主干（ETCLOVG），一份把 code 当作 substrate。两个角度互补，值得对比阅读。
+
+### A · 7 层分类视角
+
 **[Agent Harness Engineering: A Survey](https://openreview.net/forum?id=eONq7FdiHa)**
-Li, Xiao, Zhang, Liu et al. · TMLR under review · 2026
+Li, Xiao, Zhang, Liu et al. · TMLR under review · 2026-05
 *第一篇把 agent harness engineering 作为独立学科系统化的综述。提出 binding-constraint thesis、ETCLOVG 七层分类法（Execution / Tool / Context / Lifecycle / Observability / Verification / Governance），把 170+ 开源项目按层级映射。作者来自 CMU / Yale / JHU / Tulane / UAB / OSU / Virginia Tech / Amazon。*
 
 - 项目主页：[picrew.github.io/LLM-Harness/](https://picrew.github.io/LLM-Harness/)
@@ -30,6 +34,45 @@ Li, Xiao, Zhang, Liu et al. · TMLR under review · 2026
    - Trace-native 失败诊断
    - 标准化交接协议
    - 随模型能力提升的自适应简化
+
+### B · Code-as-Substrate 视角
+
+**[Code as Agent Harness](https://arxiv.org/abs/2605.18747)**
+Ning, Tieu, Fu, Wei, Li et al. · arXiv 2605.18747 · 2026-05
+*提出 "code as the basis for agent infrastructure" 的中心论点——code 不只是产出，也是 agent 推理 / 行动 / 环境建模 / 验证的<u>operational substrate</u>。42 位作者主要来自 UIUC（Hanghang Tong / Jingrui He 实验室）+ 多个工业界。*
+
+#### 核心贡献
+
+1. **三层结构**：
+   - **Harness Interface** · code 怎么连接 reasoning / action / environment
+   - **Harness Mechanisms** · planning / memory / tool use / feedback control
+   - **Scaling** · 从 single → multi-agent，shared code artifacts 作为协调媒介
+
+2. **应用清单**（覆盖比 Li et al. 更广）：
+   - coding assistants
+   - GUI / OS automation
+   - embodied agents
+   - **scientific discovery** ← 跟本仓库最相关
+   - personalization & recommendation
+   - DevOps & enterprise workflows
+
+3. **5 个开放问题**：
+   - Evaluation beyond final-task-success
+   - Verification under incomplete feedback
+   - Regression-free harness improvement
+   - Consistent shared state across agents
+   - Human oversight for safety-critical actions
+
+#### 跟 Li et al. 的关系
+
+| 维度 | Li et al. (TMLR) | Ning et al. (arXiv) |
+|---|---|---|
+| 切入点 | 工程层级（什么在做什么） | 表达媒介（用什么做） |
+| 分类粒度 | 7 层（ETCLOVG） | 3 层（interface / mechanism / scaling） |
+| 实证 | 170+ 项目 → 层级映射 | 应用域 → mechanism 对应 |
+| 论点定位 | binding-constraint thesis | code 作为 unified substrate |
+
+**两者互补**：Li 把 harness <u>分解</u>为多层；Ning 把 harness <u>统一</u>到一个媒介。先看 Li 知道有哪些层，再看 Ning 知道为什么 code 能贯穿这些层。
 
 ## 核心 4 篇博客 · Harness 工程的工业实践源头
 

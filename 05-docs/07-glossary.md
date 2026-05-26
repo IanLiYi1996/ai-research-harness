@@ -348,10 +348,39 @@ Harness = Tools + Knowledge + Observation + Action + Permissions
 
 ---
 
+## 21 · Code as Substrate · 代码即基底
+
+**定义** · code（含 spec.yaml / config / harness 自身的代码）不只是<u>产出</u>，是 agent 的 **operational substrate**——同时承担推理 / 行动 / 环境建模 / 验证 4 件事。
+
+**起源** · Ning, Tieu, Fu, Wei, Li et al. 2026 · [*Code as Agent Harness*](https://arxiv.org/abs/2605.18747) · arXiv 2605.18747 · 42 位作者主要来自 UIUC。
+
+**核心引语**：
+
+> *"Code is no longer only a target output. It increasingly serves as an operational substrate for agent reasoning, acting, environment modeling, and execution-based verification."*
+
+**4 个角色**：
+
+| 角色 | 例子 |
+|---|---|
+| Reasoning | agent 看 `spec.yaml` 推断"实验在做什么" |
+| Action | `axolotl train spec.yaml` 一行命令落地实验 |
+| Environment modeling | spec.yaml 用 registry ID 把外部世界状态钉死 |
+| Verification | pytest invariant + spec 一起判定"对不对" |
+
+**和 [SDD](#02--sdd--spec-driven-development) 的关系** · code-as-substrate 是 SDD 的<u>更底层</u>论证：为什么 spec.yaml 应该是 single source of truth——因为<u>整个 agent 系统</u>都把 code 作为基底，spec 自然成为基底中的基底。
+
+**和 [ETCLOVG 七层](#12-etclovg--七层分类法) 的关系** · 两份 2026-05 综述。Li 把 harness <u>分解</u>为 7 层；Ning 把 harness <u>统一</u>到一个媒介（code）。互补。
+
+**深读** · [`05-docs/05-spec-driven.md` · 学术背书段](./05-spec-driven.md#学术背书--code-as-substrate-视角)
+
+---
+
 ## 互参索引
 
-- 学术综述：Junjie Li et al. 2026 · *Agent Harness Engineering: A Survey* · [TMLR · openreview.net/forum?id=eONq7FdiHa](https://openreview.net/forum?id=eONq7FdiHa)
+- 学术综述 A · 7 层视角：Junjie Li et al. 2026 · *Agent Harness Engineering: A Survey* · [TMLR · openreview.net/forum?id=eONq7FdiHa](https://openreview.net/forum?id=eONq7FdiHa)
+- 学术综述 B · code-as-substrate 视角：Ning et al. 2026 · *Code as Agent Harness* · [arXiv 2605.18747](https://arxiv.org/abs/2605.18747)
 - 工程博客：Anthropic [Effective Harnesses](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) / [Harness Design](https://www.anthropic.com/engineering/harness-design-long-running-apps)
 - 工程博客：OpenAI [Harness Engineering](https://openai.com/index/harness-engineering/) / [Codex App Server](https://openai.com/index/unlocking-the-codex-harness/)
 - 方法论栈：AWS [AIDLC Workflows](https://github.com/awslabs/aidlc-workflows)
 - 项目目录：[Picrew/awesome-agent-harness](https://github.com/Picrew/awesome-agent-harness) (170+ 项目)
+- 造 harness 教程：[shareAI-lab/learn-claude-code](https://github.com/shareAI-lab/learn-claude-code) (20 章拆解)
