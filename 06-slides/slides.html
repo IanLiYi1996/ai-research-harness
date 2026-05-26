@@ -1238,45 +1238,54 @@ managed by a shell CLI.
     <p class="kicker">// references · 全部参考资料</p>
     <h2 class="h2">参考资料 · 想深入看从这里开始</h2>
 
-    <div class="ref-section">
-      <h3>核心 4 篇博客 · Harness 工程的源头文献</h3>
-      <ul class="ref-list">
-        <li><span class="ttl">Effective Harnesses for Long-Running Agents</span> · <span class="meta">Anthropic · Justin Young · 2025-11-26</span><br><span class="url">anthropic.com/engineering/effective-harnesses-for-long-running-agents</span></li>
-        <li><span class="ttl">Harness Design for Long-Running Application Development</span> · <span class="meta">Anthropic · Prithvi Rajasekaran · 2026-03-24</span><br><span class="url">anthropic.com/engineering/harness-design-long-running-apps</span></li>
-        <li><span class="ttl">Harness Engineering: Leveraging Codex in an Agent-First World</span> · <span class="meta">OpenAI · Ryan Lopopolo · 2026-02-11</span><br><span class="url">openai.com/index/harness-engineering</span></li>
-        <li><span class="ttl">Unlocking the Codex Harness: How We Built the App Server</span> · <span class="meta">OpenAI · Celia Chen · 2026-02-04</span><br><span class="url">openai.com/index/unlocking-the-codex-harness</span></li>
-      </ul>
+    <div class="ref-grid">
+      <div class="ref-col">
+        <div class="ref-section">
+          <h3>核心 4 篇博客 · Harness 源头</h3>
+          <ul class="ref-list">
+            <li><span class="ttl">Effective Harnesses for Long-Running Agents</span> · <span class="meta">Anthropic · Young · 2025-11</span></li>
+            <li><span class="ttl">Harness Design for Long-Running Apps</span> · <span class="meta">Anthropic · Rajasekaran · 2026-03</span></li>
+            <li><span class="ttl">Harness Engineering · Codex in Agent-First World</span> · <span class="meta">OpenAI · Lopopolo · 2026-02</span></li>
+            <li><span class="ttl">Unlocking the Codex Harness · App Server</span> · <span class="meta">OpenAI · Chen · 2026-02</span></li>
+          </ul>
+        </div>
+
+        <div class="ref-section">
+          <h3>关键工具 · 上手即用</h3>
+          <ul class="ref-list">
+            <li><span class="ttl">Claude Code</span> · <span class="meta">claude.ai/code</span></li>
+            <li><span class="ttl">awslabs/aidlc-workflows</span> · <span class="meta">spec-driven SDLC 落地</span></li>
+            <li><span class="ttl">superpowers</span> · <span class="meta">brainstorming / TDD / debugging skills</span></li>
+            <li><span class="ttl">huggingface-papers · arxiv-mcp-server</span> · <span class="meta">读论文 skill + MCP</span></li>
+            <li><span class="ttl">html-ppt</span> · <span class="meta">本 deck 工具 · 36 主题</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="ref-col">
+        <div class="ref-section">
+          <h3>学术综述 · 2026-05 同月两份</h3>
+          <ul class="ref-list">
+            <li><span class="ttl">Agent Harness Engineering: A Survey</span> · <span class="meta">Li et al. · TMLR 2026 · ETCLOVG 七层</span></li>
+            <li><span class="ttl">Code as Agent Harness</span> · <span class="meta">Ning et al. · arXiv 2605.18747 · code as substrate · 列 sci-discovery</span></li>
+            <li><span class="ttl">awesome-agent-harness</span> · <span class="meta">170+ 项目按 ETCLOVG 分类</span></li>
+          </ul>
+        </div>
+
+        <div class="ref-section">
+          <h3>关键概念 · 搜索关键词</h3>
+          <ul class="ref-list">
+            <li><span class="ttl">Binding-Constraint Thesis</span> · <span class="meta">benchmark 差异来自 harness 不是模型 — Bölük 2026</span></li>
+            <li><span class="ttl">ETCLOVG 七层分类法</span> · <span class="meta">E·T·C·L·O·V·G — Li 2026</span></li>
+            <li><span class="ttl">Spec-Driven Development</span> · <span class="meta">spec 是单一真理 — AIDLC</span></li>
+            <li><span class="ttl">Generator-Evaluator</span> · <span class="meta">GAN 启发多 Agent 协作 — Anthropic</span></li>
+          </ul>
+        </div>
+      </div>
     </div>
 
-    <div class="ref-section">
-      <h3>学术综述（必读）· 2026-05 同月两份</h3>
-      <ul class="ref-list">
-        <li><span class="ttl">Agent Harness Engineering: A Survey</span> · <span class="meta">Li, Xiao, Zhang, Liu et al. · TMLR under review · 2026 · ETCLOVG 七层分类</span><br><span class="url">openreview.net/forum?id=eONq7FdiHa</span> · <span class="url">picrew.github.io/LLM-Harness/</span></li>
-        <li><span class="ttl">Code as Agent Harness</span> · <span class="meta">Ning, Tieu, Fu, Wei et al. · arXiv · 2026-05 · code 作为 substrate · 列 scientific discovery 为应用</span><br><span class="url">arxiv.org/abs/2605.18747</span></li>
-        <li><span class="ttl">awesome-agent-harness</span> · <span class="meta">170+ 开源项目按 ETCLOVG 分类的目录</span><br><span class="url">github.com/Picrew/awesome-agent-harness</span></li>
-      </ul>
-    </div>
-
-    <div class="ref-section">
-      <h3>关键工具 · 上手即用</h3>
-      <ul class="ref-list">
-        <li><span class="ttl">Claude Code</span> · <span class="meta">CLI / VS Code / JetBrains / Web</span> · <span class="url">claude.ai/code</span></li>
-        <li><span class="ttl">awslabs/aidlc-workflows</span> · <span class="meta">25KB 单文件 · spec-driven SDLC 落地</span> · <span class="url">github.com/awslabs/aidlc-workflows</span></li>
-        <li><span class="ttl">superpowers</span> · <span class="meta">brainstorming / writing-plans / TDD / debugging skills</span></li>
-        <li><span class="ttl">huggingface-papers · arxiv-mcp-server</span> · <span class="meta">读论文相关 skill 与 MCP server</span></li>
-        <li><span class="ttl">html-ppt</span> · <span class="meta">本 deck 用的演示工具，36 主题 + 演讲者模式</span></li>
-      </ul>
-    </div>
-
-    <div class="ref-section">
-      <h3>关键概念延伸</h3>
-      <ul class="ref-list">
-        <li><span class="ttl">Binding-Constraint Thesis</span> · <span class="meta">长程任务，benchmark 差异主要来自 harness 不是模型 — Bölük 2026</span></li>
-        <li><span class="ttl">ETCLOVG 七层分类法</span> · <span class="meta">E·T·C·L·O·V·G — Li et al. TMLR 2026</span></li>
-        <li><span class="ttl">Spec-Driven Development (SDD)</span> · <span class="meta">spec 是单一真理 — AIDLC</span></li>
-        <li><span class="ttl">Generator-Evaluator Pattern</span> · <span class="meta">受 GAN 启发的多 Agent 协作 — Anthropic V2</span></li>
-      </ul>
-    </div>
+    <p class="small mt-s" style="text-align:center; font-style:italic; color:var(--text-3);">完整 URL 与扩展阅读 →
+      <span class="mono">github.com/IanLiYi1996/ai-research-harness/blob/main/05-docs/references.md</span></p>
 
     <aside class="notes">
       <p>这一页就是大家会后唯一需要保留的一页——<strong>所有参考资料都汇总在这里</strong>。</p>

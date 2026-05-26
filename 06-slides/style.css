@@ -446,6 +446,30 @@
 .tpl-harness-talk .two-col ol li { margin-bottom: 4px; }
 
 /* ---------- Reference list (final reference page) ---------- */
+.tpl-harness-talk .ref-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px 32px;
+  margin-top: 8px;
+}
+.tpl-harness-talk .ref-col {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.tpl-harness-talk .slide[data-dense] .ref-section { margin-top: 4px; }
+.tpl-harness-talk .slide[data-dense] .ref-section h3 {
+  font-size: 12px;
+  margin: 0 0 4px 0;
+  padding-bottom: 4px;
+}
+.tpl-harness-talk .slide[data-dense] .ref-list li {
+  padding: 3px 0;
+  font-size: 11px;
+  line-height: 1.4;
+}
+.tpl-harness-talk .slide[data-dense] .ref-list .ttl { font-size: 12px; }
+.tpl-harness-talk .slide[data-dense] .ref-list .meta { font-size: 10px; }
 .tpl-harness-talk .ref-section { margin-top: 16px; }
 .tpl-harness-talk .ref-section h3 {
   font-size: 14px;
