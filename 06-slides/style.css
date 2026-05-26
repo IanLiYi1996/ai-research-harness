@@ -537,6 +537,47 @@
   line-height: 1.45;
 }
 
+/* ---------- Glossary (compact 2-column grid) ---------- */
+.tpl-harness-talk .glossary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px 28px;
+  margin-top: 14px;
+}
+.tpl-harness-talk .gl-item {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 10px;
+  align-items: baseline;
+  padding: 8px 0;
+  border-bottom: 1px solid var(--border, rgba(127,127,127,0.12));
+}
+.tpl-harness-talk .gl-item .n {
+  font-family: var(--font-mono, monospace);
+  font-size: 11px;
+  color: var(--text-3);
+  font-weight: 700;
+}
+.tpl-harness-talk .gl-item .body b {
+  display: block;
+  font-size: 14px;
+  color: var(--accent);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.tpl-harness-talk .gl-item .body p {
+  margin: 2px 0 0 0;
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--text-2);
+}
+.tpl-harness-talk .gl-item .body .en {
+  font-style: italic;
+  color: var(--text-3);
+  font-size: 11px;
+  margin-left: 4px;
+}
+
 /* ---------- Diagram embed (SVG figures) ---------- */
 .tpl-harness-talk .figure {
   width: 100%;
