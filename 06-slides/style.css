@@ -4,10 +4,71 @@
 
 /* ---------- Layout ---------- */
 .tpl-harness-talk .slide {
-  padding: 56px 88px 64px;
+  padding: 44px 72px 48px;
   display: flex;
   flex-direction: column;
+  /* Safety: if content truly overflows, allow scroll instead of clipping. */
+  overflow-y: auto;
+  overflow-x: hidden;
 }
+
+/* Dense slides: tighten padding + force content to fit by shrinking type */
+.tpl-harness-talk .slide[data-dense] {
+  padding: 32px 56px 40px;
+}
+.tpl-harness-talk .slide[data-dense] .h2 {
+  font-size: clamp(22px, 2.8vw, 38px);
+  margin-bottom: 12px;
+}
+.tpl-harness-talk .slide[data-dense] .kicker {
+  margin-bottom: 10px;
+}
+.tpl-harness-talk .slide[data-dense] .lede {
+  font-size: 15px;
+  line-height: 1.45;
+}
+.tpl-harness-talk .slide[data-dense] .small {
+  font-size: 12px;
+  line-height: 1.4;
+}
+.tpl-harness-talk .slide[data-dense] .num-list { margin: 10px 0; }
+.tpl-harness-talk .slide[data-dense] .num-list .item {
+  padding: 8px 0;
+  grid-template-columns: 36px 1fr;
+  gap: 12px;
+}
+.tpl-harness-talk .slide[data-dense] .num-list .n { font-size: 18px; }
+.tpl-harness-talk .slide[data-dense] .num-list .body b { font-size: 14px; margin-bottom: 2px; }
+.tpl-harness-talk .slide[data-dense] .num-list .body p { font-size: 12px; line-height: 1.45; }
+.tpl-harness-talk .slide[data-dense] table.compare { font-size: 12px; margin-top: 10px; }
+.tpl-harness-talk .slide[data-dense] table.compare th,
+.tpl-harness-talk .slide[data-dense] table.compare td { padding: 6px 8px; }
+.tpl-harness-talk .slide[data-dense] .quote-inline { font-size: 13px; line-height: 1.45; padding: 2px 0 2px 12px; margin: 8px 0; }
+.tpl-harness-talk .slide[data-dense] .mt-l { margin-top: 14px; }
+.tpl-harness-talk .slide[data-dense] .mt-m { margin-top: 10px; }
+.tpl-harness-talk .slide[data-dense] .mt-s { margin-top: 6px; }
+.tpl-harness-talk .slide[data-dense] .layer { padding: 8px 0; }
+.tpl-harness-talk .slide[data-dense] .layer .desc b { font-size: 14px; margin-bottom: 2px; }
+.tpl-harness-talk .slide[data-dense] .layer .desc p { font-size: 12px; line-height: 1.45; }
+.tpl-harness-talk .slide[data-dense] .code-block { font-size: 12px; line-height: 1.55; padding: 12px 16px; margin: 8px 0; }
+.tpl-harness-talk .slide[data-dense] .arch { font-size: 11px; line-height: 1.45; padding: 14px 18px; margin: 8px 0; }
+.tpl-harness-talk .slide[data-dense] .figure { margin: 8px 0; }
+.tpl-harness-talk .slide[data-dense] .figure.compact { margin: 4px 0; }
+.tpl-harness-talk .slide[data-dense] .figure img { max-height: 56vh; width: auto; }
+.tpl-harness-talk .slide[data-dense] .ba-row { gap: 12px; margin: 10px 0; }
+.tpl-harness-talk .slide[data-dense] .ba-col { padding: 12px 14px; }
+.tpl-harness-talk .slide[data-dense] .ba-col ol,
+.tpl-harness-talk .slide[data-dense] .ba-col ul { font-size: 12px; line-height: 1.5; }
+.tpl-harness-talk .slide[data-dense] .flow-grid { gap: 14px; margin-top: 10px; }
+.tpl-harness-talk .slide[data-dense] .flow-col { padding: 12px 14px; }
+.tpl-harness-talk .slide[data-dense] .flow-step { padding: 6px 10px; font-size: 12px; line-height: 1.3; margin-bottom: 4px; }
+.tpl-harness-talk .slide[data-dense] .flow-step .artifact { font-size: 10px; margin-top: 2px; }
+.tpl-harness-talk .slide[data-dense] .flow-arrow-down { font-size: 11px; }
+.tpl-harness-talk .slide[data-dense] .flow-outcome { padding: 6px 10px; font-size: 11px; margin-top: 6px; }
+.tpl-harness-talk .slide[data-dense] .science-row { gap: 8px; margin-top: 10px; }
+.tpl-harness-talk .slide[data-dense] .science-prop { padding: 8px 10px; }
+.tpl-harness-talk .slide[data-dense] .science-prop .name { font-size: 12px; }
+.tpl-harness-talk .slide[data-dense] .science-prop .by { font-size: 10px; line-height: 1.35; }
 
 .tpl-harness-talk .center-v {
   margin-top: auto;
@@ -541,40 +602,41 @@
 .tpl-harness-talk .glossary {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px 28px;
-  margin-top: 14px;
+  gap: 4px 24px;
+  margin-top: 10px;
 }
 .tpl-harness-talk .gl-item {
   display: grid;
-  grid-template-columns: 28px 1fr;
-  gap: 10px;
+  grid-template-columns: 24px 1fr;
+  gap: 8px;
   align-items: baseline;
-  padding: 8px 0;
+  padding: 5px 0;
   border-bottom: 1px solid var(--border, rgba(127,127,127,0.12));
 }
 .tpl-harness-talk .gl-item .n {
   font-family: var(--font-mono, monospace);
-  font-size: 11px;
+  font-size: 10px;
   color: var(--text-3);
   font-weight: 700;
 }
 .tpl-harness-talk .gl-item .body b {
   display: block;
-  font-size: 14px;
+  font-size: 13px;
   color: var(--accent);
   font-weight: 700;
   letter-spacing: -0.01em;
+  line-height: 1.25;
 }
 .tpl-harness-talk .gl-item .body p {
-  margin: 2px 0 0 0;
-  font-size: 12px;
-  line-height: 1.45;
+  margin: 1px 0 0 0;
+  font-size: 11px;
+  line-height: 1.35;
   color: var(--text-2);
 }
 .tpl-harness-talk .gl-item .body .en {
   font-style: italic;
   color: var(--text-3);
-  font-size: 11px;
+  font-size: 10px;
   margin-left: 4px;
 }
 
