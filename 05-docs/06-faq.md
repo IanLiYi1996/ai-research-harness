@@ -1,5 +1,7 @@
 # 6 · FAQ · 常见问题
 
+> 不知道术语意思？先去 [`07-glossary.md`](./07-glossary.md) 查一下。
+
 ## 入门
 
 ### Q: 我连 Claude Code 都没装，从哪开始？
