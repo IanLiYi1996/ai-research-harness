@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 360" font-family="Georgia, 'Latin Modern Roman', serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 370" font-family="Georgia, 'Latin Modern Roman', serif">
   <defs>
     <marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto">
       <path d="M 0 0 L 10 5 L 0 10 z" fill="#1a3a7a"/>
@@ -80,19 +80,19 @@
   <text x="495" y="265" text-anchor="middle" fill="#707070" font-size="11" font-style="italic">REFLECT · 失败也是产物 · 写回 DDD 知识层 · 下次实验避坑</text>
 
   <!-- bottom labels: artifacts -->
+  <text x="20" y="288" fill="#707070" font-size="11" letter-spacing="2">PRODUCTS (TO ARTIFACT REGISTRY)</text>
+  <line x1="20" y1="295" x2="980" y2="295" stroke="#707070" stroke-width="0.5" stroke-dasharray="3,3"/>
   <g font-size="10" fill="#707070" font-style="italic">
-    <text x="90" y="295" text-anchor="middle">inbox/*.md</text>
-    <text x="250" y="295" text-anchor="middle">papers/*.md + figs/</text>
-    <text x="410" y="295" text-anchor="middle">spec.yaml</text>
-    <text x="570" y="295" text-anchor="middle">checkpoints/ + runs</text>
-    <text x="730" y="295" text-anchor="middle">eval/*.json</text>
-    <text x="900" y="295" text-anchor="middle">⟨ paper · model · dataset · demo ⟩</text>
+    <text x="90" y="313" text-anchor="middle">inbox/*.md</text>
+    <text x="250" y="313" text-anchor="middle">papers/*.md + figs/</text>
+    <text x="410" y="313" text-anchor="middle">spec.yaml</text>
+    <text x="570" y="313" text-anchor="middle">checkpoints/ + runs</text>
+    <text x="730" y="313" text-anchor="middle">eval/*.json</text>
+    <text x="900" y="313" text-anchor="middle">⟨ paper · model · dataset · demo ⟩</text>
   </g>
-  <text x="20" y="295" fill="#707070" font-size="11" letter-spacing="2">PRODUCTS</text>
-  <line x1="20" y1="280" x2="980" y2="280" stroke="#707070" stroke-width="0.5" stroke-dasharray="3,3"/>
 
   <!-- caption -->
-  <text x="500" y="335" text-anchor="middle" fill="#0a0a0a" font-size="13" font-weight="700" font-style="italic">
+  <text x="500" y="350" text-anchor="middle" fill="#0a0a0a" font-size="13" font-weight="700" font-style="italic">
     AI Research Pipeline · 6 阶段串行 + REFLECT 反馈闭环
   </text>
 </svg>
