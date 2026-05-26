@@ -286,6 +286,11 @@
 
     <p class="quote-inline mt-l">这些"harness-only" 改动每个都<strong>超过同期"更好的模型"在同 benchmark 上 2-4pp 的典型涨幅</strong>。<br><em>变量是 harness，不是模型。</em></p>
 
+    <p class="small mt-s" style="border-top:1px dashed var(--border, rgba(127,127,127,0.2)); padding-top:10px;">
+      📑 <strong>同月第二份综述</strong> · Ning et al. 2026 (<a href="https://arxiv.org/abs/2605.18747" style="color:var(--accent);">arXiv 2605.18747</a>) 把 <span class="accent">scientific discovery</span> 明确列为 harness 的核心应用——
+      <em>这件事不只是工程问题，是研究问题</em>。所以今天我们讲它给师弟师妹听。
+    </p>
+
     <aside class="notes">
       <p>之前讲的都是工业博客（Anthropic / OpenAI），有人会问"是不是只是大厂自吹"。这一页给学术层面的反驳。</p>
       <p>2026 年 TMLR 上有一篇 survey 论文叫 <strong>Agent Harness Engineering: A Survey</strong>，作者来自 CMU、Yale、JHU、Amazon 等机构。它提出一个核心论断——<em>"binding-constraint thesis"</em>，意思是：对长程 agent 任务，benchmark 表现的差异主要来自 harness，不是来自模型。</p>
@@ -294,6 +299,7 @@
       <p><strong>第二</strong>：LangChain 的 DeepAgents 团队，固定 GPT-5.2-Codex 不变，只通过改 system prompt、加 middleware 注入上下文、加自验证 hook，把 Terminal-Bench 2.0 从 52.8% 拉到 66.5%——<em>13.7 个百分点</em>。</p>
       <p><strong>第三</strong>：Stanford 和 MIT 的 Meta-Harness 工作，做自动化 harness 优化，<em>76.4% 超过所有手工调优</em>。</p>
       <p>关键是底下这句——这些改动每一个都<strong>超过</strong>同期"更好的模型"在同 benchmark 上 2-4 个百分点的典型涨幅。也就是说：<em>变量是 harness，不是模型</em>。</p>
+      <p>底部那行 callout——<strong>顺手提一句</strong>：同一个月（2026-05）UIUC 那边还出了第二份综述 <em>Code as Agent Harness</em>，把 scientific discovery 明确列为 harness 应用之一。我不展开讲，但这给"AI 做科研"提供了第二条学术依据——<em>不只是工程问题，是研究问题</em>。10 秒过完，让师弟师妹拿走"两份综述都背书了" 这个信号即可。</p>
       <p>讲完这一页，听众会觉得"这件事不是噱头"——是有学术分量的、有数据的。</p>
     </aside>
   </section>
@@ -1243,9 +1249,10 @@ managed by a shell CLI.
     </div>
 
     <div class="ref-section">
-      <h3>学术综述（必读）</h3>
+      <h3>学术综述（必读）· 2026-05 同月两份</h3>
       <ul class="ref-list">
-        <li><span class="ttl">Agent Harness Engineering: A Survey</span> · <span class="meta">Li, Xiao, Zhang, Liu et al. · TMLR under review · 2026</span><br><span class="url">openreview.net/forum?id=eONq7FdiHa</span> · <span class="url">picrew.github.io/LLM-Harness/</span></li>
+        <li><span class="ttl">Agent Harness Engineering: A Survey</span> · <span class="meta">Li, Xiao, Zhang, Liu et al. · TMLR under review · 2026 · ETCLOVG 七层分类</span><br><span class="url">openreview.net/forum?id=eONq7FdiHa</span> · <span class="url">picrew.github.io/LLM-Harness/</span></li>
+        <li><span class="ttl">Code as Agent Harness</span> · <span class="meta">Ning, Tieu, Fu, Wei et al. · arXiv · 2026-05 · code 作为 substrate · 列 scientific discovery 为应用</span><br><span class="url">arxiv.org/abs/2605.18747</span></li>
         <li><span class="ttl">awesome-agent-harness</span> · <span class="meta">170+ 开源项目按 ETCLOVG 分类的目录</span><br><span class="url">github.com/Picrew/awesome-agent-harness</span></li>
       </ul>
     </div>
