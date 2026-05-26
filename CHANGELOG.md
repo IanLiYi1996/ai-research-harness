@@ -9,6 +9,19 @@
 
 —
 
+## [v1.3.0] · 2026-05-26
+
+### Added · 新增（受 [shareAI-lab/learn-claude-code](https://github.com/shareAI-lab/learn-claude-code) 启发）
+- **`04-examples/00-minimal-agent-loop/`** · 30 行 minimal agent loop 示例 + README，剥神秘感
+- `05-docs/01-what-is-harness.md` · 加 3 段：
+  - "Agency 来自模型，不是 harness" 起源视角
+  - **Harness 5-component 公式** (Tools + Knowledge + Observation + Action + Permissions)
+  - 反面教材：提示词水管工 / GOFAI 还魂 / 一次性 RAG ≠ harness
+- `05-docs/07-glossary.md` · 加术语 #01.5 · 5-component 公式（速记版 vs ETCLOVG 学术版）
+- `README.md` · 加 cross-domain 泛化表（实验生物 / 临床 / 工程仿真 / 社科）
+- `README.md` · 加 "范围说明 · 本仓库不包含什么" 段
+- `README.md` · 加"用 harness vs 造 harness"仓库定位表，链 learn-claude-code
+
 ## [v1.2.0] · 2026-05-26
 
 ### Added · 新增

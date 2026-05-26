@@ -51,6 +51,28 @@
 
 ---
 
+## 01.5 · Harness 5-Component 公式 · 速记版
+
+```
+Harness = Tools + Knowledge + Observation + Action + Permissions
+```
+
+| 组件 | 给 agent 提供 | 例子 |
+|---|---|---|
+| **Tools** | 一双手 | bash / file read+write / API 调用 / 浏览器 |
+| **Knowledge** | 领域专长 | CLAUDE.md / 论文笔记 / 风格约定 / 命名规则 |
+| **Observation** | 一双眼 | git diff / 错误日志 / 实验输出 / 测试报告 |
+| **Action** | 行动接口 | CLI 命令 / git commit / 提交 PR |
+| **Permissions** | 边界 | 沙箱 / 写权限 / 审批 / 不能动机密文件 |
+
+**这个公式来自** · [shareAI-lab/learn-claude-code](https://github.com/shareAI-lab/learn-claude-code)。
+
+**和 [ETCLOVG 七层](#12-etclovg--七层分类法) 的关系** · 5-component 是<u>给师弟师妹</u>的速记，ETCLOVG 是<u>给学术综述</u>的精细分类。一个浅一个深，并存。
+
+**记法** · "**T-K-O-A-P**" — Tools / Knowledge / Observation / Action / Permissions。
+
+---
+
 ## 02 · SDD · Spec-Driven Development
 
 **定义** · `spec.yaml` / `spec.md` 是 single source of truth（唯一可信来源）。代码不直接改——改 spec → 重新生成代码。

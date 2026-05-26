@@ -1,10 +1,47 @@
 # 1 · 什么是 Harness？
 
+## 起源视角 · Agency 来自模型，不是 harness
+
+在讨论"造 harness"之前，先把一件根本的事说清楚：
+
+> **Agency —— 感知、推理、行动的能力 —— 是<u>训练</u>出来的，不是<u>编</u>出来的。**
+
+这个观点在 [shareAI-lab/learn-claude-code](https://github.com/shareAI-lab/learn-claude-code) 里写得最清楚。一个能干活的 agent 产品，需要模型和 harness 缺一不可——但智能的来源永远是模型。
+
+历史已经写好了铁证：
+
+| 年份 | 系统 | 智能怎么来的 |
+|---|---|---|
+| 2013 · DeepMind DQN | 玩 49 款 Atari | 神经网络从原始像素学，没有游戏专属规则 |
+| 2019 · OpenAI Five | Dota 2 击败 OG（TI8 冠军） | 自我对弈 45,000 年，**没有脚本化策略** |
+| 2019 · DeepMind AlphaStar | StarCraft II 宗师段位 | 同上 |
+| 2024-2026 · LLM Agent | 写代码 / 读论文 / 做研究 | 在人类全部代码 + 推理上训练的 LLM |
+
+每一个里程碑都指向同一个事实：**Agency 是模型学到的，环境（harness）只是让 agency 落地的载具**。
+
+**含义** · 当我们说"用好 AI 做科研" 时，不是要替模型"想"，而是要给模型一个能感知 + 行动的好环境。模型是驾驶者，harness 是载具。
+
+这跟 OpenAI 的 *"Humans steer. Agents execute."* 是<u>同一件事的两个角度</u>——OpenAI 强调分工，shareAI 强调起源。
+
 ## 定义
 
 **Harness（脚手架/套具）** 是包裹在 LLM 外部的程序化框架，负责管理 Agent 的运行环境、上下文、状态、工具和生命周期。
 
 它**不改变模型本身的能力**，而是通过工程手段让模型在复杂任务中发挥出更接近上限的表现。
+
+## 5-Component 公式 · 速记版
+
+```
+Harness = Tools + Knowledge + Observation + Action + Permissions
+
+  Tools         · 给 agent 一双手 — 文件读写、shell、API 调用、浏览器
+  Knowledge     · 给 agent 领域专长 — 论文笔记、命名规则、风格约定
+  Observation   · 给 agent 一双眼 — git diff、错误日志、实验输出
+  Action        · 让 agent 能动 — CLI 命令 / API 调用 / 提交 PR
+  Permissions   · 给 agent 边界 — 沙箱、审批、写权限、机密文件保护
+```
+
+这是给师弟师妹的<u>速记版</u>。再深一层有 [ETCLOVG 七层分类](./06-faq.md#etclovg)（学术综述用），先把 5-component 记牢就够。
 
 ## 类比
 
@@ -59,6 +96,46 @@ Ryan Lopopolo (OpenAI, 2026-02)：
 - ✅ 提供"控制 + 反馈" 的物理接口
 
 LLM Harness 的本质就是这个——**把通用 LLM 工程化、约束化、可审计化的接口层**。
+
+## 反面教材 · 什么<u>不是</u> harness
+
+要避免几种"看起来像但不是"的东西：
+
+### ❌ 提示词水管工（Prompt Plumbing）
+
+把 LLM API 调用用 if-else、节点图、硬编码路由串起来，就以为自己"造了 agent"。
+
+> *"它们做出来的东西是鲁布·戈德堡机械——一个过度工程化的、脆弱的过程式规则流水线，LLM 被楔在里面当一个美化了的文本补全节点。那不是 Agent。那是一个有着宏大妄想的 shell 脚本。"*
+>
+> — shareAI-lab · learn-claude-code
+
+**症状**：
+- 拖拽式工作流构建器
+- 庞大的规则树 / 决策树
+- 链式提示词瀑布流（"先让 LLM 做 X，再让它做 Y，再让它做 Z..."）
+
+**为什么不是 harness**：harness 是给模型<u>提供能力</u>，不是<u>替代</u>模型的判断。
+
+### ❌ GOFAI 还魂
+
+GOFAI = *Good Old-Fashioned AI*，1980-90 年代的符号专家系统——大量手工规则 + 决策树。这种 paradigm 已经被深度学习证伪一次，现在喷一层 LLM 漆又登场——同一条死路。
+
+**症状**：硬编码所有 corner case 而不是让模型决定。
+
+### ❌ 一次性 RAG = harness
+
+"我做了 RAG 检索 + LLM 调用，是不是 harness？"
+
+不是。RAG 只是 [5-component](#5-component-公式--速记版) 里 **Knowledge** 的一种实现。一个完整 harness 还需要 Tools / Observation / Action / Permissions。
+
+### ✅ 真正的 harness 长什么样
+
+- 给 agent 工具（不是写死流程）
+- 让 agent 看得见环境（git diff / 错误日志 / 实验输出）
+- 给 agent 边界（不能偷偷推到 main / 不能删 .env）
+- 让 agent 自己决定下一步（不是程序员决定）
+
+**一句话** · *Agency 是学出来的，不是编出来的。Harness 是让学出来的 agency 能落地的载具。*
 
 ## Harness 不是 Agent
 

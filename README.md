@@ -76,6 +76,32 @@ claude  # 或你用的任何 AI coding 工具
 
 > 出自 Junjie Li et al. 2026 · *Agent Harness Engineering: A Survey* · TMLR under review · 把 170+ 开源项目映射进 7 层。
 
+### 不只是科研：harness 模式可以泛化
+
+把"做研究" 换成任意复杂工作，公式不变——只换 `Tools / Knowledge / Permissions` 这 3 个，循环和 evaluation 思路全可以复用：
+
+| 领域 | Tools | Knowledge | 典型 harness 任务 |
+|---|---|---|---|
+| **AI/ML 研究**（本仓库） | bash / arxiv-mcp / HF / pytest | 论文笔记 / spec.yaml | 读论文 → 写笔记 → 复现 |
+| 实验生物 | LIMS / 仪器 SDK | protocol / SOP / 历史 batch | 分析数据 / 起草 protocol |
+| 临床研究 | EMR / REDCap | guideline / inclusion criteria | 病例审阅 / 数据清洗 |
+| 工程仿真 | CAD / FEA solver | 历史报告 / 设计规范 | 参数扫描 / 报告生成 |
+| 社科 / 经济 | Stata / R / 调研 API | 文献综述 / codebook | 文献筛选 / 数据建模 |
+
+> 想看完整泛化论证：参见 [shareAI-lab/learn-claude-code](https://github.com/shareAI-lab/learn-claude-code) 的 "Agent = 模型 + 泛化的操作环境" 段。
+
+### 范围说明 · 本仓库<u>不</u>包含什么
+
+为了让师弟师妹能 30 分钟跑起来，仓库**有意省掉**了几件大型 harness 才需要的东西：
+
+- ❌ 多 agent 编排 / 异步邮箱 / autonomy loop（学术场景用不上）
+- ❌ Cron 定时触发 / 后台任务调度
+- ❌ Worktree 隔离 / 跨 worktree 协调
+- ❌ 完整 hook bus / event stream
+- ❌ MCP runtime 细节（OAuth / transport / 资源订阅）
+
+学完想深入这些，跳到 → [shareAI-lab/learn-claude-code](https://github.com/shareAI-lab/learn-claude-code) 的 20 章拆解。
+
 ---
 
 ## 🇬🇧 What is this
@@ -122,6 +148,32 @@ claude
 
 See [`01-quickstart/README.md`](./01-quickstart/README.md) for the full guide.
 
+### Beyond research: the harness pattern generalizes
+
+Swap research for any complex domain — only Tools / Knowledge / Permissions change; the loop and evaluation stay the same.
+
+| Domain | Tools | Knowledge | Typical task |
+|---|---|---|---|
+| **AI/ML research** (this repo) | bash, arxiv-mcp, HF, pytest | paper notes, spec.yaml | read → digest → reproduce |
+| Wet-lab biology | LIMS, instrument SDKs | protocols, SOPs, batch history | analyze data, draft protocol |
+| Clinical research | EMR, REDCap | guidelines, inclusion criteria | chart review, data cleaning |
+| Engineering simulation | CAD, FEA solvers | reports, design specs | parameter sweep, report gen |
+| Social / econ | Stata, R, survey APIs | lit review, codebook | screen lit, build models |
+
+> Full generalization argument: see [shareAI-lab/learn-claude-code](https://github.com/shareAI-lab/learn-claude-code).
+
+### Scope · what this repo does <u>not</u> include
+
+To keep the kit runnable in 30 min, several large-system pieces are intentionally omitted:
+
+- ❌ Multi-agent orchestration / async mailboxes / autonomy loops
+- ❌ Cron schedulers / background task systems
+- ❌ Worktree isolation / cross-worktree coordination
+- ❌ Full hook bus / event stream
+- ❌ MCP runtime details (OAuth / transports / resource subscriptions)
+
+Want those? Jump to → [shareAI-lab/learn-claude-code](https://github.com/shareAI-lab/learn-claude-code) (20-chapter teardown).
+
 ---
 
 ## 📚 References & Inspiration
@@ -129,6 +181,7 @@ See [`01-quickstart/README.md`](./01-quickstart/README.md) for the full guide.
 Built on the shoulders of:
 
 - **学术综述** · Junjie Li, Xi Xiao, Yunbei Zhang, Chen Liu et al. · [Agent Harness Engineering: A Survey](https://openreview.net/forum?id=eONq7FdiHa) (TMLR under review, 2026) — 第一篇把 harness 系统化的学术综述，给出 ETCLOVG 七层分类 + binding-constraint thesis
+- **造 harness 教程（姊妹仓库）** · [shareAI-lab/learn-claude-code](https://github.com/shareAI-lab/learn-claude-code) — 20 章从零拆解 Claude Code 内核，提出 *"Agency 来自模型，不是 harness"* 的起源视角和 5-component 公式
 - Anthropic · [Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) (Justin Young, 2025-11)
 - Anthropic · [Harness Design for Long-Running Application Development](https://www.anthropic.com/engineering/harness-design-long-running-apps) (Prithvi Rajasekaran, 2026-03)
 - OpenAI · [Harness Engineering](https://openai.com/index/harness-engineering/) (Ryan Lopopolo, 2026-02)
@@ -136,6 +189,14 @@ Built on the shoulders of:
 - AWS · [AIDLC Workflows](https://github.com/awslabs/aidlc-workflows) — DDD + SDD + TDD methodology stack
 
 Full reading list: [`05-docs/references.md`](./05-docs/references.md)
+
+### 仓库定位 · 用 harness vs 造 harness
+
+| 你想学的 | 看这个仓库 |
+|---|---|
+| **用** harness 做科研 / 写笔记 / 跑实验 | **本仓库**（research-side, L1→L2） |
+| **造** 自己的 agent harness / 写 agent loop / 多 agent / MCP | [shareAI-lab/learn-claude-code](https://github.com/shareAI-lab/learn-claude-code)（engineering-side, L2→L3） |
+| 系统看综述 + 学术分类 | [Agent Harness Engineering Survey](https://openreview.net/forum?id=eONq7FdiHa)（TMLR 2026） |
 
 ---
 
