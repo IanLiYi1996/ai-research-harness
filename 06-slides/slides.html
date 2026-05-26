@@ -175,43 +175,12 @@
 
   <!-- ============ 5. AGENT IN 30 LINES ============ -->
   <section class="slide" data-dense data-title="Agent in 30 Lines">
-    <p class="kicker">// 1.5 · agent in 30 lines</p>
+    <p class="kicker">// 1.5 · what is an agent</p>
     <h2 class="h2">在讲 Harness 之前 · <span class="accent">Agent 是什么？</span></h2>
-    <p class="lede mt-s">剥掉所有装饰，<strong>agent 内核就是这 8 行</strong>——剩下的<em>都</em>是 harness。</p>
+    <p class="lede mt-s">剥掉所有装饰，<strong>agent 内核就是一个 loop + 一组 tools</strong>——剩下都是 harness。</p>
 
-    <div class="two-col mt-m">
-      <div>
-        <pre class="code-block" style="margin:0;"><span class="label">// agent loop · 8 lines</span>while True:
-    <span class="comment"># 1. 让模型决定下一步</span>
-    resp = llm(messages, tools=TOOLS)
-    messages.append(resp)
-
-    <span class="comment"># 2. 模型说停就停</span>
-    if resp.stop_reason != <span class="str">"tool_use"</span>:
-        return
-
-    <span class="comment"># 3. 工具调用 → 执行 → 结果回灌</span>
-    for call in resp.tool_calls:
-        out = TOOL_HANDLERS[call.name](**call.input)
-        messages.append(tool_result(out))</pre>
-      </div>
-      <div>
-        <h3 class="h3" style="font-size:18px;">3 个组件</h3>
-        <div class="num-list" style="margin-top:8px;">
-          <div class="item"><div class="n">①</div><div class="body">
-            <b>Loop</b>
-            <p><span class="mono">while True</span> · 模型决定继续还是停（不是程序员）</p>
-          </div></div>
-          <div class="item"><div class="n">②</div><div class="body">
-            <b>Tools</b>
-            <p>给模型一组可调用的函数（bash / read / write / API）</p>
-          </div></div>
-          <div class="item"><div class="n">③</div><div class="body">
-            <b>tool_use 触发</b>
-            <p>模型主动喊"我要用 X"，loop 执行后回灌结果</p>
-          </div></div>
-        </div>
-      </div>
+    <div class="figure compact">
+      <img src="./diagrams/fig-agent-loop.svg" alt="Agent loop: USER → LLM → stop_reason? → TOOL execute → result feedback → LLM (loop) / end_turn → return">
     </div>
 
     <p class="quote-inline mt-s"><strong>"Loop 属于 agent，机制属于 harness。"</strong>
