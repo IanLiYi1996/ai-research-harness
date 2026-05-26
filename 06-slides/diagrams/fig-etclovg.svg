@@ -1,4 +1,4 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 480" font-family="Georgia, 'Latin Modern Roman', serif">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 350" font-family="Georgia, 'Latin Modern Roman', serif">
   <!-- Title strip -->
   <text x="20" y="28" fill="#707070" font-size="11" letter-spacing="2">ETCLOVG · 7-LAYER TAXONOMY · Li et al. 2026 · TMLR Survey</text>
   <line x1="20" y1="36" x2="980" y2="36" stroke="#707070" stroke-width="0.5"/>
@@ -44,8 +44,8 @@
     <rect x="760" y="80" width="220" height="86" fill="#f5f3ea" stroke="#1a3a7a" stroke-width="2.5"/>
     <rect x="760" y="80" width="44" height="86" fill="#1a3a7a"/>
     <text x="782" y="128" text-anchor="middle" fill="#fdfcf8" font-weight="800" font-size="32">L</text>
-    <text x="820" y="102" fill="#0a0a0a" font-weight="700" font-size="14">Lifecycle &amp; Orchestration ★</text>
-    <text x="820" y="120" fill="#333" font-size="11">单 / 多 agent loop</text>
+    <text x="820" y="102" fill="#0a0a0a" font-weight="700" font-size="14">Lifecycle ★</text>
+    <text x="820" y="120" fill="#333" font-size="11">单 / 多 agent · orchestration</text>
     <text x="820" y="135" fill="#333" font-size="11">issue → PR pipeline</text>
     <text x="968" y="160" text-anchor="end" fill="#1a3a7a" font-size="13" font-weight="700" font-family="monospace">N=47</text>
   </g>
@@ -88,23 +88,4 @@
     <text x="968" y="320" text-anchor="end" fill="#1a3a7a" font-size="13" font-weight="700" font-family="monospace">N=14</text>
   </g>
 
-  <!-- ============ Bottom: insights ============ -->
-  <line x1="20" y1="358" x2="980" y2="358" stroke="#707070" stroke-width="0.5" stroke-dasharray="3,3"/>
-
-  <g>
-    <text x="20" y="380" fill="#707070" font-size="11" letter-spacing="2">EMPIRICAL FINDINGS · 170+ OPEN-SOURCE PROJECTS MAPPED</text>
-
-    <text x="40" y="408" fill="#0a0a0a" font-weight="700" font-size="12">★ Densely covered</text>
-    <text x="40" y="425" fill="#333" font-size="12" font-style="italic">L (47) · V (21) · E (20)</text>
-
-    <text x="280" y="408" fill="#0a0a0a" font-weight="700" font-size="12">⚠ Coverage gaps</text>
-    <text x="280" y="425" fill="#333" font-size="12" font-style="italic">O (15) · G (14) · C (9)</text>
-
-    <text x="520" y="408" fill="#0a0a0a" font-weight="700" font-size="12">📊 New 2026 categories</text>
-    <text x="520" y="425" fill="#333" font-size="12" font-style="italic">spec-driven dev tools · multi-agent orchestrators</text>
-  </g>
-
-  <text x="500" y="465" text-anchor="middle" fill="#0a0a0a" font-size="13" font-weight="700" font-style="italic">
-    ETCLOVG: 4 structural pillars (E T C L) + 3 control plane layers (O V G)
-  </text>
 </svg>
