@@ -1,8 +1,13 @@
 # AI Research Harness
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](./LICENSE)
+[![Use this template](https://img.shields.io/badge/use_this-template-brightgreen)](https://github.com/IanLiYi1996/ai-research-harness/generate)
+[![Slides](https://img.shields.io/badge/slides-html-orange)](./06-slides/slides.html)
+[![CHANGELOG](https://img.shields.io/badge/changelog-current-lightgrey)](./CHANGELOG.md)
+
 > 用 Harness 工程做科研的 starter kit · A starter kit for doing research with AI harnesses
 >
-> 配套分享：[《用好 AI 工具做科研：从 Prompt 到 Harness》](./06-slides/slides.html)
+> 配套分享：[《用好 AI 工具做科研：从 Prompt 到 Harness》](./06-slides/slides.html) · [📒 术语表 glossary](./05-docs/07-glossary.md)
 
 ---
 
@@ -33,6 +38,7 @@
 | 看 6 阶段 AI 研究 pipeline 怎么落地 | [`03-pipeline/`](./03-pipeline/) |
 | 看完整 working examples（读论文/写笔记/复现实验） | [`04-examples/`](./04-examples/) |
 | 系统学 Harness 概念 | [`05-docs/`](./05-docs/) |
+| **不知道术语啥意思 / 听完分享回看** | [`05-docs/07-glossary.md`](./05-docs/07-glossary.md) |
 | 看分享 slides 原版 | [`06-slides/`](./06-slides/) |
 
 ### 30 秒 Quick Start
@@ -64,6 +70,12 @@ claude  # 或你用的任何 AI coding 工具
 
 ![pipeline](./06-slides/diagrams/fig-pipeline.svg)
 
+### 学术背书：ETCLOVG 七层分类法
+
+![ETCLOVG](./06-slides/diagrams/fig-etclovg.svg)
+
+> 出自 Junjie Li et al. 2026 · *Agent Harness Engineering: A Survey* · TMLR under review · 把 170+ 开源项目映射进 7 层。
+
 ---
 
 ## 🇬🇧 What is this
@@ -93,6 +105,7 @@ You should be here if any of these apply:
 | 6-stage research pipeline recipes | [`03-pipeline/`](./03-pipeline/) |
 | Full working examples | [`04-examples/`](./04-examples/) |
 | Concept docs | [`05-docs/`](./05-docs/) |
+| **Term not clear? / Post-talk reference** | [`05-docs/07-glossary.md`](./05-docs/07-glossary.md) |
 | Original talk slides | [`06-slides/`](./06-slides/) |
 
 ### Quick Start
@@ -115,6 +128,7 @@ See [`01-quickstart/README.md`](./01-quickstart/README.md) for the full guide.
 
 Built on the shoulders of:
 
+- **学术综述** · Junjie Li, Xi Xiao, Yunbei Zhang, Chen Liu et al. · [Agent Harness Engineering: A Survey](https://openreview.net/forum?id=eONq7FdiHa) (TMLR under review, 2026) — 第一篇把 harness 系统化的学术综述，给出 ETCLOVG 七层分类 + binding-constraint thesis
 - Anthropic · [Effective Harnesses for Long-Running Agents](https://www.anthropic.com/engineering/effective-harnesses-for-long-running-agents) (Justin Young, 2025-11)
 - Anthropic · [Harness Design for Long-Running Application Development](https://www.anthropic.com/engineering/harness-design-long-running-apps) (Prithvi Rajasekaran, 2026-03)
 - OpenAI · [Harness Engineering](https://openai.com/index/harness-engineering/) (Ryan Lopopolo, 2026-02)
@@ -141,6 +155,12 @@ See [CONTRIBUTING.md](./CONTRIBUTING.md) for details.
 ## 📜 License
 
 MIT — see [LICENSE](./LICENSE). Use it for anything, attribution appreciated but not required.
+
+---
+
+## 📖 Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for version history.
 
 ---
 
