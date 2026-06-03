@@ -26,14 +26,11 @@ test('provisions a Cognito User Pool with a public app client', () => {
   });
 });
 
-test('relay Lambda streams and is scoped to the one runtime ARN', () => {
+test('relay Lambda is scoped to the one runtime ARN and has NO Function URL', () => {
   const t = synth();
-  // IAM-protected Function URL in streaming mode (CloudFront OAC signs to it).
-  t.hasResourceProperties('AWS::Lambda::Url', {
-    AuthType: 'AWS_IAM',
-    InvokeMode: 'RESPONSE_STREAM',
-  });
-  // IAM policy limited to InvokeAgentRuntime on the single runtime.
+  // No Lambda Function URL at all (avoids the public-policy AppSec finding).
+  t.resourceCountIs('AWS::Lambda::Url', 0);
+  // IAM policy limited to InvokeAgentRuntime on the single runtime + endpoint.
   t.hasResourceProperties('AWS::IAM::Policy', {
     PolicyDocument: {
       Statement: Match.arrayWith([
@@ -49,11 +46,22 @@ test('relay Lambda streams and is scoped to the one runtime ARN', () => {
   });
 });
 
-test('routes /api/* through CloudFront to the relay (OAC) and exposes outputs', () => {
+test('fronts the relay with an API Gateway HTTP API (no open Lambda policy)', () => {
   const t = synth();
-  // CloudFront OAC for the Function URL origin (SigV4 signing).
-  t.resourceCountIs('AWS::CloudFront::OriginAccessControl', 2); // S3 + Lambda URL
+  t.resourceCountIs('AWS::ApiGatewayV2::Api', 1);
+  t.hasResourceProperties('AWS::ApiGatewayV2::Route', { RouteKey: 'POST /invoke' });
+  // The Lambda invoke permission is granted to API Gateway with a scoped
+  // SourceArn — never Principal "*".
+  t.hasResourceProperties('AWS::Lambda::Permission', {
+    Action: 'lambda:InvokeFunction',
+    Principal: 'apigateway.amazonaws.com',
+  });
+});
+
+test('exposes web url, relay api url, and cognito outputs', () => {
+  const t = synth();
   const keys = Object.keys(t.findOutputs('*')).map((k) => k.toLowerCase());
   expect(keys.some((k) => k.includes('weburl'))).toBe(true);
+  expect(keys.some((k) => k.includes('relayapiurl'))).toBe(true);
   expect(keys.some((k) => k.includes('cognitodomain'))).toBe(true);
 });

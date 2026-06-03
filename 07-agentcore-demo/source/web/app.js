@@ -133,17 +133,24 @@ function addUserMessage(text) {
   $('transcript').scrollTop = $('transcript').scrollHeight;
 }
 
-/* ───────────────────────── Invoke (SSE via relay) ───────────────────────── */
+/* ───────────────────────── Invoke (buffered via API Gateway) ─────────────────────────
+ * API Gateway + Lambda proxy doesn't stream, so the relay returns the full
+ * answer as one {text} JSON. We show a "working" pulse, then reveal the answer
+ * and ignite the relevant tiles once it lands. To keep the booth feel lively,
+ * the final text is typed into the transcript with a short cadence.
+ */
 async function run() {
   const prompt = $('prompt').value.trim();
   if (!prompt) return;
   const sessionId = $('session').value.trim() || 'booth-1';
   $('run').disabled = true;
-  $('conn').textContent = 'STREAMING…';
+  $('conn').textContent = 'AGENT WORKING…';
   resetTiles();
   addUserMessage(prompt);
   $('prompt').value = '';
   startAgentMessage();
+  appendAgent('▌ thinking');
+  const dots = setInterval(() => appendAgent('.'), 700);
 
   try {
     const resp = await fetch(CFG.relayUrl, {
@@ -154,39 +161,33 @@ async function run() {
       },
       body: JSON.stringify({ prompt, session_id: sessionId }),
     });
-    if (!resp.ok || !resp.body) throw new Error('relay error ' + resp.status);
+    clearInterval(dots);
+    const data = await resp.json().catch(() => ({}));
+    if (!resp.ok) throw new Error(data.error || 'relay error ' + resp.status);
 
-    const reader = resp.body.getReader();
-    const decoder = new TextDecoder();
-    let buf = '';
-    const handle = (line) => {
-      const m = line.match(/^data:\s*(.*)$/);
-      if (!m || m[1] === '[DONE]') return;
-      let text;
-      try {
-        const o = JSON.parse(m[1]);
-        if (o.error) { appendAgent('\n⚠ ' + o.error); return; }
-        text = o.text ?? '';
-      } catch { text = m[1]; }
-      if (!text) return;
-      appendAgent(text);
-      routeToTile(text);
-    };
-    for (;;) {
-      const { value, done } = await reader.read();
-      if (done) break;
-      buf += decoder.decode(value, { stream: true });
-      const lines = buf.split('\n');
-      buf = lines.pop() ?? '';
-      lines.forEach(handle);
-    }
-    if (buf) handle(buf);
+    const full = data.text || '(no response)';
+    // Reset the bubble (drop the "thinking…" placeholder) and type the answer.
+    agentBubble.textContent = '';
+    await typeOut(full);
+    // Route the whole answer through the tiles so the instruments light up.
+    routeToTile(full);
   } catch (e) {
-    appendAgent('\n⚠ ' + e.message);
+    clearInterval(dots);
+    if (agentBubble) agentBubble.textContent = '';
+    appendAgent('⚠ ' + e.message);
   } finally {
     endAgentMessage();
     $('run').disabled = false;
     $('conn').textContent = 'LINK ACTIVE';
+  }
+}
+
+// Type text into the agent bubble in small chunks for a live cadence.
+async function typeOut(text) {
+  const CHUNK = 4;
+  for (let i = 0; i < text.length; i += CHUNK) {
+    appendAgent(text.slice(i, i + CHUNK));
+    if (i % 80 === 0) await new Promise((r) => setTimeout(r, 8));
   }
 }
 
