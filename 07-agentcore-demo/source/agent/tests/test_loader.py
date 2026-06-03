@@ -47,8 +47,13 @@ def test_build_agent_wires_skills_and_tools():
     assert captured["sm_actor_id"] == "research_copilot"  # DEFAULT_ACTOR_ID
     assert captured["session_manager"] == "session-manager:mem-123:sess-abc:research_copilot"
     assert "ci-tool" in captured["tools"]
-    # the paper tool is always present
-    assert any(getattr(t, "__name__", "") == "fetch_paper" or t == "ci-tool" for t in captured["tools"])
+    # two tools registered: the CI tool plus the @tool-wrapped paper tool
+    assert len(captured["tools"]) == 2
+    paper_tool = next(t for t in captured["tools"] if t != "ci-tool")
+    # the wrapped paper tool exposes the arXiv id in its name/spec
+    assert "fetch_paper" in repr(paper_tool) or "fetch_paper" == getattr(
+        paper_tool, "tool_name", getattr(paper_tool, "__name__", "")
+    )
     # an AgentSkills plugin is registered
     assert any(p.__class__.__name__ == "AgentSkills" for p in captured["plugins"])
     # system prompt is passed

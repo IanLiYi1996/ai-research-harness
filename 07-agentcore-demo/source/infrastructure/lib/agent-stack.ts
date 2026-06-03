@@ -91,10 +91,22 @@ export class AgentStack extends Stack {
               ],
               resources: ['*'],
             }),
+            // Memory data plane: events (write/read turns) AND record retrieval
+            // (long-term recall). Without the Retrieve/List record actions the
+            // cross-session recall hook is denied and recall returns empty.
             new iam.PolicyStatement({
               effect: iam.Effect.ALLOW,
-              actions: ['bedrock-agentcore:*Event*'],
-              resources: [memory.memoryArn],
+              actions: [
+                'bedrock-agentcore:CreateEvent',
+                'bedrock-agentcore:GetEvent',
+                'bedrock-agentcore:ListEvents',
+                'bedrock-agentcore:ListActors',
+                'bedrock-agentcore:ListSessions',
+                'bedrock-agentcore:RetrieveMemoryRecords',
+                'bedrock-agentcore:GetMemoryRecord',
+                'bedrock-agentcore:ListMemoryRecords',
+              ],
+              resources: [memory.memoryArn, `${memory.memoryArn}/*`],
             }),
             new iam.PolicyStatement({
               effect: iam.Effect.ALLOW,
@@ -130,8 +142,8 @@ export class AgentStack extends Stack {
         AWS_REGION: this.region,
         SKILL_SOURCES: [
           '/app/agent/skills',
-          'https://raw.githubusercontent.com/huggingface/skills/main/huggingface-papers/SKILL.md',
-          'https://raw.githubusercontent.com/huggingface/skills/main/huggingface-datasets/SKILL.md',
+          'https://raw.githubusercontent.com/huggingface/skills/main/skills/huggingface-papers/SKILL.md',
+          'https://raw.githubusercontent.com/huggingface/skills/main/skills/huggingface-datasets/SKILL.md',
         ].join(','),
       },
     });

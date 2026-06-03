@@ -8,7 +8,7 @@ import os
 from pathlib import Path
 from typing import Callable, Optional
 
-from agent.tools.paper import fetch_paper
+from agent.tools.paper import fetch_paper as _fetch_paper
 
 _PROMPT_PATH = Path(__file__).parent / "prompts" / "system.md"
 _SKILLS_PATH = Path(__file__).parent / "skills"
@@ -16,6 +16,27 @@ _SKILLS_PATH = Path(__file__).parent / "skills"
 
 def load_system_prompt() -> str:
     return _PROMPT_PATH.read_text(encoding="utf-8")
+
+
+def _build_paper_tool():
+    """Wrap the pure ``fetch_paper`` as a Strands tool.
+
+    Strands 1.42 rejects bare functions ("unrecognized tool specification") and
+    silently drops them, so the tool must carry @tool metadata. We keep
+    ``paper.py`` itself strands-free (unit-testable) and decorate here.
+    """
+    from strands import tool
+
+    @tool
+    def fetch_paper(arxiv_id: str) -> dict:
+        """Fetch an arXiv paper's metadata (title, authors, abstract, slug).
+
+        Args:
+            arxiv_id: The arXiv identifier, e.g. "2104.09864".
+        """
+        return _fetch_paper(arxiv_id)
+
+    return fetch_paper
 
 
 # Retrieval namespaces MUST match the extraction-strategy namespaces declared
@@ -115,7 +136,7 @@ def build_agent(
 
     return agent_factory(
         system_prompt=load_system_prompt(),
-        tools=[fetch_paper, ci_tool],
+        tools=[_build_paper_tool(), ci_tool],
         plugins=[skills_plugin],
         session_manager=session_manager,
     )
