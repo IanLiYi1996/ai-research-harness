@@ -101,6 +101,14 @@ export class WebAppStack extends Stack {
     const relayUrl = relay.addFunctionUrl({
       authType: lambda.FunctionUrlAuthType.NONE, // auth = JWT check inside handler
       invokeMode: lambda.InvokeMode.RESPONSE_STREAM,
+      // Function URL handles OPTIONS preflight and injects ACAO on responses;
+      // more reliable than hand-rolling CORS inside a streaming handler.
+      cors: {
+        allowedOrigins: [webUrl],
+        allowedMethods: [lambda.HttpMethod.POST],
+        allowedHeaders: ['authorization', 'content-type'],
+        maxAge: Duration.hours(1),
+      },
     });
 
     // --- Front-end runtime config (read by the SPA at load) ---

@@ -15,7 +15,6 @@ import { CognitoJwtVerifier } from 'aws-jwt-verify';
 
 const REGION = process.env.AWS_REGION || 'us-east-1';
 const RUNTIME_ARN = process.env.RUNTIME_ARN;
-const ALLOWED_ORIGIN = process.env.ALLOWED_ORIGIN || '*';
 
 // Verify Cognito **access** tokens minted for our app client.
 const verifier = CognitoJwtVerifier.create({
@@ -26,12 +25,6 @@ const verifier = CognitoJwtVerifier.create({
 
 const client = new BedrockAgentCoreClient({ region: REGION });
 
-const CORS = {
-  'Access-Control-Allow-Origin': ALLOWED_ORIGIN,
-  'Access-Control-Allow-Headers': 'authorization,content-type',
-  'Access-Control-Allow-Methods': 'POST,OPTIONS',
-};
-
 /** Pad/normalize a session id to AgentCore's >=33 char requirement. */
 function normalizeSessionId(raw) {
   let s = (raw || 'web-session').replace(/[^a-zA-Z0-9_-]/g, '');
@@ -39,23 +32,13 @@ function normalizeSessionId(raw) {
   return s;
 }
 
+// CORS (preflight + ACAO) is handled by the Function URL's cors config, so the
+// handler only deals with POST.
 export const handler = awslambda.streamifyResponse(async (event, responseStream) => {
-  const method = event.requestContext?.http?.method;
-
-  // CORS preflight.
-  if (method === 'OPTIONS') {
-    responseStream = awslambda.HttpResponseStream.from(responseStream, {
-      statusCode: 204,
-      headers: CORS,
-    });
-    responseStream.end();
-    return;
-  }
-
   const fail = (statusCode, message) => {
     const s = awslambda.HttpResponseStream.from(responseStream, {
       statusCode,
-      headers: { ...CORS, 'Content-Type': 'application/json' },
+      headers: { 'Content-Type': 'application/json' },
     });
     s.write(JSON.stringify({ error: message }));
     s.end();
@@ -91,7 +74,6 @@ export const handler = awslambda.streamifyResponse(async (event, responseStream)
   const http = awslambda.HttpResponseStream.from(responseStream, {
     statusCode: 200,
     headers: {
-      ...CORS,
       'Content-Type': 'text/event-stream',
       'Cache-Control': 'no-cache',
     },
