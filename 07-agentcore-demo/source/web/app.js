@@ -1,71 +1,241 @@
-import {
-  BedrockAgentCoreClient,
-  InvokeAgentRuntimeCommand,
-} from 'https://esm.sh/@aws-sdk/client-bedrock-agentcore@3';
-import {
-  CognitoIdentityClient,
-} from 'https://esm.sh/@aws-sdk/client-cognito-identity@3';
-import {
-  fromCognitoIdentityPool,
-} from 'https://esm.sh/@aws-sdk/credential-provider-cognito-identity@3';
+/**
+ * Research Co·pilot — booth console.
+ *
+ * Auth: Cognito Hosted UI, Authorization-Code + PKCE (public SPA client, no
+ * secret). We exchange the code for tokens, then call the relay Lambda with the
+ * access token as a Bearer header. The relay verifies the JWT, invokes
+ * AgentCore server-side, and streams SSE back — which we render into the
+ * console transcript and the three instrument tiles.
+ */
 
-const tiles = {
-  pipeline: document.getElementById('pipeline'),
-  memory: document.getElementById('memory'),
-  sandbox: document.getElementById('sandbox'),
-};
+let CFG = null;
+let ACCESS_TOKEN = null;
 
-function append(tile, text) {
-  tiles[tile].textContent += text;
+const $ = (id) => document.getElementById(id);
+
+/* ───────────────────────── PKCE helpers ───────────────────────── */
+function b64url(bytes) {
+  return btoa(String.fromCharCode(...new Uint8Array(bytes)))
+    .replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+}
+async function sha256(str) {
+  return crypto.subtle.digest('SHA-256', new TextEncoder().encode(str));
+}
+function randomString(len = 64) {
+  const a = new Uint8Array(len);
+  crypto.getRandomValues(a);
+  return b64url(a).slice(0, len);
 }
 
-function route(text) {
-  // Lightweight routing of streamed text into tiles by marker.
-  if (text.includes('activated skill') || /step\s*\d/i.test(text)) append('pipeline', text);
-  else if (/score|recall|remember|memory/i.test(text)) append('memory', text);
-  else if (/accuracy|=|stdout|sandbox|plot/i.test(text)) append('sandbox', text);
-  else append('pipeline', text);
+async function beginLogin() {
+  const verifier = randomString(64);
+  sessionStorage.setItem('pkce_verifier', verifier);
+  const challenge = b64url(await sha256(verifier));
+  const u = new URL(CFG.cognitoDomain + '/oauth2/authorize');
+  u.searchParams.set('response_type', 'code');
+  u.searchParams.set('client_id', CFG.userPoolClientId);
+  u.searchParams.set('redirect_uri', CFG.redirectUri);
+  u.searchParams.set('scope', 'openid email profile');
+  u.searchParams.set('code_challenge_method', 'S256');
+  u.searchParams.set('code_challenge', challenge);
+  location.assign(u.toString());
 }
 
-async function main() {
-  const cfg = await (await fetch('./config.json')).json();
-  const credentials = fromCognitoIdentityPool({
-    client: new CognitoIdentityClient({ region: cfg.region }),
-    identityPoolId: cfg.identityPoolId,
+async function exchangeCode(code) {
+  const verifier = sessionStorage.getItem('pkce_verifier');
+  const body = new URLSearchParams({
+    grant_type: 'authorization_code',
+    client_id: CFG.userPoolClientId,
+    code,
+    redirect_uri: CFG.redirectUri,
+    code_verifier: verifier || '',
   });
-  const client = new BedrockAgentCoreClient({ region: cfg.region, credentials });
+  const r = await fetch(CFG.cognitoDomain + '/oauth2/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body,
+  });
+  if (!r.ok) throw new Error('token exchange failed: ' + r.status);
+  return r.json(); // { access_token, id_token, ... }
+}
 
-  document.getElementById('go').onclick = async () => {
-    for (const t of Object.values(tiles)) t.textContent = '';
-    const prompt = document.getElementById('prompt').value;
-    const sessionId = document.getElementById('session').value || 'booth-1';
-    const payload = new TextEncoder().encode(JSON.stringify({ prompt, session_id: sessionId }));
-    const resp = await client.send(
-      new InvokeAgentRuntimeCommand({
-        agentRuntimeArn: cfg.runtimeArn,
-        runtimeSessionId: sessionId.padEnd(33, '0'),
-        payload,
-      }),
-    );
-    // response.response is a streaming byte source; decode incrementally.
-    // Buffer across chunks so a line split mid-boundary isn't parsed as
-    // garbage — only complete (newline-terminated) lines are dispatched.
+function parseJwt(t) {
+  try { return JSON.parse(atob(t.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))); }
+  catch { return {}; }
+}
+
+function logout() {
+  sessionStorage.clear();
+  const u = new URL(CFG.cognitoDomain + '/logout');
+  u.searchParams.set('client_id', CFG.userPoolClientId);
+  u.searchParams.set('logout_uri', CFG.redirectUri);
+  location.assign(u.toString());
+}
+
+/* ───────────────────────── UI: tiles + transcript ───────────────────────── */
+const TILES = ['pipeline', 'memory', 'sandbox'];
+function setTile(name, hot) {
+  const el = $('tile-' + name);
+  el.classList.toggle('hot', hot);
+  el.querySelector('.tile-led').textContent = hot ? 'LIVE' : 'IDLE';
+}
+function resetTiles() {
+  TILES.forEach((t) => { $(t).innerHTML = ''; setTile(t, false); });
+}
+function routeToTile(text) {
+  // Heuristic routing of streamed text into the relevant instrument.
+  const skill = text.match(/activated skill[:\s]*([a-z0-9-]+)/i);
+  if (skill) {
+    appendTile('pipeline', '');
+    $('pipeline').insertAdjacentHTML('beforeend',
+      `<span class="skill-chip">🧩 ${skill[1]}</span>`);
+    setTile('pipeline', true);
+    return;
+  }
+  if (/score|recall|remember|from (my )?memory|prior session|namespace/i.test(text)) {
+    appendTile('memory', text); setTile('memory', true); return;
+  }
+  if (/accuracy|spread|invariant|stdout|sandbox|RED|GREEN|=\s*[-\d]|1e-|×\s*10|float/i.test(text)) {
+    appendTile('sandbox', text); setTile('sandbox', true); return;
+  }
+  appendTile('pipeline', text); setTile('pipeline', true);
+}
+function appendTile(name, text) {
+  const el = $(name);
+  el.appendChild(document.createTextNode(text));
+  el.scrollTop = el.scrollHeight;
+}
+
+let agentBubble = null;
+function startAgentMessage() {
+  const wrap = document.createElement('div');
+  wrap.className = 'msg agent';
+  wrap.innerHTML = '<div class="role">◆ agent</div><div class="bubble cursor"></div>';
+  $('transcript').appendChild(wrap);
+  agentBubble = wrap.querySelector('.bubble');
+  $('transcript').scrollTop = $('transcript').scrollHeight;
+}
+function appendAgent(text) {
+  if (!agentBubble) startAgentMessage();
+  agentBubble.appendChild(document.createTextNode(text));
+  $('transcript').scrollTop = $('transcript').scrollHeight;
+}
+function endAgentMessage() {
+  if (agentBubble) agentBubble.classList.remove('cursor');
+  agentBubble = null;
+}
+function addUserMessage(text) {
+  const wrap = document.createElement('div');
+  wrap.className = 'msg user boot';
+  wrap.innerHTML = '<div class="role">you ◆</div><div class="bubble"></div>';
+  wrap.querySelector('.bubble').textContent = text;
+  $('transcript').appendChild(wrap);
+  $('transcript').scrollTop = $('transcript').scrollHeight;
+}
+
+/* ───────────────────────── Invoke (SSE via relay) ───────────────────────── */
+async function run() {
+  const prompt = $('prompt').value.trim();
+  if (!prompt) return;
+  const sessionId = $('session').value.trim() || 'booth-1';
+  $('run').disabled = true;
+  $('conn').textContent = 'STREAMING…';
+  resetTiles();
+  addUserMessage(prompt);
+  $('prompt').value = '';
+  startAgentMessage();
+
+  try {
+    const resp = await fetch(CFG.relayUrl, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: 'Bearer ' + ACCESS_TOKEN,
+      },
+      body: JSON.stringify({ prompt, session_id: sessionId }),
+    });
+    if (!resp.ok || !resp.body) throw new Error('relay error ' + resp.status);
+
+    const reader = resp.body.getReader();
     const decoder = new TextDecoder();
     let buf = '';
-    const handleLine = (line) => {
+    const handle = (line) => {
       const m = line.match(/^data:\s*(.*)$/);
       if (!m || m[1] === '[DONE]') return;
-      try { route(JSON.parse(m[1]).text ?? ''); }
-      catch { route(m[1]); }
+      let text;
+      try {
+        const o = JSON.parse(m[1]);
+        if (o.error) { appendAgent('\n⚠ ' + o.error); return; }
+        text = o.text ?? '';
+      } catch { text = m[1]; }
+      if (!text) return;
+      appendAgent(text);
+      routeToTile(text);
     };
-    for await (const chunk of resp.response) {
-      buf += decoder.decode(chunk, { stream: true });
+    for (;;) {
+      const { value, done } = await reader.read();
+      if (done) break;
+      buf += decoder.decode(value, { stream: true });
       const lines = buf.split('\n');
-      buf = lines.pop() ?? ''; // keep the trailing partial line in the buffer
-      for (const line of lines) handleLine(line);
+      buf = lines.pop() ?? '';
+      lines.forEach(handle);
     }
-    if (buf) handleLine(buf); // flush any final unterminated line
+    if (buf) handle(buf);
+  } catch (e) {
+    appendAgent('\n⚠ ' + e.message);
+  } finally {
+    endAgentMessage();
+    $('run').disabled = false;
+    $('conn').textContent = 'LINK ACTIVE';
+  }
+}
+
+/* ───────────────────────── Wiring ───────────────────────── */
+function enterApp(claims) {
+  $('gate').style.display = 'none';
+  $('app').classList.add('live');
+  $('who').innerHTML = 'OPERATOR <b>' + (claims.email || claims.username || claims.sub?.slice(0, 8) || 'guest') + '</b>';
+  $('run').onclick = run;
+  $('logout').onclick = logout;
+  $('prompt').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) run();
+  });
+  $('presets').addEventListener('click', (e) => {
+    const q = e.target?.dataset?.q;
+    if (q) { $('prompt').value = q; $('prompt').focus(); }
+  });
+  $('newsess').onclick = () => {
+    $('session').value = 'booth-' + Math.floor(Math.random() * 9000 + 1000);
   };
 }
 
-main().catch((e) => append('pipeline', 'Init error: ' + e.message));
+async function init() {
+  CFG = await (await fetch('./config.json')).json();
+  $('login').onclick = beginLogin;
+
+  // Returning from Hosted UI with ?code=…
+  const params = new URLSearchParams(location.search);
+  const code = params.get('code');
+  const saved = sessionStorage.getItem('access_token');
+
+  if (code) {
+    $('gate-state').textContent = 'AUTH: EXCHANGING…';
+    try {
+      const tok = await exchangeCode(code);
+      ACCESS_TOKEN = tok.access_token;
+      sessionStorage.setItem('access_token', tok.access_token);
+      history.replaceState({}, '', location.pathname); // strip ?code
+      enterApp(parseJwt(tok.id_token || tok.access_token));
+    } catch (e) {
+      $('gate-state').textContent = 'AUTH: FAILED — ' + e.message;
+    }
+  } else if (saved) {
+    ACCESS_TOKEN = saved;
+    enterApp(parseJwt(saved));
+  }
+}
+
+init().catch((e) => {
+  const gs = document.getElementById('gate-state');
+  if (gs) gs.textContent = 'INIT ERROR: ' + e.message;
+});

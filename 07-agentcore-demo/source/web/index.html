@@ -1,34 +1,296 @@
 <!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>AgentCore Research Co-pilot</title>
-  <style>
-    body { font-family: system-ui, sans-serif; margin: 0; background: #0f1117; color: #e6e6e6; }
-    header { padding: 16px 24px; background: #161a22; font-size: 20px; font-weight: 600; }
-    .controls { padding: 16px 24px; display: flex; gap: 8px; }
-    input, button { font-size: 16px; padding: 8px 12px; border-radius: 6px; border: 1px solid #333; }
-    input { flex: 1; background: #1c2129; color: #fff; }
-    button { background: #ff9900; color: #111; font-weight: 600; cursor: pointer; }
-    .tiles { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding: 24px; }
-    .tile { background: #161a22; border-radius: 10px; padding: 16px; min-height: 320px; }
-    .tile h2 { font-size: 14px; text-transform: uppercase; letter-spacing: 1px; color: #ff9900; margin: 0 0 12px; }
-    pre { white-space: pre-wrap; word-break: break-word; font-size: 13px; margin: 0; }
-  </style>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>RESEARCH CO·PILOT — AgentCore Mission Control</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet" />
+<style>
+  :root {
+    --ink: #070a10;
+    --ink-2: #0c111b;
+    --panel: #0e1521;
+    --panel-2: #111a28;
+    --line: #1b2940;
+    --line-2: #25395a;
+    --amber: #ff9d3c;
+    --amber-dim: #b56b1f;
+    --cyan: #44e0d6;
+    --cyan-dim: #1f7a75;
+    --violet: #8b7bff;
+    --text: #d7e2f2;
+    --text-dim: #6f819c;
+    --ok: #3ee08a;
+    --warn: #ff5c7a;
+    --grid: rgba(68, 224, 214, 0.045);
+    --display: 'Chakra Petch', sans-serif;
+    --mono: 'IBM Plex Mono', monospace;
+    --sans: 'IBM Plex Sans', sans-serif;
+  }
+
+  * { box-sizing: border-box; }
+  html, body { height: 100%; margin: 0; }
+
+  body {
+    background: var(--ink);
+    color: var(--text);
+    font-family: var(--sans);
+    overflow: hidden;
+    /* phosphor grid + radial vignette + faint scanlines */
+    background-image:
+      linear-gradient(var(--grid) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid) 1px, transparent 1px),
+      radial-gradient(120% 90% at 78% 8%, rgba(255,157,60,0.10), transparent 55%),
+      radial-gradient(120% 100% at 12% 100%, rgba(68,224,214,0.08), transparent 50%);
+    background-size: 34px 34px, 34px 34px, 100% 100%, 100% 100%;
+  }
+  body::after {
+    /* film grain / scanline overlay */
+    content: "";
+    position: fixed; inset: 0; pointer-events: none; z-index: 50;
+    background: repeating-linear-gradient(0deg, rgba(0,0,0,0.18) 0 1px, transparent 1px 3px);
+    mix-blend-mode: overlay; opacity: .35;
+  }
+
+  /* ───────────────────────── Login gate ───────────────────────── */
+  #gate {
+    position: fixed; inset: 0; z-index: 40;
+    display: grid; place-items: center;
+    background: radial-gradient(80% 60% at 50% 40%, rgba(14,21,33,.92), var(--ink) 75%);
+  }
+  .gate-card {
+    width: min(440px, 90vw);
+    border: 1px solid var(--line-2);
+    background: linear-gradient(180deg, var(--panel), var(--ink-2));
+    box-shadow: 0 0 0 1px rgba(68,224,214,.06), 0 40px 120px -30px rgba(0,0,0,.9),
+      inset 0 1px 0 rgba(255,255,255,.04);
+    padding: 38px 34px 30px;
+    position: relative;
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 16px), calc(100% - 16px) 100%, 0 100%);
+  }
+  .gate-card::before {
+    content: "● REC"; position: absolute; top: 14px; right: 18px;
+    font-family: var(--mono); font-size: 10px; letter-spacing: .2em; color: var(--warn);
+    opacity: .8; animation: blink 1.6s steps(1) infinite;
+  }
+  @keyframes blink { 50% { opacity: .15; } }
+  .gate-kicker { font-family: var(--mono); font-size: 11px; letter-spacing: .42em;
+    color: var(--cyan); text-transform: uppercase; }
+  .gate-title { font-family: var(--display); font-weight: 700; font-size: 34px;
+    line-height: 1.04; margin: 14px 0 6px; letter-spacing: .01em; }
+  .gate-title em { color: var(--amber); font-style: normal; }
+  .gate-sub { color: var(--text-dim); font-size: 13.5px; line-height: 1.6; margin-bottom: 26px; }
+  .gate-sub b { color: var(--text); font-weight: 600; }
+  .authorize {
+    width: 100%; cursor: pointer; border: 1px solid var(--amber-dim);
+    background: linear-gradient(180deg, #ffb255, var(--amber));
+    color: #1a0e02; font-family: var(--display); font-weight: 700; font-size: 15px;
+    letter-spacing: .12em; text-transform: uppercase; padding: 14px; position: relative;
+    transition: transform .12s ease, box-shadow .2s ease;
+    box-shadow: 0 0 22px -4px rgba(255,157,60,.6);
+  }
+  .authorize:hover { transform: translateY(-1px); box-shadow: 0 0 34px -2px rgba(255,157,60,.85); }
+  .authorize:active { transform: translateY(0); }
+  .gate-foot { margin-top: 18px; font-family: var(--mono); font-size: 10.5px;
+    color: var(--text-dim); letter-spacing: .08em; display: flex; justify-content: space-between; }
+
+  /* ───────────────────────── App shell ───────────────────────── */
+  #app { display: none; height: 100vh; grid-template-rows: auto 1fr; }
+  #app.live { display: grid; }
+
+  header {
+    display: flex; align-items: center; gap: 18px;
+    padding: 14px 22px; border-bottom: 1px solid var(--line);
+    background: linear-gradient(180deg, rgba(14,21,33,.9), rgba(7,10,16,.6));
+    backdrop-filter: blur(6px);
+  }
+  .brand { font-family: var(--display); font-weight: 700; font-size: 18px; letter-spacing: .04em; }
+  .brand .dot { color: var(--amber); }
+  .brand small { display:block; font-family: var(--mono); font-weight: 400;
+    font-size: 9.5px; letter-spacing: .34em; color: var(--text-dim); margin-top: 2px; }
+  .svc-tags { display: flex; gap: 8px; margin-left: 6px; }
+  .svc { font-family: var(--mono); font-size: 10px; letter-spacing: .12em; padding: 4px 9px;
+    border: 1px solid var(--line-2); color: var(--cyan); border-radius: 2px; }
+  .svc b { color: var(--text); }
+  .spacer { flex: 1; }
+  .status { font-family: var(--mono); font-size: 11px; color: var(--text-dim);
+    display: flex; align-items: center; gap: 8px; }
+  .status .led { width: 8px; height: 8px; border-radius: 50%; background: var(--ok);
+    box-shadow: 0 0 10px var(--ok); animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 50% { opacity: .35; } }
+  .who { font-family: var(--mono); font-size: 11px; color: var(--text-dim); }
+  .who b { color: var(--text); }
+  .logout { cursor: pointer; background: none; border: 1px solid var(--line-2);
+    color: var(--text-dim); font-family: var(--mono); font-size: 10px; letter-spacing: .12em;
+    padding: 6px 10px; text-transform: uppercase; transition: color .15s, border-color .15s; }
+  .logout:hover { color: var(--warn); border-color: var(--warn); }
+
+  main { display: grid; grid-template-columns: minmax(380px, 1.05fr) 1.4fr;
+    min-height: 0; }
+
+  /* ── Console (left) ── */
+  .console { border-right: 1px solid var(--line); display: grid;
+    grid-template-rows: auto 1fr auto; min-height: 0; }
+  .console-head { padding: 14px 20px 10px; border-bottom: 1px solid var(--line);
+    font-family: var(--mono); font-size: 11px; letter-spacing: .26em; color: var(--text-dim);
+    text-transform: uppercase; }
+  .transcript { overflow-y: auto; padding: 18px 20px; display: flex; flex-direction: column; gap: 16px; }
+  .msg { max-width: 92%; }
+  .msg .role { font-family: var(--mono); font-size: 10px; letter-spacing: .2em;
+    text-transform: uppercase; color: var(--text-dim); margin-bottom: 5px; }
+  .msg.user { align-self: flex-end; text-align: right; }
+  .msg.user .bubble { background: linear-gradient(180deg, #14223a, #0f1a2c);
+    border: 1px solid var(--line-2); }
+  .msg.user .role { color: var(--cyan); }
+  .bubble { font-family: var(--sans); font-size: 14px; line-height: 1.6; padding: 11px 14px;
+    border: 1px solid var(--line); background: var(--panel); border-radius: 3px;
+    white-space: pre-wrap; word-break: break-word; }
+  .msg.agent .role { color: var(--amber); }
+  .cursor::after { content: "▋"; color: var(--amber); animation: blink 1s steps(1) infinite; }
+
+  .composer { padding: 14px 18px; border-top: 1px solid var(--line);
+    background: linear-gradient(0deg, rgba(14,21,33,.8), transparent); }
+  .presets { display: flex; flex-wrap: wrap; gap: 7px; margin-bottom: 11px; }
+  .preset { cursor: pointer; font-family: var(--mono); font-size: 10.5px; letter-spacing: .04em;
+    color: var(--cyan); border: 1px dashed var(--cyan-dim); background: rgba(68,224,214,.05);
+    padding: 5px 9px; border-radius: 2px; transition: background .15s, color .15s; }
+  .preset:hover { background: rgba(68,224,214,.14); color: var(--text); }
+  .input-row { display: flex; gap: 10px; align-items: stretch; }
+  .input-row textarea { flex: 1; resize: none; height: 50px; background: var(--ink-2);
+    border: 1px solid var(--line-2); color: var(--text); font-family: var(--mono);
+    font-size: 13px; padding: 10px 12px; border-radius: 3px; line-height: 1.4; }
+  .input-row textarea:focus { outline: none; border-color: var(--amber-dim);
+    box-shadow: 0 0 0 1px rgba(255,157,60,.25); }
+  .run { cursor: pointer; width: 96px; border: 1px solid var(--amber-dim);
+    background: linear-gradient(180deg, #ffb255, var(--amber)); color: #1a0e02;
+    font-family: var(--display); font-weight: 700; font-size: 13px; letter-spacing: .12em;
+    text-transform: uppercase; border-radius: 3px; transition: transform .1s, box-shadow .2s; }
+  .run:hover { box-shadow: 0 0 24px -4px rgba(255,157,60,.8); }
+  .run:disabled { opacity: .45; cursor: not-allowed; filter: grayscale(.4); }
+  .session-line { font-family: var(--mono); font-size: 10px; color: var(--text-dim);
+    margin-top: 9px; display: flex; gap: 14px; align-items: center; }
+  .session-line input { background: transparent; border: none; border-bottom: 1px dotted var(--line-2);
+    color: var(--cyan); font-family: var(--mono); font-size: 10px; width: 150px; }
+  .session-line input:focus { outline: none; border-color: var(--cyan); }
+  .newsess { cursor:pointer; color: var(--violet); text-decoration: underline dotted; }
+
+  /* ── Instrument tiles (right) ── */
+  .panels { display: grid; grid-template-rows: repeat(3, 1fr); min-height: 0; }
+  .tile { border-bottom: 1px solid var(--line); padding: 14px 20px 16px;
+    display: grid; grid-template-rows: auto 1fr; min-height: 0; position: relative;
+    transition: background .4s ease; }
+  .tile:last-child { border-bottom: none; }
+  .tile.hot { background:
+    radial-gradient(140% 80% at 100% 0, rgba(255,157,60,.07), transparent 60%); }
+  .tile.hot.t-mem { background:
+    radial-gradient(140% 80% at 100% 0, rgba(139,123,255,.09), transparent 60%); }
+  .tile.hot.t-box { background:
+    radial-gradient(140% 80% at 100% 0, rgba(68,224,214,.08), transparent 60%); }
+  .tile-head { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .tile-idx { font-family: var(--mono); font-size: 10px; color: var(--text-dim); }
+  .tile-name { font-family: var(--display); font-weight: 600; font-size: 14px; letter-spacing: .12em;
+    text-transform: uppercase; }
+  .t-pipe .tile-name { color: var(--amber); }
+  .t-mem .tile-name { color: var(--violet); }
+  .t-box .tile-name { color: var(--cyan); }
+  .tile-led { margin-left: auto; font-family: var(--mono); font-size: 9.5px; letter-spacing: .18em;
+    color: var(--text-dim); border: 1px solid var(--line); padding: 3px 7px; border-radius: 2px; }
+  .tile.hot .tile-led { color: var(--ink); background: var(--amber); border-color: var(--amber); }
+  .tile.hot.t-mem .tile-led { background: var(--violet); border-color: var(--violet); }
+  .tile.hot.t-box .tile-led { background: var(--cyan); border-color: var(--cyan); }
+  .tile-body { overflow-y: auto; font-family: var(--mono); font-size: 12px; line-height: 1.6;
+    color: var(--text); white-space: pre-wrap; word-break: break-word; }
+  .tile-body:empty::before { content: "— awaiting telemetry —"; color: var(--text-dim);
+    font-style: italic; opacity: .5; }
+  .skill-chip { display: inline-block; color: var(--cyan); border: 1px solid var(--cyan-dim);
+    padding: 1px 6px; border-radius: 2px; margin: 2px 2px 2px 0; font-size: 11px; }
+
+  ::-webkit-scrollbar { width: 9px; height: 9px; }
+  ::-webkit-scrollbar-thumb { background: var(--line-2); border-radius: 0; }
+  ::-webkit-scrollbar-track { background: transparent; }
+
+  .boot { animation: boot .5s ease both; }
+  @keyframes boot { from { opacity: 0; transform: translateY(8px); } }
+</style>
 </head>
 <body>
-  <header>🧪 AgentCore Research Co-pilot — Builder Demo</header>
-  <div class="controls">
-    <input id="prompt" placeholder="e.g. read arXiv 2104.09864 and store the key insight" />
-    <input id="session" placeholder="session id" value="booth-1" style="flex:0 0 160px" />
-    <button id="go">Run</button>
+
+  <!-- LOGIN GATE -->
+  <div id="gate">
+    <div class="gate-card boot">
+      <div class="gate-kicker">Amazon Bedrock AgentCore</div>
+      <h1 class="gate-title">RESEARCH<br><em>CO·PILOT</em></h1>
+      <p class="gate-sub">
+        Autonomous research agent — <b>discover · digest · reproduce</b>.<br>
+        Runtime · Memory · Code Interpreter, behind a Cognito-secured console.
+      </p>
+      <button class="authorize" id="login">▸ Authorize Console</button>
+      <div class="gate-foot"><span id="gate-state">AUTH: REQUIRED</span><span>SIGV4 · JWT</span></div>
+    </div>
   </div>
-  <div class="tiles">
-    <div class="tile"><h2>Pipeline</h2><pre id="pipeline"></pre></div>
-    <div class="tile"><h2>Memory</h2><pre id="memory"></pre></div>
-    <div class="tile"><h2>Sandbox</h2><pre id="sandbox"></pre></div>
+
+  <!-- APP -->
+  <div id="app">
+    <header>
+      <div class="brand">RESEARCH<span class="dot">·</span>CO·PILOT
+        <small>AGENTCORE MISSION CONTROL</small></div>
+      <div class="svc-tags">
+        <span class="svc"><b>RUNTIME</b></span>
+        <span class="svc"><b>MEMORY</b></span>
+        <span class="svc"><b>CODE·INTERP</b></span>
+      </div>
+      <div class="spacer"></div>
+      <div class="status"><span class="led"></span><span id="conn">LINK ACTIVE</span></div>
+      <div class="who" id="who"></div>
+      <button class="logout" id="logout">Sign out</button>
+    </header>
+
+    <main>
+      <!-- CONSOLE -->
+      <section class="console">
+        <div class="console-head">// agent console</div>
+        <div class="transcript" id="transcript"></div>
+        <div class="composer">
+          <div class="presets" id="presets">
+            <span class="preset" data-q="Read arXiv 2104.09864 and store its one-line key insight.">▸ digest RoPE</span>
+            <span class="preset" data-q="Based on your memory of past sessions, what papers have we studied? Be specific.">▸ recall memory</span>
+            <span class="preset" data-q="Reproduce the core RoPE claim with a minimal experiment in the code interpreter and show the actual numbers.">▸ reproduce</span>
+          </div>
+          <div class="input-row">
+            <textarea id="prompt" placeholder="Issue a command to the research agent…"></textarea>
+            <button class="run" id="run">Run</button>
+          </div>
+          <div class="session-line">
+            <span>SESSION</span>
+            <input id="session" value="booth-1" />
+            <span class="newsess" id="newsess">⟳ new session (test recall)</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- INSTRUMENT PANELS -->
+      <section class="panels">
+        <div class="tile t-pipe" id="tile-pipeline">
+          <div class="tile-head"><span class="tile-idx">01</span>
+            <span class="tile-name">Pipeline</span><span class="tile-led">IDLE</span></div>
+          <div class="tile-body" id="pipeline"></div>
+        </div>
+        <div class="tile t-mem" id="tile-memory">
+          <div class="tile-head"><span class="tile-idx">02</span>
+            <span class="tile-name">Memory</span><span class="tile-led">IDLE</span></div>
+          <div class="tile-body" id="memory"></div>
+        </div>
+        <div class="tile t-box" id="tile-sandbox">
+          <div class="tile-head"><span class="tile-idx">03</span>
+            <span class="tile-name">Sandbox</span><span class="tile-led">IDLE</span></div>
+          <div class="tile-body" id="sandbox"></div>
+        </div>
+      </section>
+    </main>
   </div>
+
   <script type="module" src="./app.js"></script>
 </body>
 </html>
