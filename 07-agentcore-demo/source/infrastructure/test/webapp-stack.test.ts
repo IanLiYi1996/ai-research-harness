@@ -28,9 +28,9 @@ test('provisions a Cognito User Pool with a public app client', () => {
 
 test('relay Lambda streams and is scoped to the one runtime ARN', () => {
   const t = synth();
-  // Function URL in streaming mode.
+  // IAM-protected Function URL in streaming mode (CloudFront OAC signs to it).
   t.hasResourceProperties('AWS::Lambda::Url', {
-    AuthType: 'NONE',
+    AuthType: 'AWS_IAM',
     InvokeMode: 'RESPONSE_STREAM',
   });
   // IAM policy limited to InvokeAgentRuntime on the single runtime.
@@ -49,10 +49,11 @@ test('relay Lambda streams and is scoped to the one runtime ARN', () => {
   });
 });
 
-test('exposes web url, relay url, and cognito outputs', () => {
+test('routes /api/* through CloudFront to the relay (OAC) and exposes outputs', () => {
   const t = synth();
+  // CloudFront OAC for the Function URL origin (SigV4 signing).
+  t.resourceCountIs('AWS::CloudFront::OriginAccessControl', 2); // S3 + Lambda URL
   const keys = Object.keys(t.findOutputs('*')).map((k) => k.toLowerCase());
   expect(keys.some((k) => k.includes('weburl'))).toBe(true);
-  expect(keys.some((k) => k.includes('relayurl'))).toBe(true);
   expect(keys.some((k) => k.includes('cognitodomain'))).toBe(true);
 });

@@ -16,11 +16,13 @@ import { CognitoJwtVerifier } from 'aws-jwt-verify';
 const REGION = process.env.AWS_REGION || 'us-east-1';
 const RUNTIME_ARN = process.env.RUNTIME_ARN;
 
-// Verify Cognito **access** tokens minted for our app client.
+// Verify Cognito **access** tokens issued by our User Pool. clientId is null
+// (any app client of this pool is accepted) — only our pool can mint tokens
+// that pass issuer + signature verification, which is sufficient for the demo.
 const verifier = CognitoJwtVerifier.create({
   userPoolId: process.env.USER_POOL_ID,
   tokenUse: 'access',
-  clientId: process.env.USER_POOL_CLIENT_ID,
+  clientId: process.env.USER_POOL_CLIENT_ID || null,
 });
 
 const client = new BedrockAgentCoreClient({ region: REGION });

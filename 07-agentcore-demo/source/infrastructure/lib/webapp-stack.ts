@@ -28,11 +28,51 @@ export class WebAppStack extends Stack {
   constructor(scope: Construct, id: string, props: WebAppStackProps) {
     super(scope, id, props);
 
-    // --- Static hosting (created first; its domain is a token others use) ---
+    // --- Relay Lambda (streaming) + IAM-protected Function URL ---
+    // This account blocks public (AuthType=NONE) Function URLs via SCP, so the
+    // URL is AWS_IAM and CloudFront signs to it via OAC (below). App-level auth
+    // is the Cognito JWT check inside the handler.
+    const relay = new NodejsFunction(this, 'RelayFn', {
+      runtime: lambda.Runtime.NODEJS_22_X,
+      entry: path.join(__dirname, '../lambda/relay/index.mjs'),
+      handler: 'handler',
+      timeout: Duration.minutes(5),
+      memorySize: 512,
+      bundling: {
+        format: 'esm' as any,
+        nodeModules: ['@aws-sdk/client-bedrock-agentcore', 'aws-jwt-verify'],
+        banner:
+          "import{createRequire}from'module';const require=createRequire(import.meta.url);",
+      },
+      environment: {
+        RUNTIME_ARN: props.runtimeArn,
+        // USER_POOL_ID / USER_POOL_CLIENT_ID injected after the pool exists.
+      },
+    });
+    relay.addToRolePolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        actions: ['bedrock-agentcore:InvokeAgentRuntime'],
+        // InvokeAgentRuntime targets the endpoint sub-resource
+        // (…/runtime/<id>/runtime-endpoint/DEFAULT), not just the bare runtime ARN.
+        resources: [props.runtimeArn, `${props.runtimeArn}/runtime-endpoint/*`],
+      }),
+    );
+    const relayUrl = relay.addFunctionUrl({
+      authType: lambda.FunctionUrlAuthType.AWS_IAM,
+      invokeMode: lambda.InvokeMode.RESPONSE_STREAM,
+    });
+
+    // --- Static hosting + CloudFront (S3 default, /api/* → relay via OAC) ---
     const bucket = new s3.Bucket(this, 'WebBucket', {
       removalPolicy: RemovalPolicy.DESTROY,
       autoDeleteObjects: true,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
+    });
+
+    // OAC that SigV4-signs CloudFront→Lambda-URL requests (lambda service).
+    const relayOac = new cloudfront.FunctionUrlOriginAccessControl(this, 'RelayOac', {
+      signing: cloudfront.Signing.SIGV4_ALWAYS,
     });
 
     const distribution = new cloudfront.Distribution(this, 'Distribution', {
@@ -40,9 +80,36 @@ export class WebAppStack extends Stack {
         origin: origins.S3BucketOrigin.withOriginAccessControl(bucket),
         viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.REDIRECT_TO_HTTPS,
       },
+      additionalBehaviors: {
+        'api/*': {
+          origin: origins.FunctionUrlOrigin.withOriginAccessControl(relayUrl, {
+            originAccessControl: relayOac,
+          }),
+          viewerProtocolPolicy: cloudfront.ViewerProtocolPolicy.HTTPS_ONLY,
+          allowedMethods: cloudfront.AllowedMethods.ALLOW_ALL,
+          // Forward the Authorization header (Cognito JWT) without caching.
+          // CloudFront requires Authorization to be forwarded via a CachePolicy
+          // (not an OriginRequestPolicy), so we build a no-cache policy here.
+          cachePolicy: new cloudfront.CachePolicy(this, 'ApiCachePolicy', {
+            defaultTtl: Duration.seconds(0),
+            minTtl: Duration.seconds(0),
+            maxTtl: Duration.seconds(1),
+            headerBehavior: cloudfront.CacheHeaderBehavior.allowList('Authorization'),
+            enableAcceptEncodingGzip: false,
+          }),
+        },
+      },
       defaultRootObject: 'index.html',
     });
     const webUrl = `https://${distribution.distributionDomainName}`;
+
+    // Let CloudFront (this distribution) invoke the IAM-protected Function URL.
+    relay.addPermission('AllowCloudFrontInvokeUrl', {
+      principal: new iam.ServicePrincipal('cloudfront.amazonaws.com'),
+      action: 'lambda:InvokeFunctionUrl',
+      functionUrlAuthType: lambda.FunctionUrlAuthType.AWS_IAM,
+      sourceArn: `arn:aws:cloudfront::${this.account}:distribution/${distribution.distributionId}`,
+    });
 
     // --- Cognito User Pool + Hosted UI ---
     const userPool = new cognito.UserPool(this, 'UserPool', {
@@ -71,52 +138,18 @@ export class WebAppStack extends Stack {
     });
     const cognitoDomain = `https://research-copilot-${this.account}.auth.${this.region}.amazoncognito.com`;
 
-    // --- Relay Lambda (streaming) + Function URL ---
-    const relay = new NodejsFunction(this, 'RelayFn', {
-      runtime: lambda.Runtime.NODEJS_22_X,
-      entry: path.join(__dirname, '../lambda/relay/index.mjs'),
-      handler: 'handler',
-      timeout: Duration.minutes(5),
-      memorySize: 512,
-      bundling: {
-        format: 'esm' as any,
-        nodeModules: ['@aws-sdk/client-bedrock-agentcore', 'aws-jwt-verify'],
-        banner:
-          "import{createRequire}from'module';const require=createRequire(import.meta.url);",
-      },
-      environment: {
-        RUNTIME_ARN: props.runtimeArn,
-        USER_POOL_ID: userPool.userPoolId,
-        USER_POOL_CLIENT_ID: client.userPoolClientId,
-        ALLOWED_ORIGIN: webUrl,
-      },
-    });
-    relay.addToRolePolicy(
-      new iam.PolicyStatement({
-        effect: iam.Effect.ALLOW,
-        actions: ['bedrock-agentcore:InvokeAgentRuntime'],
-        // InvokeAgentRuntime targets the endpoint sub-resource
-        // (…/runtime/<id>/runtime-endpoint/DEFAULT), not just the bare runtime
-        // ARN — both are granted so the call is authorized.
-        resources: [props.runtimeArn, `${props.runtimeArn}/runtime-endpoint/*`],
-      }),
-    );
-    const relayUrl = relay.addFunctionUrl({
-      authType: lambda.FunctionUrlAuthType.NONE, // auth = JWT check inside handler
-      invokeMode: lambda.InvokeMode.RESPONSE_STREAM,
-      // Function URL handles OPTIONS preflight and injects ACAO on responses;
-      // more reliable than hand-rolling CORS inside a streaming handler.
-      cors: {
-        allowedOrigins: [webUrl],
-        allowedMethods: [lambda.HttpMethod.POST],
-        allowedHeaders: ['authorization', 'content-type'],
-        maxAge: Duration.hours(1),
-      },
-    });
+    // Wire the User Pool id into the relay for JWT verification. We inject only
+    // USER_POOL_ID (the issuer): it depends on UserPool, which does NOT depend
+    // on the distribution — so no dependency cycle. The client id is
+    // deliberately NOT injected — that edge (relay → client → distribution →
+    // relayUrl → relay) would cycle. The relay verifies issuer + access-token
+    // type, which is sufficient here since only our pool can mint these tokens.
+    relay.addEnvironment('USER_POOL_ID', userPool.userPoolId);
 
     // --- Front-end runtime config (read by the SPA at load) ---
+    // The browser calls same-origin /api (no CORS, no public URL).
     const config = {
-      relayUrl: relayUrl.url,
+      relayUrl: '/api',
       region: this.region,
       userPoolClientId: client.userPoolClientId,
       cognitoDomain,
@@ -134,7 +167,6 @@ export class WebAppStack extends Stack {
     });
 
     new CfnOutput(this, 'WebUrl', { value: webUrl });
-    new CfnOutput(this, 'RelayUrl', { value: relayUrl.url });
     new CfnOutput(this, 'CognitoDomain', { value: cognitoDomain });
     new CfnOutput(this, 'UserPoolClientId', { value: client.userPoolClientId });
   }
