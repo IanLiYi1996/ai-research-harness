@@ -18,11 +18,22 @@ def load_system_prompt() -> str:
     return _PROMPT_PATH.read_text(encoding="utf-8")
 
 
+# Retrieval namespaces MUST match the extraction-strategy namespaces declared
+# on the Memory resource (infrastructure/lib/agent-stack.ts). {actorId} is
+# resolved by the session manager at retrieval time. If these drift apart,
+# recall silently returns nothing.
+RETRIEVAL_NAMESPACES = (
+    "research/{actorId}/facts",
+    "research/{actorId}/summaries",
+)
+
+
 def _default_session_manager_factory(
     memory_id: str, region: str, session_id: str, actor_id: str
 ):
     from bedrock_agentcore.memory.integrations.strands.config import (
         AgentCoreMemoryConfig,
+        RetrievalConfig,
     )
     from bedrock_agentcore.memory.integrations.strands.session_manager import (
         AgentCoreMemorySessionManager,
@@ -39,6 +50,9 @@ def _default_session_manager_factory(
         session_id=session_id,
         actor_id=actor_id,
         async_mode=True,
+        retrieval_config={
+            ns: RetrievalConfig(top_k=5) for ns in RETRIEVAL_NAMESPACES
+        },
     )
     return AgentCoreMemorySessionManager(config, region_name=region)
 

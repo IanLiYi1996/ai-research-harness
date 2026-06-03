@@ -12,10 +12,24 @@ export class AgentStack extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
     super(scope, id, props);
 
+    // SEMANTIC + SUMMARIZATION extraction strategies turn raw conversation
+    // events into long-term records. Without a strategy, cross-session recall
+    // (the demo's Memory climax) never populates. The namespace must match the
+    // one the agent retrieves from (see agent/loader.py RETRIEVAL_NAMESPACE).
     const memory = new agentcore.Memory(this, 'Memory', {
       memoryName: 'research_copilot_memory',
       description: 'Cross-session memory for the research co-pilot',
       expirationDuration: Duration.days(30),
+      memoryStrategies: [
+        new agentcore.ManagedMemoryStrategy(agentcore.MemoryStrategyType.SEMANTIC, {
+          name: 'semantic_facts',
+          namespaces: ['research/{actorId}/facts'],
+        }),
+        new agentcore.ManagedMemoryStrategy(agentcore.MemoryStrategyType.SUMMARIZATION, {
+          name: 'session_summaries',
+          namespaces: ['research/{actorId}/summaries'],
+        }),
+      ],
     });
 
     const ciRole = new iam.Role(this, 'CodeInterpreterRole', {

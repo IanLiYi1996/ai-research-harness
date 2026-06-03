@@ -20,10 +20,14 @@ echo "${BOLD}▶ prompt:${RESET} $PROMPT"
 echo "${BOLD}▶ session:${RESET} $SESSION_ID"
 echo "${BOLD}▶ invoking runtime...${RESET}"
 
+# AWS CLI v2 treats --payload as base64 by default; raw-in-base64-out lets us
+# pass the JSON string directly and get the response bytes back decoded.
 aws bedrock-agentcore invoke-agent-runtime \
   --agent-runtime-arn "$RUNTIME_ARN" \
   --runtime-session-id "$SESSION_ID" \
   --payload "$(printf '{"prompt": %s, "session_id": "%s"}' "$(printf '%s' "$PROMPT" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))')" "$SESSION")" \
+  --content-type "application/json" \
+  --cli-binary-format raw-in-base64-out \
   --region "$REGION" \
   /dev/stdout
 echo
