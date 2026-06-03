@@ -192,7 +192,6 @@ _ARXIV_API = "http://export.arxiv.org/api/query"
 
 
 def slugify(text: str) -> str:
-    text = text.split(":")[0] if ":" in text else text
     text = re.sub(r"[^a-z0-9]+", "-", text.lower())
     return text.strip("-")
 
