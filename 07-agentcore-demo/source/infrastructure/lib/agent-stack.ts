@@ -44,6 +44,7 @@ export class AgentStack extends Stack {
               actions: ['ecr:GetAuthorizationToken'],
               resources: ['*'],
             }),
+            // Write/create scoped to the runtime log groups only.
             new iam.PolicyStatement({
               effect: iam.Effect.ALLOW,
               actions: [
@@ -51,10 +52,17 @@ export class AgentStack extends Stack {
                 'logs:CreateLogStream',
                 'logs:PutLogEvents',
                 'logs:DescribeLogStreams',
-                'logs:DescribeLogGroups',
               ],
               resources: [
                 `arn:aws:logs:${Aws.REGION}:${Aws.ACCOUNT_ID}:log-group:/aws/bedrock-agentcore/runtimes/*`,
+              ],
+            }),
+            // DescribeLogGroups is a list operation that does not support
+            // resource-level scoping below the account, so it stands alone.
+            new iam.PolicyStatement({
+              effect: iam.Effect.ALLOW,
+              actions: ['logs:DescribeLogGroups'],
+              resources: [
                 `arn:aws:logs:${Aws.REGION}:${Aws.ACCOUNT_ID}:log-group:*`,
               ],
             }),

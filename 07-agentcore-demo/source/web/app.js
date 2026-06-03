@@ -48,16 +48,23 @@ async function main() {
       }),
     );
     // response.response is a streaming byte source; decode incrementally.
+    // Buffer across chunks so a line split mid-boundary isn't parsed as
+    // garbage — only complete (newline-terminated) lines are dispatched.
     const decoder = new TextDecoder();
+    let buf = '';
+    const handleLine = (line) => {
+      const m = line.match(/^data:\s*(.*)$/);
+      if (!m || m[1] === '[DONE]') return;
+      try { route(JSON.parse(m[1]).text ?? ''); }
+      catch { route(m[1]); }
+    };
     for await (const chunk of resp.response) {
-      const text = decoder.decode(chunk, { stream: true });
-      for (const line of text.split('\n')) {
-        const m = line.match(/^data:\s*(.*)$/);
-        if (!m || m[1] === '[DONE]') continue;
-        try { route(JSON.parse(m[1]).text ?? ''); }
-        catch { route(m[1]); }
-      }
+      buf += decoder.decode(chunk, { stream: true });
+      const lines = buf.split('\n');
+      buf = lines.pop() ?? ''; // keep the trailing partial line in the buffer
+      for (const line of lines) handleLine(line);
     }
+    if (buf) handleLine(buf); // flush any final unterminated line
   };
 }
 

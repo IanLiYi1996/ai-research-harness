@@ -45,6 +45,7 @@ async def get_agent(session_id: str):
             memory_id=os.environ["MEMORY_ID"],
             code_interpreter_region=os.environ.get("AWS_REGION", "us-west-2"),
             session_id=session_id,
+            code_interpreter_id=os.environ.get("CODE_INTERPRETER_ID") or None,
             skill_sources=_skill_sources(),
         )
         _AGENTS[session_id] = agent

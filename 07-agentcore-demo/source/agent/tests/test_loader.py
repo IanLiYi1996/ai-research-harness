@@ -24,14 +24,16 @@ def test_build_agent_wires_skills_and_tools():
         captured["sm_actor_id"] = actor_id
         return f"session-manager:{memory_id}:{session_id}:{actor_id}"
 
-    def fake_ci_tool_factory(region):
+    def fake_ci_tool_factory(region, code_interpreter_id=None):
         captured["ci_region"] = region
+        captured["ci_id"] = code_interpreter_id
         return "ci-tool"
 
     build_agent(
         memory_id="mem-123",
         code_interpreter_region="us-west-2",
         session_id="sess-abc",
+        code_interpreter_id="ci-xyz",
         skill_sources=[str(SKILLS_DIR)],
         agent_factory=fake_agent_factory,
         session_manager_factory=fake_session_manager_factory,
@@ -40,6 +42,7 @@ def test_build_agent_wires_skills_and_tools():
 
     assert captured["memory_id"] == "mem-123"
     assert captured["ci_region"] == "us-west-2"
+    assert captured["ci_id"] == "ci-xyz"
     assert captured["sm_session_id"] == "sess-abc"
     assert captured["sm_actor_id"] == "research_copilot"  # DEFAULT_ACTOR_ID
     assert captured["session_manager"] == "session-manager:mem-123:sess-abc:research_copilot"

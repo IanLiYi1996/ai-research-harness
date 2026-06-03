@@ -43,10 +43,15 @@ def _default_session_manager_factory(
     return AgentCoreMemorySessionManager(config, region_name=region)
 
 
-def _default_ci_tool_factory(region: str):
+def _default_ci_tool_factory(region: str, code_interpreter_id: Optional[str] = None):
     from strands_tools.code_interpreter import AgentCoreCodeInterpreter
 
-    return AgentCoreCodeInterpreter(region=region).code_interpreter
+    # ``identifier`` binds the tool to our CDK-provisioned custom Code
+    # Interpreter (public-network egress, so reproductions can pip-install).
+    # Without it the tool auto-creates a default sandbox per run.
+    return AgentCoreCodeInterpreter(
+        region=region, identifier=code_interpreter_id
+    ).code_interpreter
 
 
 def _default_agent_factory(**kwargs):
@@ -63,6 +68,7 @@ def build_agent(
     code_interpreter_region: str,
     session_id: str,
     actor_id: str = DEFAULT_ACTOR_ID,
+    code_interpreter_id: Optional[str] = None,
     skill_sources: Optional[list[str]] = None,
     agent_factory: Callable = _default_agent_factory,
     session_manager_factory: Callable = _default_session_manager_factory,
@@ -73,14 +79,15 @@ def build_agent(
     A fresh agent is built per session (per runtime invocation) so each
     visitor's conversation maps to its own Memory ``session_id`` while sharing
     one ``actor_id`` — that shared actor is what lets a brand-new session recall
-    papers studied earlier (the demo's Memory climax).
+    papers studied earlier (the demo's Memory climax). ``code_interpreter_id``
+    binds the sandbox tool to the custom Code Interpreter the CDK stack created.
     """
     from strands.vended_plugins.skills import AgentSkills
 
     sources = skill_sources if skill_sources is not None else [str(_SKILLS_PATH)]
     skills_plugin = AgentSkills(skills=sources)
 
-    ci_tool = ci_tool_factory(code_interpreter_region)
+    ci_tool = ci_tool_factory(code_interpreter_region, code_interpreter_id)
     session_manager = session_manager_factory(
         memory_id, code_interpreter_region, session_id, actor_id
     )
