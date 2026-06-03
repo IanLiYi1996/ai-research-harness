@@ -40,6 +40,7 @@
 | 系统学 Harness 概念 | [`05-docs/`](./05-docs/) |
 | **不知道术语啥意思 / 听完分享回看** | [`05-docs/07-glossary.md`](./05-docs/07-glossary.md) |
 | 看分享 slides 原版 | [`06-slides/`](./06-slides/) |
+| 看真正跑在 AgentCore 上的 demo（Summit Builder 展位） | [`07-agentcore-demo/`](./07-agentcore-demo/) |
 
 ### 30 秒 Quick Start
 
@@ -133,6 +134,7 @@ You should be here if any of these apply:
 | Concept docs | [`05-docs/`](./05-docs/) |
 | **Term not clear? / Post-talk reference** | [`05-docs/07-glossary.md`](./05-docs/07-glossary.md) |
 | Original talk slides | [`06-slides/`](./06-slides/) |
+| Real AgentCore demo (Summit Builder booth) | [`07-agentcore-demo/`](./07-agentcore-demo/) |
 
 ### Quick Start
 

@@ -1,0 +1,20 @@
+name: Mirror to Gitee
+on:
+  push:
+    branches: [main]
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Push to Gitee
+        env:
+          GITEE_URL: ${{ secrets.GITEE_REPO_URL }}
+          GITEE_TOKEN: ${{ secrets.GITEE_TOKEN }}
+          GITEE_USER: ${{ secrets.GITEE_USER }}
+        run: |
+          if [ -z "$GITEE_URL" ]; then echo "GITEE_REPO_URL not set; skipping"; exit 0; fi
+          git remote add gitee "https://${GITEE_USER}:${GITEE_TOKEN}@${GITEE_URL}"
+          git push --force gitee main
