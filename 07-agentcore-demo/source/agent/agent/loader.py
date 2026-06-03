@@ -45,14 +45,18 @@ def _default_session_manager_factory(
     # session_id + actor_id are required by AgentCoreMemoryConfig. A FIXED
     # actor across all booth sessions is what makes cross-session recall work:
     # long-term memory is namespaced per actor, so a fresh session_id still
-    # retrieves papers studied in earlier sessions. async_mode=True keeps the
-    # memory hooks off the asyncio event loop (the agent is built via
-    # asyncio.to_thread in main.py).
+    # retrieves papers studied in earlier sessions.
+    #
+    # async_mode=False is deliberate: in async mode the retrieval hook is
+    # fire-and-forget, so recalled context is NOT injected before the model
+    # generates — recall appears empty. Sync mode injects context in time. The
+    # blocking memory I/O is fine here because main.py builds/runs the agent off
+    # the event loop (asyncio.to_thread), and booth concurrency is low.
     config = AgentCoreMemoryConfig(
         memory_id=memory_id,
         session_id=session_id,
         actor_id=actor_id,
-        async_mode=True,
+        async_mode=False,
         retrieval_config={
             ns: RetrievalConfig(top_k=5) for ns in RETRIEVAL_NAMESPACES
         },
