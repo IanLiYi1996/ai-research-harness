@@ -1,4 +1,5 @@
 """AgentCore Runtime HTTP shell. No business logic lives here."""
+import asyncio
 import json
 import os
 
@@ -9,7 +10,13 @@ from agent.loader import build_agent
 
 app = FastAPI(title="ResearchCopilot", version="0.1.0")
 
-_AGENT = None
+# AgentCore injects the runtime session id as this header on every invocation.
+SESSION_HEADER = "X-Amzn-Bedrock-AgentCore-Runtime-Session-Id"
+
+# One Strands agent per session id. Memory namespaces by session_id, so each
+# visitor gets isolated turn history while a shared actor enables cross-session
+# recall (see loader.build_agent).
+_AGENTS: dict[str, object] = {}
 
 
 def _skill_sources() -> list[str] | None:
@@ -25,16 +32,23 @@ def _skill_sources() -> list[str] | None:
     return [s.strip() for s in raw.split(",") if s.strip()]
 
 
-def get_agent():
-    """Lazily build and cache the agent (overridable in tests)."""
-    global _AGENT
-    if _AGENT is None:
-        _AGENT = build_agent(
+async def get_agent(session_id: str):
+    """Build (off the event loop) and cache one agent per session id.
+
+    Overridable in tests. ``build_agent`` does blocking AWS setup, so it runs
+    in a worker thread to avoid stalling the asyncio loop.
+    """
+    agent = _AGENTS.get(session_id)
+    if agent is None:
+        agent = await asyncio.to_thread(
+            build_agent,
             memory_id=os.environ["MEMORY_ID"],
             code_interpreter_region=os.environ.get("AWS_REGION", "us-west-2"),
+            session_id=session_id,
             skill_sources=_skill_sources(),
         )
-    return _AGENT
+        _AGENTS[session_id] = agent
+    return agent
 
 
 @app.get("/ping")
@@ -46,9 +60,16 @@ def ping():
 async def invocations(request: Request):
     body = await request.json()
     prompt = body.get("prompt", "")
+    # Prefer the platform-injected header; fall back to a body field for local
+    # runs, then a constant so a missing id never crashes the request.
+    session_id = (
+        request.headers.get(SESSION_HEADER)
+        or body.get("session_id")
+        or "local-session"
+    )
 
     async def event_stream():
-        agent = get_agent()
+        agent = await get_agent(session_id)
         async for event in agent.stream_async(prompt):
             chunk = event.get("data") if isinstance(event, dict) else str(event)
             if chunk:
