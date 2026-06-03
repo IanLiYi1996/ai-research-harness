@@ -23,8 +23,11 @@ def load_system_prompt() -> str:
 # resolved by the session manager at retrieval time. If these drift apart,
 # recall silently returns nothing.
 RETRIEVAL_NAMESPACES = (
+    # Cross-session: SEMANTIC facts are namespaced by actor only, so a fresh
+    # session still recalls papers studied earlier (the Memory climax).
     "research/{actorId}/facts",
-    "research/{actorId}/summaries",
+    # Per-session SUMMARIZATION ({sessionId} is mandatory for this type).
+    "research/{actorId}/{sessionId}/summaries",
 )
 
 

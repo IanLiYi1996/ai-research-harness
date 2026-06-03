@@ -25,9 +25,10 @@ export class AgentStack extends Stack {
           name: 'semantic_facts',
           namespaces: ['research/{actorId}/facts'],
         }),
+        // SUMMARIZATION namespaces are per-session — {sessionId} is mandatory.
         new agentcore.ManagedMemoryStrategy(agentcore.MemoryStrategyType.SUMMARIZATION, {
           name: 'session_summaries',
-          namespaces: ['research/{actorId}/summaries'],
+          namespaces: ['research/{actorId}/{sessionId}/summaries'],
         }),
       ],
     });
