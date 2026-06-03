@@ -95,7 +95,10 @@ export class WebAppStack extends Stack {
       new iam.PolicyStatement({
         effect: iam.Effect.ALLOW,
         actions: ['bedrock-agentcore:InvokeAgentRuntime'],
-        resources: [props.runtimeArn],
+        // InvokeAgentRuntime targets the endpoint sub-resource
+        // (…/runtime/<id>/runtime-endpoint/DEFAULT), not just the bare runtime
+        // ARN — both are granted so the call is authorized.
+        resources: [props.runtimeArn, `${props.runtimeArn}/runtime-endpoint/*`],
       }),
     );
     const relayUrl = relay.addFunctionUrl({

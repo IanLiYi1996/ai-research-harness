@@ -39,7 +39,10 @@ test('relay Lambda streams and is scoped to the one runtime ARN', () => {
       Statement: Match.arrayWith([
         Match.objectLike({
           Action: 'bedrock-agentcore:InvokeAgentRuntime',
-          Resource: 'arn:aws:bedrock-agentcore:us-east-1:111111111111:runtime/abc',
+          Resource: [
+            'arn:aws:bedrock-agentcore:us-east-1:111111111111:runtime/abc',
+            'arn:aws:bedrock-agentcore:us-east-1:111111111111:runtime/abc/runtime-endpoint/*',
+          ],
         }),
       ]),
     },
