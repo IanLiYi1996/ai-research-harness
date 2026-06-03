@@ -145,11 +145,12 @@ async function run() {
   const sessionId = $('session').value.trim() || 'booth-1';
   $('run').disabled = true;
   $('conn').textContent = 'AGENT WORKING…';
+  $('led')?.classList.add('busy');
   resetTiles();
   addUserMessage(prompt);
   $('prompt').value = '';
   startAgentMessage();
-  appendAgent('▌ thinking');
+  appendAgent('thinking');
   const dots = setInterval(() => appendAgent('.'), 700);
 
   try {
@@ -179,6 +180,7 @@ async function run() {
     endAgentMessage();
     $('run').disabled = false;
     $('conn').textContent = 'LINK ACTIVE';
+    $('led')?.classList.remove('busy');
   }
 }
 
