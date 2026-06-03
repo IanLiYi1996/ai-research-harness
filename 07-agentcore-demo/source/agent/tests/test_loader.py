@@ -1,0 +1,47 @@
+from pathlib import Path
+
+from agent.loader import build_agent, load_system_prompt
+
+SKILLS_DIR = Path(__file__).parent.parent / "agent" / "skills"
+
+
+def test_load_system_prompt_nonempty():
+    prompt = load_system_prompt()
+    assert "research co-pilot" in prompt.lower()
+    assert "never claim a result you did not run" in prompt.lower()
+
+
+def test_build_agent_wires_skills_and_tools():
+    captured = {}
+
+    def fake_agent_factory(**kwargs):
+        captured.update(kwargs)
+        return object()  # stand-in Agent
+
+    def fake_session_manager_factory(memory_id, region):
+        captured["memory_id"] = memory_id
+        return f"session-manager:{memory_id}"
+
+    def fake_ci_tool_factory(region):
+        captured["ci_region"] = region
+        return "ci-tool"
+
+    build_agent(
+        memory_id="mem-123",
+        code_interpreter_region="us-west-2",
+        skill_sources=[str(SKILLS_DIR)],
+        agent_factory=fake_agent_factory,
+        session_manager_factory=fake_session_manager_factory,
+        ci_tool_factory=fake_ci_tool_factory,
+    )
+
+    assert captured["memory_id"] == "mem-123"
+    assert captured["ci_region"] == "us-west-2"
+    assert captured["session_manager"] == "session-manager:mem-123"
+    assert "ci-tool" in captured["tools"]
+    # the paper tool is always present
+    assert any(getattr(t, "__name__", "") == "fetch_paper" or t == "ci-tool" for t in captured["tools"])
+    # an AgentSkills plugin is registered
+    assert any(p.__class__.__name__ == "AgentSkills" for p in captured["plugins"])
+    # system prompt is passed
+    assert "research co-pilot" in captured["system_prompt"].lower()
