@@ -1,0 +1,30 @@
+#!/usr/bin/env bash
+# demo.sh — booth driver. Invokes the deployed AgentCore runtime over the CLI.
+#
+# Usage:
+#   export RUNTIME_ARN=arn:aws:bedrock-agentcore:us-west-2:ACCT:runtime/xxxx
+#   ./scripts/demo.sh "read arXiv 2104.09864 and store the key insight" booth-1
+set -euo pipefail
+
+PROMPT="${1:-read arXiv 2104.09864 and store the key insight}"
+SESSION="${2:-booth-1}"
+REGION="${AWS_REGION:-us-west-2}"
+: "${RUNTIME_ARN:?set RUNTIME_ARN to the deployed runtime ARN (cdk output RuntimeArn)}"
+
+# Session id must be >= 33 chars.
+SESSION_ID=$(printf '%s' "$SESSION" | sed 's/[^a-zA-Z0-9_-]//g')
+while [ "${#SESSION_ID}" -lt 33 ]; do SESSION_ID="${SESSION_ID}0"; done
+
+BOLD=$(tput bold 2>/dev/null || true); RESET=$(tput sgr0 2>/dev/null || true)
+echo "${BOLD}▶ prompt:${RESET} $PROMPT"
+echo "${BOLD}▶ session:${RESET} $SESSION_ID"
+echo "${BOLD}▶ invoking runtime...${RESET}"
+
+aws bedrock-agentcore invoke-agent-runtime \
+  --agent-runtime-arn "$RUNTIME_ARN" \
+  --runtime-session-id "$SESSION_ID" \
+  --payload "$(printf '{"prompt": %s, "session_id": "%s"}' "$(printf '%s' "$PROMPT" | python3 -c 'import json,sys; print(json.dumps(sys.stdin.read()))')" "$SESSION")" \
+  --region "$REGION" \
+  /dev/stdout
+echo
+echo "${BOLD}✓ done${RESET}"
