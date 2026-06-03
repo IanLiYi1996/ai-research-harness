@@ -1,0 +1,122 @@
+import * as path from 'path';
+import { Aws, CfnOutput, Duration, Stack, StackProps } from 'aws-cdk-lib';
+import { Construct } from 'constructs';
+import * as iam from 'aws-cdk-lib/aws-iam';
+import * as ecr_assets from 'aws-cdk-lib/aws-ecr-assets';
+import * as agentcore from '@aws-cdk/aws-bedrock-agentcore-alpha';
+
+export class AgentStack extends Stack {
+  public readonly runtimeArn: string;
+  public readonly memoryId: string;
+
+  constructor(scope: Construct, id: string, props?: StackProps) {
+    super(scope, id, props);
+
+    const memory = new agentcore.Memory(this, 'Memory', {
+      memoryName: 'research_copilot_memory',
+      description: 'Cross-session memory for the research co-pilot',
+      expirationDuration: Duration.days(30),
+    });
+
+    const ciRole = new iam.Role(this, 'CodeInterpreterRole', {
+      assumedBy: new iam.ServicePrincipal('bedrock-agentcore.amazonaws.com'),
+    });
+
+    const codeInterpreter = new agentcore.CodeInterpreterCustom(this, 'CodeInterpreter', {
+      codeInterpreterCustomName: 'research_copilot_ci',
+      description: 'Sandbox for reproducing experiments',
+      networkConfiguration: agentcore.CodeInterpreterNetworkConfiguration.usingPublicNetwork(),
+      executionRole: ciRole,
+    });
+
+    const execRole = new iam.Role(this, 'AgentRuntimeRole', {
+      assumedBy: new iam.ServicePrincipal('bedrock-agentcore.amazonaws.com'),
+      inlinePolicies: {
+        AgentCorePolicy: new iam.PolicyDocument({
+          statements: [
+            new iam.PolicyStatement({
+              effect: iam.Effect.ALLOW,
+              actions: ['ecr:BatchGetImage', 'ecr:GetDownloadUrlForLayer'],
+              resources: [`arn:aws:ecr:${Aws.REGION}:${Aws.ACCOUNT_ID}:repository/*`],
+            }),
+            new iam.PolicyStatement({
+              effect: iam.Effect.ALLOW,
+              actions: ['ecr:GetAuthorizationToken'],
+              resources: ['*'],
+            }),
+            new iam.PolicyStatement({
+              effect: iam.Effect.ALLOW,
+              actions: [
+                'logs:CreateLogGroup',
+                'logs:CreateLogStream',
+                'logs:PutLogEvents',
+                'logs:DescribeLogStreams',
+                'logs:DescribeLogGroups',
+              ],
+              resources: [
+                `arn:aws:logs:${Aws.REGION}:${Aws.ACCOUNT_ID}:log-group:/aws/bedrock-agentcore/runtimes/*`,
+                `arn:aws:logs:${Aws.REGION}:${Aws.ACCOUNT_ID}:log-group:*`,
+              ],
+            }),
+            new iam.PolicyStatement({
+              effect: iam.Effect.ALLOW,
+              actions: [
+                'xray:PutTraceSegments',
+                'xray:PutTelemetryRecords',
+                'xray:GetSamplingRules',
+                'xray:GetSamplingTargets',
+              ],
+              resources: ['*'],
+            }),
+            new iam.PolicyStatement({
+              effect: iam.Effect.ALLOW,
+              actions: ['bedrock-agentcore:*Event*'],
+              resources: [memory.memoryArn],
+            }),
+            new iam.PolicyStatement({
+              effect: iam.Effect.ALLOW,
+              actions: ['bedrock-agentcore:*CodeInterpreter*'],
+              resources: ['*'],
+            }),
+            new iam.PolicyStatement({
+              effect: iam.Effect.ALLOW,
+              actions: ['bedrock:InvokeModel', 'bedrock:InvokeModelWithResponseStream'],
+              resources: [
+                'arn:aws:bedrock:*::foundation-model/*',
+                `arn:aws:bedrock:${Aws.REGION}:${Aws.ACCOUNT_ID}:*`,
+              ],
+            }),
+          ],
+        }),
+      },
+    });
+
+    const artifact = agentcore.AgentRuntimeArtifact.fromAsset(
+      path.join(__dirname, '../../agent'),
+      { platform: ecr_assets.Platform.LINUX_ARM64, file: 'Dockerfile' },
+    );
+
+    const runtime = new agentcore.Runtime(this, 'Runtime', {
+      runtimeName: 'research_copilot_runtime',
+      agentRuntimeArtifact: artifact,
+      executionRole: execRole,
+      description: 'Research co-pilot agent runtime',
+      environmentVariables: {
+        MEMORY_ID: memory.memoryId,
+        CODE_INTERPRETER_ID: codeInterpreter.codeInterpreterId,
+        AWS_REGION: this.region,
+        SKILL_SOURCES: [
+          '/app/agent/skills',
+          'https://raw.githubusercontent.com/huggingface/skills/main/huggingface-papers/SKILL.md',
+          'https://raw.githubusercontent.com/huggingface/skills/main/huggingface-datasets/SKILL.md',
+        ].join(','),
+      },
+    });
+
+    this.runtimeArn = runtime.agentRuntimeArn;
+    this.memoryId = memory.memoryId;
+
+    new CfnOutput(this, 'RuntimeArn', { value: runtime.agentRuntimeArn });
+    new CfnOutput(this, 'MemoryId', { value: memory.memoryId });
+  }
+}
