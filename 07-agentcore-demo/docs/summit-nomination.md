@@ -3,14 +3,14 @@
 > 填入 Quip 提名表的一行。各列对应 Demo Owner 行动项（B/C/D/F/G…）。
 > 架构图见 `docs/architecture.png`（draw.io · AWS 官方图标 · AgentCore 高亮；源文件 `architecture_diagram` drawio session）。
 >
-> **定位**：企业**搜索 / 推荐 / 标签**等算法团队的「技术选型与验证副驾」——一个真实、跨行业、
-> 高度涉及算法的企业业务场景；弱化具体行业，突出通用算法工程能力。
+> **定位**：AlgoProof（算法验证智能体）——帮企业算法团队加速「技术选型与方案验证」类工作；
+> 以搜索 / 推荐 / 标签为示例场景，弱化具体行业，突出通用算法工程提效能力。
 
 ---
 
 ## A · Demo 名称（≤10 字）
-**算法选型副驾**
-（备选：算法验证副驾 / 算法落地副驾）
+**算法验证智能体**
+（英文/品牌名：AlgoProof）
 
 > 注：提名表第 14 行已有「自主科研Agent」(Synapse, weiyihao)，主打 **Gateway + Runtime + MCP/GPU 编排**的科研项目编排。
 > 本 Demo 走 **不同的 AgentCore 服务组合与业务场景**：面向**企业算法团队的技术选型与方案验证**，
@@ -18,7 +18,7 @@
 
 ## B · Demo 简介（≤150 字，含 AgentCore/Bedrock 如何实现、用了哪些 service、区别在哪）
 
-> 面向企业**搜索/推荐/标签系统**等算法团队的「技术选型与验证副驾」。以「为推荐系统选一个新的召回/排序模型」为例：副驾自动「读源材料 → 沉淀评估结论 → 跨会话复用 → 在隔离沙箱真跑 benchmark（如 Recall@K、NDCG）验证宣称指标」。**AgentCore Memory**（SEMANTIC+SUMMARIZATION）把团队历次选型结论沉淀为长期记忆，新会话直接召回，不重复踩坑；**AgentCore Code Interpreter** 让选型不靠论文/厂商口述指标，而是当场跑出真实数字再决策，根治「离线指标漂亮、上线效果翻车」；评估 SOP 固化为可复用 **Skills**（含 huggingface/skills）。基于 Strands Agents，一条 `cdk deploy` 起全栈，GitHub+Gitee 可复刻。换 tools/skills 即在搜索/推荐/标签间切换。
+> AlgoProof（算法验证智能体）是面向企业算法团队（搜索、推荐、标签等）加速「技术选型与验证」类工作的智能体：基于 Amazon Bedrock AgentCore（Strands Agents SDK），按"调研 → 评估 → 验证 → 沉淀"协同——读源材料产出结构化评估卡，并在 **AgentCore Code Interpreter** 沙箱里真跑 benchmark（如 Recall@K / NDCG / F1）验证宣称指标，根治"离线漂亮、上线翻车"；团队历次结论由 **AgentCore Memory**（SEMANTIC + SUMMARIZATION）跨会话记忆并召回，不重复踩坑；评估方法论沉淀为可复用 **Skills**（含 huggingface/skills）。一条 `cdk deploy` 起全栈，GitHub + Gitee 可复刻；换 tools/skills 即在搜索/推荐/标签等算法域间切换。
 
 ## C · AgentCore Services（最多 3 个，按演示重点排序，不要默认 Runtime 在前）
 
@@ -49,7 +49,7 @@
 | Team | IVT |
 | Key AWS Product/Service | Amazon Bedrock AgentCore (Memory / Code Interpreter / Runtime / Observability), Strands Agents SDK, Cognito, API Gateway, Lambda, CloudFront, CDK |
 | LLM Model | Claude（Nova / DeepSeek 可切换） |
-| 特殊设备需求 | 无特殊要求；10Mbps 有线 + 1 Win PC 双屏即可（一屏 Web 控制台、一屏 CLI/日志） |
+| 特殊设备需求 | 无特殊要求； |
 | 时间安排 | 待定 |
 
 ---
