@@ -3,22 +3,22 @@
 > 填入 Quip 提名表的一行。各列对应 Demo Owner 行动项（B/C/D/F/G…）。
 > 架构图见 `docs/architecture.png`（draw.io · AWS 官方图标 · AgentCore 高亮；源文件 `architecture_diagram` drawio session）。
 >
-> **定位**：AlgoProof（算法验证智能体）——帮企业算法团队加速「技术选型与方案验证」类工作；
-> 以搜索 / 推荐 / 标签为示例场景，弱化具体行业，突出通用算法工程提效能力。
+> **定位**：ModelForge（炼模智能体）——「AI 炼 AI」：让 Agent 自主评估、真跑验证、迭代企业内部业务的 AI 模型；
+> 以企业内部的搜索 / 推荐 / 标签系统为业务落点，弱化具体行业，突出通用算法工程提效能力。
 
 ---
 
 ## A · Demo 名称（≤10 字）
-**算法验证智能体**
-（英文/品牌名：AlgoProof）
+**炼模智能体**
+（英文/品牌名：ModelForge）
 
 > 注：提名表第 14 行已有「自主科研Agent」(Synapse, weiyihao)，主打 **Gateway + Runtime + MCP/GPU 编排**的科研项目编排。
-> 本 Demo 走 **不同的 AgentCore 服务组合与业务场景**：面向**企业算法团队的技术选型与方案验证**，
-> 高潮是 **Memory 跨会话沉淀评估结论 + Code Interpreter 真跑 benchmark 验证**，不重复。
+> 本 Demo 走 **不同的 AgentCore 服务组合与业务落点**：核心叙事是 **「AI 炼 AI」**——Agent 自主验证/迭代**企业内部业务**（搜索/推荐/标签）的算法模型，
+> 高潮是 **Code Interpreter 真跑 benchmark 验证 + Memory 跨会话沉淀评估结论**，与 Synapse 不重复。
 
 ## B · Demo 简介（≤150 字，含 AgentCore/Bedrock 如何实现、用了哪些 service、区别在哪）
 
-> AlgoProof（算法验证智能体）是面向企业算法团队（搜索、推荐、标签等）加速「技术选型与验证」类工作的智能体：基于 Amazon Bedrock AgentCore（Strands Agents SDK），按"调研 → 评估 → 验证 → 沉淀"协同——读源材料产出结构化评估卡，并在 **AgentCore Code Interpreter** 沙箱里真跑 benchmark（如 Recall@K / NDCG / F1）验证宣称指标，根治"离线漂亮、上线翻车"；团队历次结论由 **AgentCore Memory**（SEMANTIC + SUMMARIZATION）跨会话记忆并召回，不重复踩坑；评估方法论沉淀为可复用 **Skills**（含 huggingface/skills）。一条 `cdk deploy` 起全栈，GitHub + Gitee 可复刻；换 tools/skills 即在搜索/推荐/标签等算法域间切换。
+> ModelForge（炼模智能体）演示「AI 炼 AI」：让 Agent 替企业内部业务团队评估、真跑验证、迭代算法模型。基于 Amazon Bedrock AgentCore（Strands Agents SDK），按"调研 → 评估 → 验证 → 沉淀"协同——以企业**搜索/推荐/标签**系统的模型选型为例，Agent 读源材料产出评估卡，并在 **AgentCore Code Interpreter** 沙箱里真跑 benchmark（Recall@K / NDCG / F1）验证宣称指标，根治"离线漂亮、上线翻车"；历次结论由 **AgentCore Memory**（SEMANTIC + SUMMARIZATION）跨会话记忆召回，团队不重复踩坑；评估方法论沉淀为可复用 **Skills**。一条 `cdk deploy` 起全栈，GitHub + Gitee 可复刻；换 skills 即赋能不同内部业务。
 
 ## C · AgentCore Services（最多 3 个，按演示重点排序，不要默认 Runtime 在前）
 
@@ -58,9 +58,9 @@
 
 场景设定：电商/内容平台的**推荐算法团队**要评估是否引入一个新的召回/排序模型（同一套流程也适用于**搜索**的相关性模型、**标签系统**的多标签分类模型）。
 
-1. **Evaluate + Digest**：观众给出候选方案（arXiv id / 开源 repo / 内部 wiki）→ 副驾抓取源材料、激活评估 skill、产出结构化「选型评估卡」（数据/指标/成本/风险），并把关键结论写入 Memory。
-2. **🎬 高潮 1 · Memory 跨会话沉淀召回**：操作员**新开一个会话**，问「我们推荐团队之前评估过哪些排序模型？结论和坑是什么？」——副驾从 Memory 召回本会话从未出现过的历史评估结论与踩坑。Memory 面板亮起召回记录 + 相似度。**价值：搜索/推荐/标签团队的算法知识不流失、不重复踩坑。**
-3. **🎬 高潮 2 · Code Interpreter 真跑验证**：观众说「别看它宣称的指标，帮我真跑验证」——副驾激活相关 skill，写最小 benchmark，在 **Code Interpreter** 沙箱用样例数据真跑，返回 **Recall@K / NDCG（或标签 F1）真实数字 + 图**，与宣称值对比。Sandbox 面板流式打印 stdout。**价值：上线前先验真，避免「离线漂亮、线上翻车」。**
+1. **Evaluate + Digest**：观众给出候选方案（arXiv id / 开源 repo / 内部 wiki）→ Agent 抓取源材料、激活评估 skill、产出结构化「选型评估卡」（数据/指标/成本/风险），并把关键结论写入 Memory。
+2. **🎬 高潮 1 · Memory 跨会话沉淀召回**：操作员**新开一个会话**，问「我们推荐团队之前评估过哪些排序模型？结论和坑是什么？」——Agent 从 Memory 召回本会话从未出现过的历史评估结论与踩坑。Memory 面板亮起召回记录 + 相似度。**价值：搜索/推荐/标签团队的算法知识不流失、不重复踩坑。**
+3. **🎬 高潮 2 · Code Interpreter 真跑验证**：观众说「别看它宣称的指标，帮我真跑验证」——Agent 激活相关 skill，写最小 benchmark，在 **Code Interpreter** 沙箱用样例数据真跑，返回 **Recall@K / NDCG（或标签 F1）真实数字 + 图**，与宣称值对比。Sandbox 面板流式打印 stdout。**价值：上线前先验真，避免「离线漂亮、线上翻车」。**
 4. **沉淀**：新结论写回 Memory → 下次选型直接复用，团队知识复利。
 
 ## 与「真实企业算法业务场景 + 弱化行业 + 突出通用性」的呼应
