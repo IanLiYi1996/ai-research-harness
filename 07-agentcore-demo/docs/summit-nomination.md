@@ -3,22 +3,22 @@
 > 填入 Quip 提名表的一行。各列对应 Demo Owner 行动项（B/C/D/F/G…）。
 > 架构图见 `docs/architecture.png`（draw.io · AWS 官方图标 · AgentCore 高亮；源文件 `architecture_diagram` drawio session）。
 >
-> **定位**：ModelForge（炼模智能体）——「AI 炼 AI」：让 Agent 自主评估、真跑验证、迭代企业内部业务的 AI 模型；
-> 以企业内部的搜索 / 推荐 / 标签系统为业务落点，弱化具体行业，突出通用算法工程提效能力。
+> **定位**：AlgoOps（算法效能智能体）——**赋能业务，提效产品与算法**。以「AI 验证 AI」的方式让 Agent 自主评估、
+> 真跑验证、迭代企业内部业务的算法模型；以搜索 / 推荐 / 标签系统为业务落点，弱化具体行业，突出通用算法工程提效能力。
 
 ---
 
 ## A · Demo 名称（≤10 字）
-**炼模智能体**
-（英文/品牌名：ModelForge）
+**算法效能智能体**
+（英文/品牌名：AlgoOps）
 
 > 注：提名表第 14 行已有「自主科研Agent」(Synapse, weiyihao)，主打 **Gateway + Runtime + MCP/GPU 编排**的科研项目编排。
-> 本 Demo 走 **不同的 AgentCore 服务组合与业务落点**：核心叙事是 **「AI 炼 AI」**——Agent 自主验证/迭代**企业内部业务**（搜索/推荐/标签）的算法模型，
+> 本 Demo 走 **不同的 AgentCore 服务组合与业务落点**：核心叙事是 **「AI 验证 AI」**——Agent 赋能企业算法团队，自主验证/迭代**企业内部业务**（搜索/推荐/标签）的算法模型，
 > 高潮是 **Code Interpreter 真跑 benchmark 验证 + Memory 跨会话沉淀评估结论**，与 Synapse 不重复。
 
 ## B · Demo 简介（≤150 字，含 AgentCore/Bedrock 如何实现、用了哪些 service、区别在哪）
 
-> ModelForge（炼模智能体）演示「AI 炼 AI」：让 Agent 替企业内部业务团队评估、真跑验证、迭代算法模型。基于 Amazon Bedrock AgentCore（Strands Agents SDK），按"调研 → 评估 → 验证 → 沉淀"协同——以企业**搜索/推荐/标签**系统的模型选型为例，Agent 读源材料产出评估卡，并在 **AgentCore Code Interpreter** 沙箱里真跑 benchmark（Recall@K / NDCG / F1）验证宣称指标，根治"离线漂亮、上线翻车"；历次结论由 **AgentCore Memory**（SEMANTIC + SUMMARIZATION）跨会话记忆召回，团队不重复踩坑；评估方法论沉淀为可复用 **Skills**。一条 `cdk deploy` 起全栈，GitHub + Gitee 可复刻；换 skills 即赋能不同内部业务。
+> AlgoOps（算法效能智能体）赋能业务、提效产品与算法，以「AI 验证 AI」让 Agent 替团队评估、真跑验证、迭代内部业务的算法模型。基于 Amazon Bedrock AgentCore（Strands Agents SDK），按"调研 → 评估 → 验证 → 沉淀"协同——以企业**搜索/推荐/标签**系统的模型选型为例，Agent 读源材料产出评估卡，并在 **AgentCore Code Interpreter** 沙箱真跑 benchmark（Recall@K / NDCG / F1）验证宣称指标，根治"离线漂亮、上线翻车"；历次结论由 **AgentCore Memory**（SEMANTIC + SUMMARIZATION）跨会话记忆召回，不重复踩坑；评估方法论沉淀为可复用 **Skills**。一条 `cdk deploy` 起全栈，GitHub + Gitee 可复刻。
 
 ## C · AgentCore Services（最多 3 个，按演示重点排序，不要默认 Runtime 在前）
 
